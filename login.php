@@ -3,7 +3,7 @@
 include 'lb.php';
 include 'lang.php';
 
-if (isset($usehttps)&&$usehttps) include 'https.php'; 
+//if (isset($usehttps)&&$usehttps) include 'https.php'; 
 include 'connect.php';
 include 'auth.php';
 include 'xss.php';

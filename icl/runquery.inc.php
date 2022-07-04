@@ -146,8 +146,8 @@ function runquery(){
 					if (mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
 				$dv=hspc($v);
-				if ($v==null&&!isset($v)) $dv='<span style="color:#000088;">NULL</span>';
-				if (isset($v)&&$v==='') $dv='<em style="color:#666666;">(empty)</em>';
+				if ($v==null&&!isset($v)) $dv='<span style="color:#EE00AA;">NULL</span>';
+				if (isset($v)&&$v==='') $dv='<em style="color:#669966;">(empty)</em>';
 		?>
 			<td valign="top"><acronym 
 				style="cursor:pointer;" 

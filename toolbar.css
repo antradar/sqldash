@@ -32,7 +32,7 @@ use toolbar.psp to generate toolbar.gif
 
 input:disabled{
 	color:#000000;
-	background-color:#F8F8F8;
+	background-color:#F0F0F0;
 }
 
 #gyroscope_updater{font-size:13px;}

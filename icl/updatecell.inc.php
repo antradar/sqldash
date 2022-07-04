@@ -13,7 +13,10 @@ function updatecell(){
 	$pfval=$_POST['pfval'];
 	
 	if ($pfval!='') $fval=$pfval;
-	
+
+	$setnull=intval($_GET['setnull']);
+	if ($setnull) $fval=null;
+		
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
 	ob_start();
@@ -29,7 +32,6 @@ function updatecell(){
 	$rs=sql_prep($query,$db,$pval);
 	$myrow=sql_fetch_assoc($rs);
 	$ffval=$myrow[$fkey];
-	
 	
 	echo $ffval;
 }

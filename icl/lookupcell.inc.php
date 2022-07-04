@@ -164,13 +164,15 @@ function lookupcell(){
 		<input <?php if (!$canedit) echo 'readonly';?> <?php if ($itr!=0) echo 'style="background:#ffffcc;"';?> id="celllookupfval" class="inplong" value="<?php echo htmlspecialchars($fval);?>">
 		<?php
 		}
-		?>
+		?>		
 		<div id="celllookupupdater" style="display:none;"></div>
 	</div>
 	
 	<div class="inputrow">
 		<?php if ($canedit){?>
-		<button onclick="updatecell('<?php echo $dbname;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $fkey;?>')">Update Cell</button>
+		<button onclick="updatecell('<?php echo $dbname;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $fkey;?>');">Update</button>
+		&nbsp;
+		<button onclick="updatecell('<?php echo $dbname;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $fkey;?>',1);">Set Null</button>
 		<?php
 		}//canedit
 		

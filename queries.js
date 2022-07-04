@@ -34,11 +34,14 @@ runquery=function(queryidx,dbname){
 		
 }
 
-updatecell=function(dbname,tablename,pkey,pval,fkey){
+updatecell=function(dbname,tablename,pkey,pval,fkey,defsetnull){
 	var fval='';
 	if (gid('celllookupfval')) fval=gid('celllookupfval').value;
 	var pfval='';
 	if (gid('celllookuppfval')) pfval=gid('celllookuppfval').value;
+	
+	var setnull=0;
+	if (defsetnull) setnull=defsetnull;
 	
 	var os=document.getElementsByClassName('cell_'+dbname+'_'+tablename+'_'+fkey+'_'+pval);
 	for (var i=0;i<os.length;i++){
@@ -47,11 +50,12 @@ updatecell=function(dbname,tablename,pkey,pval,fkey){
 		//o.innerHTML=fval.replace(/</g,'&lt;').replace(/>/g,'&gt;');
 	}//for
 	
-	ajxpgn('celllookupupdater',document.appsettings.codepage+'?cmd=updatecell&dbname='+dbname+'&table='+tablename+'&pkey='+pkey+'&pval='+pval+'&fkey='+fkey+'&fval='+encodeHTML(fval),0,0,'pfval='+encodeHTML(pfval),function(rq){
+	ajxpgn('celllookupupdater',document.appsettings.codepage+'?cmd=updatecell&dbname='+dbname+'&table='+tablename+'&pkey='+pkey+'&pval='+pval+'&fkey='+fkey+'&fval='+encodeHTML(fval)+'&setnull='+setnull,0,0,'pfval='+encodeHTML(pfval),function(rq){
 		for (var i=0;i<os.length;i++){
 			var o=os[i];
 			o.style.backgroundColor='#abffaa';
 			o.innerHTML=rq.responseText.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+			if (defsetnull) o.innerHTML='<em>NULL</em>';
 		}//for
 		
 		if (gid('celllookupfval')) gid('celllookupfval').value=rq.responseText;
