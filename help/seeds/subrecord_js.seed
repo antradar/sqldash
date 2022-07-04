@@ -1,0 +1,78 @@
+show#record#=function(#primarykey#,name,#masterkey#){
+	addtab('#record#_'+#masterkey#+'_'+#primarykey#,name,'show#record#&#primarykey#='+#primarykey#);	
+}
+
+_inline_lookup#record#=function(d){
+	if (d.timer) clearTimeout(d.timer);
+	d.timer=setTimeout(function(){
+		ajxpgn('#record#list',document.appsettings.codepage+'?cmd=slv#fviewindex#&mode=embed&key='+encodeHTML(d.value));
+	},300
+	);	
+}
+
+
+add#record#=function(#masterkey#){
+	var suffix='new';
+#iterator-fieldlist-getrecordjs#
+	var valid=1;
+	var offender=null;
+	
+	//delete the excessive validate rules
+#iterator-fieldlist-validate#
+	//add more validation rules
+	
+	if (!valid) {
+		if (offender&&offender.focus) offender.focus();
+		return;
+	}
+
+#iterator-fieldlist-realvalues#	
+	var params=[];
+#iterator-fieldlist-parampush#
+	
+	reloadtab('#record#_'+#masterkey#+'_new',o#dispfield#.value,'add#record#&#masterkey#='+#masterkey#,function(req){
+		var #primarykey#=req.getResponseHeader('newrecid');		
+		ajxpgn('#master_record##records#_'+#masterkey#,document.appsettings.codepage+'?cmd=list#master_record##records#&#masterkey#='+#masterkey#);
+		reloadview('#viewindex#','#record#list');
+	},params.join('&'));
+	
+}
+
+update#record#=function(#primarykey#,#masterkey#){
+	var suffix=#primarykey#;
+#iterator-fieldlist-getrecordjs#
+	
+	var valid=1;
+	var offender=null;
+	
+	//delete the excessive validate rules
+#iterator-fieldlist-validate#
+	//add more validation rules
+	
+	if (!valid) {
+		if (offender&&offender.focus) offender.focus();
+		return;
+	}
+	
+#iterator-fieldlist-realvalues#	
+	var params=[];
+#iterator-fieldlist-parampush#
+	
+	reloadtab('#record#_'+#masterkey#+'_'+#primarykey#,o#dispfield#.value,'update#record#&#primarykey#='+#primarykey#,function(){
+		ajxpgn('#master_record##records#_'+#masterkey#,document.appsettings.codepage+'?cmd=list#master_record##records#&#masterkey#='+#masterkey#);
+		reloadview('#viewindex#','#record#list');
+		flashstatus('Updated '+o#dispfield#.value,5000);
+	},params.join('&'));
+	
+}
+
+
+del#record#=function(#primarykey#,#masterkey#){
+	if (!confirm('Are you sure you want to remove this #record#?')) return;
+	
+	reloadtab('#record#_'+#masterkey#+'_'+#primarykey#,null,'del#record#&#primarykey#='+#primarykey#,function(){
+		closetab('#record#_'+#masterkey#+'_'+#primarykey#);
+		ajxpgn('#master_record##records#_'+#masterkey#,document.appsettings.codepage+'?cmd=list#master_record##records#&#masterkey#='+#masterkey#);		
+		reloadview('#viewindex#','#record#list');
+	});
+}

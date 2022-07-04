@@ -1,0 +1,38 @@
+<?php
+
+function list#master_record##records#($#masterkey#=null){
+	if (!isset($#masterkey#)) $#masterkey#=GETVAL('#masterkey#');
+	
+	global $db;
+	
+	$query="select * from #tablename#,#master_tablename# where #tablename#.#masterkey#=$#masterkey# and #tablename#.#foreignkey#=#master_tablename#.#masterkey# order by #sortquery#";
+	
+	$rs=sql_query($query,$db);
+	
+	?>
+	<table>
+	<?
+	
+	while ($myrow=sql_fetch_array($rs)){
+		$#primarykey#=$myrow['#primarykey#'];
+		$#dispfield#=$myrow['#dispfield#'];
+		$recordtitle="$#dispfield#"; //change this
+		$dbrecordtitle=htmlspecialchars(noapos($recordtitle));
+		
+	?>
+	<tr>
+		<td>#<?echo $#primarykey#;?></td>
+		<td><a onclick="ajxjs(self.show#record#,'#records#.js');show#record#(<?echo $#primarykey#;?>,'<?echo $dbrecordtitle;?>','<?echo $#masterkey#;?>');"><?echo $recordtitle?></a></td>
+	</tr>
+	<?
+	}//while
+	?>
+	</table>
+	<div class="listbar">
+		<a class="recadder" onclick="ajxjs(self.show#record#,'#records#.js');addtab('#record#_<?echo $#masterkey#?>_new','<?tr('list_#record#_add_tab');?>','new#record#&#masterkey#=<?echo $#masterkey#;?>');">
+			<img src="imgs/t.gif" class="img-addrec" width="18" height="18"> <?tr('list_#record#_add');?>
+		</a>	
+	</div>
+	<?
+
+}

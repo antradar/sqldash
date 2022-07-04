@@ -1,0 +1,8 @@
+
+	$#editfield#=QETSTR('#editfield#');
+	$#editfield#=str_replace('>&nbsp;</','></',$#editfield#);
+	
+	//Image localizer stores images locally and allows direct pasting in Firefox
+	//It is included in the commercial version of Gyroscope
+	
+	//$#editfield#=localizeimages($#editfield#);

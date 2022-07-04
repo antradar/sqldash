@@ -1,0 +1,55 @@
+<?php
+
+function show#record#($#primarykey#=null){
+	if (!isset($#primarykey#)) $#primarykey#=GETVAL('#primarykey#');
+	
+	global $db;
+	
+	$query="select * from #tablename#,#master_tablename# where #tablename#.#foreignkey#=#master_tablename#.#masterkey# and #primarykey#=$#primarykey#";
+	$rs=sql_query($query,$db);
+	
+	if (!$myrow=sql_fetch_array($rs)) die(_tr('record_removed'));
+	
+#iterator-fieldlist-myrowlist#	
+	$#masterkey#=$myrow['#masterkey#'];
+	$#master_dispfield#=$myrow['#master_dispfield#'];
+	$recordtitle="$#master_dispfield#"; //change this
+	$dbrecordtitle=htmlspecialchars(noapos($recordtitle));
+	
+	header('newtitle:'.$#dispfield#);
+	header('parenttab: #masterkey#_'.$#masterkey#);
+?>
+<div class="section">
+	<div class="sectiontitle"><?echo $#dispfield#;?></div>
+	<div class="col">
+
+	<div class="inputrow">
+		<div class="formlabel"><?tr('list_#master_record#_stab');?>:
+		
+			<a onclick="ajxjs(self.show#master_record#,'#master_records#.js');show#master_record#(<?echo $#masterkey#?>,'<?echo $dbrecordtitle;?>');">
+			<u><?echo $recordtitle;?></u>
+			</a>
+		</div>
+	</div>
+	
+#iterator-fieldlist-detailview#
+	
+	<div class="inputrow">
+		<button onclick="update#record#(<?echo $#primarykey#;?>,<?echo $#foreignkey#;?>);"><?tr('button_update');?></button>
+
+		&nbsp; &nbsp;
+		<button class="warn" onclick="del#record#(<?echo $#primarykey#;?>,<?echo $#foreignkey#;?>);"><?tr('button_delete');?></button>
+
+
+	</div>
+
+	</div>
+	<div class="col">
+
+
+
+	</div>
+	<div class="clear"></div>
+</div>
+<?
+}

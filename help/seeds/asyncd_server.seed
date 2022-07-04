@@ -1,0 +1,6 @@
+function #command#($params,$taskid=null){
+	$#keyfield#=$params['#keyfield#'];
+
+	echo "running #command# $#keyfield#\r\n";
+	passthru('php asyncd_#command#.php '.$#keyfield#.' '.$taskid);
+}

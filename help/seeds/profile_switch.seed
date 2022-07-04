@@ -1,0 +1,5 @@
+//#primaryfield# #mediatype# Uploader
+
+  case 'show#primaryfield##mediatype#': include 'icl/show#primaryfield##mediatype#.inc.php'; show#primaryfield##mediatype#(); break;
+  case 'remove#primaryfield##mediatype#pic': include 'icl/remove#primaryfield##mediatype#pic.inc.php'; remove#primaryfield##mediatype#pic(); break;
+  case 'embed#primaryfield##mediatype#uploader': include 'icl/embed#primaryfield##mediatype#uploader.inc.php'; embed#primaryfield##mediatype#uploader(); break;

@@ -1,0 +1,2 @@
+
+include 'icl/show#primaryfield##mediatype#.inc.php';

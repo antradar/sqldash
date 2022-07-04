@@ -1,0 +1,177 @@
+<?php
+// Gyroscope SQL Wrapper
+// Microsoft SQL Server (SQLSRV) implementation
+// (c) Antradar Software
+
+$SQL_ENGINE="SQLSRV";
+
+function sql_get_db($dbhost,$dbsource,$dbuser=null,$dbpass=null,$lazyname=null){
+
+	if (isset($lazyname)){
+		global $dbdefers;
+		if (!isset($dbdefers)) $dbdefers=array();
+		$dbdefers[$lazyname]=array(
+			'host'=>$dbhost,'source'=>$dbsource,
+			'user'=>$dbuser,'pass'=>$dbpass
+		);
+		return $lazyname;
+	}
+
+	$config=array('Database'=>$dbsource);
+	if (isset($dbuser)) $config['UID']=$dbuser;
+	if (isset($dbpass)) $config['PWD']=$dbpass;
+
+	$db=sqlsrv_connect($dbhost,$config);
+	return $db;
+}
+
+function sql_prep($query,&$db,$params=null){
+	global $gsdbprofile;
+	
+	if (is_string($db)){
+		global $dbdefers;
+		$dbinfo=$dbdefers[$db];
+		$db=sql_get_db($dbinfo['host'],$dbinfo['source'],$dbinfo['user'],$dbinfo['pass']);
+	}	
+	
+	if (!is_array($params)&&isset($params)) $params=array($params);
+	
+	$a=microtime(1);
+	
+	$rs=sqlsrv_prepare($db, $query, $params,array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+	if (!sqlsrv_execute($rs)){
+		$err=sqlsrv_errors();
+		echo 'SQL Error: '.$query.' '.$err[0]['message']; 	
+	}
+	
+	$b=microtime(1);
+			
+	if (is_array($gsdbprofile)) array_push($gsdbprofile,array('query'=>$query,'time'=>$b-$a));
+	return $rs;
+		
+}
+
+function sql_reescape($inp){
+	$str='';
+
+	$inside=0; $escaping=0;
+	$len=strlen($inp);
+
+	$token='';
+	for ($i=0;$i<$len;$i++){
+		$c=$inp[$i];
+		$nc='';
+		if ($i<$len-1) $nc=$inp[$i+1];
+
+		if (!$inside) $str.=$c;
+		if ($c=="'"&&!$inside) {$inside=1;continue;}
+		if ($inside){
+			if ($c=='\\'&&!$escaping&&($nc=='\\'||$nc=="'"||$nc=='"')){
+				$c='';
+				$escaping=1;
+				continue;
+			}
+			
+			if ($escaping){
+				$escaping=0;
+				$token.=$c;
+				continue;
+			} else {
+				if ($c=="'"){
+					$c='';
+					$str.=str_replace("'","''",$token)."'";
+					$token='';
+					$inside=0;
+					continue;
+				}
+			}
+
+			$token.=$c;
+
+		}
+	}
+
+	return $str;
+}
+
+function sql_query($query,&$db){
+	global $gsdbprofile;
+
+	
+	if (is_string($db)){
+		global $dbdefers;
+		$dbinfo=$dbdefers[$db];
+		$db=sql_get_db($dbinfo['host'],$dbinfo['source'],$dbinfo['user'],$dbinfo['pass']);	
+	}
+
+	$query=sql_reescape($query);	
+	
+	$params=array();
+	$a=microtime(1);		
+	$rs=sqlsrv_query($db,$query,$params,array( "Scrollable" => SQLSRV_CURSOR_KEYSET ));
+	$b=microtime(1);	
+	if (!$rs) {
+		$errors=sqlsrv_errors();
+		$message=$errors[0]['message'];
+		echo "sql_error: <u>".$query.'</u> '.$message;
+	}
+	if (is_array($gsdbprofile)) array_push($gsdbprofile,array('query'=>$query,'time'=>$b-$a));
+	return $rs;
+}
+
+function sql_fetch_array($rs){
+	return sqlsrv_fetch_array($rs);
+}
+
+function sql_fetch_assoc($rs){
+	return sqlsrv_fetch_array($rs,SQLSRV_FETCH_ASSOC);
+}
+
+function sql_insert_id($db,$rs=null){
+	$query="select @@IDENTITY";
+	$rs=sql_query($query,$db);
+	$myrow=sql_fetch_array($rs);
+	return $myrow[0];	
+}
+
+function sql_affected_rows($db,$rs){
+	$c1=sqlsrv_rows_affected($db);
+	$c2=sqlsrv_num_rows($rs);
+
+	return max($c1,$c2);
+}
+
+function sql_copy_from_query($query,$db,$omits,$table){
+	$rs=sql_query($query,$db);
+	$myrow=sql_fetch_assoc($rs);
+	$fields=array();
+	$values=array();
+	foreach ($myrow as $k=>$v){
+		if (in_array(strtolower($k),$omits)) continue;
+		array_push($fields,$k);
+		array_push($values,"'".noapos($v)."'");
+	}
+	
+	$query="insert into $table (".implode(',',$fields).") values (".implode(',',$values).")";
+	$rs=sql_query($query,$db);
+	$id=sql_insert_id($db,$rs);
+	return $id;
+}
+
+function sql_begin_transaction(){
+	die("not implemented!");
+}
+
+function sql_commit(){
+	die("not implemented!");
+}
+
+function sql_rollback(){
+	die("not implemented!");
+}
+
+
+/* Sample Connection
+
+$db=sql_get_db("PT-PC\SQLEXPRESS","SQLLHDB");
+*/

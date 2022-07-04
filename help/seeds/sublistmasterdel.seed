@@ -1,0 +1,7 @@
+...
+
+		//comment out closetab('#masterkey#_'+#masterkey#);
+		
+		closetabtree('#masterkey#_'+#masterkey#);
+
+...

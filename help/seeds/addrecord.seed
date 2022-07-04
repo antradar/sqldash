@@ -1,0 +1,25 @@
+<?php
+
+include 'icl/show#record#.inc.php';
+
+function add#record#(){
+	
+#iterator-fieldlist-servervars#	
+	global $db;
+	
+	$query="insert into #tablename# (#iterator-fieldlist-sqlflist#) values (#iterator-fieldlist-sqlvlist#) ";
+	$rs=sql_query($query,$db);
+	$#primarykey#=sql_insert_id($db,$rs)+0;
+
+	if (!$#primarykey#) {
+		header('apperror:'._tr('error_creating_record'));die();
+	}
+	
+	logaction("added #c_record# #$#primarykey# <u>$#dispfield#</u>",array('#primarykey#'=>$#primarykey#,'#dispfield#'=>"$#dispfield#"));
+	
+	header('newrecid:'.$#primarykey#);
+	header('newkey:#record#_'.$#primarykey#);
+	header('newparams:show#record#&#primarykey#='.$#primarykey#);
+	
+	show#record#($#primarykey#);
+}

@@ -1,0 +1,3 @@
+
+	var #editfield#=encodeHTML(tinyMCE.get('#editfield#_'+suffix).getContent());
+	
