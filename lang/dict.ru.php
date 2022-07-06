@@ -1,4 +1,4 @@
-<?
+<?php
 
 $dict=array(
 	'login'=>'Войти',

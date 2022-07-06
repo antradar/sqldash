@@ -1,5 +1,0 @@
-		case '#command#':
-			$#keyfield#=GETVAL('#keyfield#');
-			$taskid=asyncd_addtask('#command#','#command#',array('#keyfield#'=>$#keyfield#),'#command#-'.$#keyfield#,$passive);
-			echo $taskid;die();
-		break;

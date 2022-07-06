@@ -28,61 +28,61 @@ function showuser($userid=null){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?echo $login;?></div>
+	<div class="sectiontitle"><?php echo $login;?></div>
 
 	<div class="col">
 
 
 	<div class="inputrow">
-		<div class="formlabel"><?tr('username');?>:</div>
-		<input class="inpmed" id="login_<?echo $userid;?>" value="<?echo htmlspecialchars($login);?>">
+		<div class="formlabel"><?php tr('username');?>:</div>
+		<input class="inpmed" id="login_<?php echo $userid;?>" value="<?php echo htmlspecialchars($login);?>">
 	</div>
 	<div class="inputrow">
-		<input type="checkbox" id="active_<?echo $userid;?>" <?if ($active) echo 'checked';?>> <label for="active_<?echo $userid;?>"><?tr('account_active');?></label>
+		<input type="checkbox" id="active_<?php echo $userid;?>" <?php if ($active) echo 'checked';?>> <label for="active_<?php echo $userid;?>"><?php tr('account_active');?></label>
 		&nbsp;&nbsp;
-		<input type="checkbox" id="virtual_<?echo $userid;?>" <?if ($virtual) echo 'checked';?> onclick="if (this.checked) gid('userpasses_<?echo $userid;?>').style.display='none'; else gid('userpasses_<?echo $userid;?>').style.display='block';"> <label for="virtual_<?echo $userid;?>"><?tr('account_virtual');?></label>
+		<input type="checkbox" id="virtual_<?php echo $userid;?>" <?php if ($virtual) echo 'checked';?> onclick="if (this.checked) gid('userpasses_<?php echo $userid;?>').style.display='none'; else gid('userpasses_<?php echo $userid;?>').style.display='block';"> <label for="virtual_<?php echo $userid;?>"><?php tr('account_virtual');?></label>
 	</div>
-	<div id="userpasses_<?echo $userid;?>" style="<?if ($virtual) echo 'display:none;';?>">
+	<div id="userpasses_<?php echo $userid;?>" style="<?php if ($virtual) echo 'display:none;';?>">
 	<div class="inputrow">
-		<div class="formlabel"><?tr('new_password');?>:</div>
-		<input class="inp" id="newpass_<?echo $userid;?>" type="password">
+		<div class="formlabel"><?php tr('new_password');?>:</div>
+		<input class="inp" id="newpass_<?php echo $userid;?>" type="password">
 	</div>
 	<div class="inputrow">
-		<div class="formlabel"><?tr('repeat_password');?>:</div>
-		<input class="inp" id="newpass2_<?echo $userid;?>" type="password">
+		<div class="formlabel"><?php tr('repeat_password');?>:</div>
+		<input class="inp" id="newpass2_<?php echo $userid;?>" type="password">
 	</div>
 	
 	<div class="inputrow">
-		<input type="checkbox" id="passreset_<?echo $userid;?>" <?if ($passreset) echo 'checked';?>> <label for="passreset_<?echo $userid;?>"><?tr('account_login_reset');?></label>
+		<input type="checkbox" id="passreset_<?php echo $userid;?>" <?php if ($passreset) echo 'checked';?>> <label for="passreset_<?php echo $userid;?>"><?php tr('account_login_reset');?></label>
 	</div>
 
-	<div class="inputrow" id="cardsettings_<?echo $userid;?>">
+	<div class="inputrow" id="cardsettings_<?php echo $userid;?>">
 		<div class="formlabel">ID Card: &nbsp; 
-			<span style="font-weight:normal;" id="cardstatus_<?echo $userid;?>"><?echo $certname;?></span> <a class="labelbutton" onclick="loadsmartcard(<?echo $userid;?>);">load card</a>
-			<span style="display:none;"><textarea id="cert_<?echo $userid;?>" value=""></textarea></span>
+			<span style="font-weight:normal;" id="cardstatus_<?php echo $userid;?>"><?php echo $certname;?></span> <a class="labelbutton" onclick="loadsmartcard(<?php echo $userid;?>);">load card</a>
+			<span style="display:none;"><textarea id="cert_<?php echo $userid;?>" value=""></textarea></span>
 		</div>
-		<input type="checkbox" id="needcert_<?echo $userid;?>" <?if ($needcert) echo 'checked';?>> card must be present at sign-in
+		<input type="checkbox" id="needcert_<?php echo $userid;?>" <?php if ($needcert) echo 'checked';?>> card must be present at sign-in
 
 	</div>
 	
 	<div class="inputrow">
-		<div class="formlabel"><?tr('account_roles');?>:</div>
-		<?foreach ($userroles as $role=>$label){
+		<div class="formlabel"><?php tr('account_roles');?>:</div>
+		<?php foreach ($userroles as $role=>$label){
 		?>
 		<div style="padding-left:10px;margin-bottom:3px;">
-			<input type="checkbox" id="userrole_<?echo $role;?>_<?echo $userid;?>" <?if (in_array($role,$groups)) echo 'checked';?>> 
-			<label for="userrole_<?echo $role;?>_<?echo $userid;?>"><?echo $label;?></label>
+			<input type="checkbox" id="userrole_<?php echo $role;?>_<?php echo $userid;?>" <?php if (in_array($role,$groups)) echo 'checked';?>> 
+			<label for="userrole_<?php echo $role;?>_<?php echo $userid;?>"><?php echo $label;?></label>
 		</div>
-		<?	
+		<?php	
 		}?>
 	</div>	
 	</div><!-- userpasses -->
 	
 	<div class="inputrow">
-		<button onclick="updateuser(<?echo $userid;?>);"><?tr('button_update');?></button>
+		<button onclick="updateuser(<?php echo $userid;?>);"><?php tr('button_update');?></button>
 
 		&nbsp; &nbsp;
-		<button class="warn" onclick="deluser(<?echo $userid;?>);"><?tr('button_delete');?></button>
+		<button class="warn" onclick="deluser(<?php echo $userid;?>);"><?php tr('button_delete');?></button>
 
 
 	</div>
@@ -94,5 +94,5 @@ function showuser($userid=null){
 	</div>
 	<div class="clear"></div>
 </div>
-<?
+<?php
 }

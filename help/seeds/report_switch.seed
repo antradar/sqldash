@@ -1,2 +1,0 @@
-
-	case 'rpt#reportkey#': include 'icl/rpt#reportkey#.inc.php'; rpt#reportkey#(); break;

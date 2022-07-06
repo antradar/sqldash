@@ -1,4 +1,4 @@
-<?
+<?php
 include 'lb.php';
 //if (isset($usehttps)&&$usehttps) include 'https.php';
 
@@ -21,13 +21,13 @@ $user=userinfo();
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href='gyroscope.css' type='text/css' rel='stylesheet'>
 	<link href='toolbar.css' type='text/css' rel='stylesheet'>
-	<meta name="Version" content="Gyroscope <?echo GYROSCOPE_VERSION?>">
+	<meta name="Version" content="Gyroscope <?php echo GYROSCOPE_VERSION?>">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 </head>
 
 <body onload="setTimeout(scrollTo, 0, 0, 1)">
 <script>
-document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane;?>', views:<?echo json_encode(array_keys($toolbaritems));?>};
+document.appsettings={codepage:'<?php echo $codepage;?>', fastlane:'<?php echo $fastlane;?>', views:<?php echo json_encode(array_keys($toolbaritems));?>};
 </script>
 
 <div style="display:none;"><img src="imgs/t.gif"><img src="imgs/hourglass.gif"></div>
@@ -35,9 +35,9 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 <div id="tooltitle" title="double-click to reload the side view" ondblclick="if (document.viewindex) reloadview(document.viewindex);"></div>
 <div id="leftview" scale:ch="105"><div id="leftview_">
 	<div id="lvcore.users" style="display:none;width:100%;height:100%;overflow:auto;position:absolute;"></div>
-	<?foreach ($toolbaritems as $modid=>$ti){?>
-	<div id="lv<?echo $modid;?>" style="display:none;width:100%;height:100%;overflow:auto;position:absolute;"></div>
-	<?}?>
+	<?php foreach ($toolbaritems as $modid=>$ti){?>
+	<div id="lv<?php echo $modid;?>" style="display:none;width:100%;height:100%;overflow:auto;position:absolute;"></div>
+	<?php }?>
 	<div id="lkv" style="height:100%;">
 		<div id="lkvs"></div>
 		<div id="lkvtitle"><a id="lkvt"></a><img id="lkvx" width="29" height="32" src="imgs/t.gif" onclick="hidelookup();"></div>
@@ -55,14 +55,14 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 
 <div id="iconbelt">
 <div id="topicons" style="left:0;">
-<?foreach ($toolbaritems as $modid=>$ti){
+<?php foreach ($toolbaritems as $modid=>$ti){
 	if (isset($ti['type'])&&$ti['type']=='break') {
 		echo '<div class="break"><span></span></div>';continue;	
 	}
 	if (isset($ti['type'])&&$ti['type']=='custom'){
 	?>
-	<?echo $ti['desktop'];?>
-	<?	
+	<?php echo $ti['desktop'];?>
+	<?php	
 		continue;
 	}
 	
@@ -78,10 +78,8 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 	}
 		
 ?>	
-<?/* <acronym title="<?echo $ti['title'];?>"> */?>
-<a onmouseover="hintstatus(this,'<?echo $ti['title'];?>');" onclick="<?echo $action;?>"><img class="<?echo $ti['icon'];?>" src="imgs/t.gif" width="32" height="32"><br><?echo $ti['title']?></a>
-<? /* </acronym> */ ?>
-<?
+<a onmouseover="hintstatus(this,'<?php echo $ti['title'];?>');" onclick="<?php echo $action;?>"><img class="<?php echo $ti['icon'];?>" src="imgs/t.gif" width="32" height="32"><br><?php echo $ti['title']?></a>
+<?php
 }//foreach
 ?>
 </div><!-- topicons -->
@@ -92,15 +90,10 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 </span><!-- iconbuttons -->
 
 <div id="logoutlink">
-<img src="imgs/t.gif" width="16" height="16" class="admin-user"><?echo $user['login'];?>
+<img src="imgs/t.gif" width="16" height="16" class="admin-user"><?php echo $user['login'];?>
 &nbsp; &nbsp;
-<?php
-/*
-<acronym title="<?tr('account_settings');?>"><a title="<?tr('account_settings');?>" onclick="ajxjs(self.setaccountpass,'accounts.js');reloadtab('account','<?tr('account_settings');?>','showaccount');addtab('account','<?tr('account_settings');?>','showaccount');<?if ($user['groups']['accounts']){?>ajxjs(self.showuser,'users_js.php');showview('core.users');<?}?>return false;"><img src="imgs/t.gif" width="16" height="16" class="admin-settings"></a></acronym>
-*/
-?>
 &nbsp;
-<acronym title="<?tr('signout');?>"><a title="<?tr('signout');?>" onclick="skipconfirm();" href="login.php?from=<?echo $_SERVER['PHP_SELF'];?>" onmouseover="hintstatus(this,'Logout');"><img src="imgs/t.gif" width="16" height="16" class="admin-logout"></a></acronym>
+<acronym title="<?php tr('signout');?>"><a title="<?php tr('signout');?>" onclick="skipconfirm();" href="login.php?from=<?php echo $_SERVER['PHP_SELF'];?>" onmouseover="hintstatus(this,'Logout');"><img src="imgs/t.gif" width="16" height="16" class="admin-logout"></a></acronym>
 </div><!-- logout -->
 </div>
 </div>
@@ -114,7 +107,7 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 </div>
 
 <!-- right panel -->
-<div id="tabtitles" scale:cw="225"> <a id="closeall" style="" onclick="resettabs('welcome');"><b><img src="imgs/t.gif" class="img-closeall" width="10" height="10"><?tr('close_all_tabs');?></b></a> </div>
+<div id="tabtitles" scale:cw="225"> <a id="closeall" style="" onclick="resettabs('welcome');"><b><img src="imgs/t.gif" class="img-closeall" width="10" height="10"><?php tr('close_all_tabs');?></b></a> </div>
 <div id="tabviews" style="overflow:auto;position:absolute;left:295px;height:30px;top:122px;" scale:cw="225" scale:ch="105"></div>
 
 <div id="sptr" scale:ch="104"></div>
@@ -126,7 +119,7 @@ document.appsettings={codepage:'<?echo $codepage;?>', fastlane:'<?echo $fastlane
 </div>
 <div id="fsview"></div>
 
-<script src="lang/dict.<?echo $lang;?>.js"></script>
+<script src="lang/dict.<?php echo $lang;?>.js"></script>
 <script src="nano.js"></script>
 <script>
 hdpromote('toolbar_hd.css');
@@ -135,16 +128,16 @@ hdpromote('toolbar_hd.css');
 <script src="viewport.js"></script>
 <script src="validators.js"></script>
 <script src="autocomplete.js"></script>
-<?if (isset($_GET['keynav'])){?>
+<?php if (isset($_GET['keynav'])){?>
 <script src="blind.js"></script>
-<?}?>
+<?php }?>
 <script>
 window.onresize=autosize;
 autosize();
 setTimeout(function(){scaleall(document.body);},100);
 
 
-addtab('welcome','<?tr('tab_welcome');?>','wk',null,null,{noclose:1});
+addtab('welcome','<?php tr('tab_welcome');?>','wk',null,null,{noclose:1});
 
 
 
@@ -169,19 +162,11 @@ window.onbeforeunload=function(){
 </script>
 <script src="wss.js"></script>
 <script>
-<?include 'ws_js.php';?>
+<?php include 'ws_js.php';?>
 </script>
 
 <script src="speech.js"></script>
 
-<?/*
-<script src="barcodescanner.js"></script>
-<script>
-	window.onblur=function(){if (gid('barcodewarn')) gid('barcodewarn').style.display='inline';}
-	window.onfocus=function(){if (gid('barcodewarn')) gid('barcodewarn').style.display='none';}
-</script>
-*/
-?>
 
 <script src="smartcard.js"></script>
 <script>

@@ -9,7 +9,7 @@ function listtables(){
 	
 	if ($mode!='embed'){
 	?>
-	<div class="sectionheader" style="margin:0;">Database: <?echo $dbname;?></div>
+	<div class="sectionheader" style="margin:0;">Database: <?php echo $dbname;?></div>
 	<?php
 	}
 
@@ -52,7 +52,7 @@ function listtables(){
 </div>
 <div id="tablelist">
 
-<?
+<?php
 	}//embed
 	
 	$rs=sql_prep($query,$db);
@@ -61,7 +61,7 @@ function listtables(){
 		$tablename=$myrow[0];
 	?>
 	<div class="listitem">
-	<a onclick="showtable('<?echo $tablename;?>','<?echo $dbname;?>');"><?echo $tablename;?>
+	<a onclick="showtable('<?php echo $tablename;?>','<?php echo $dbname;?>');"><?php echo $tablename;?>
 		<?php if ($tabletypes[$tablename]!=''){?>
 		<span class="labelbutton"><?php echo $tabletypes[$tablename];?></span>
 		<?php }?>
@@ -73,7 +73,7 @@ function listtables(){
 		<span class="labelbutton"><?php echo $dopts;?></span>
 		<?php }?>		
 	</a></div>
-	<?	
+	<?php	
 			
 	}//while	
 	
@@ -85,7 +85,7 @@ function listtables(){
 	gid('tooltitle').innerHTML='<a>Tables</a>';
 	ajxjs(self.showtable,'tables.js');
 </script>
-<?
+<?php
 }
 	
 }

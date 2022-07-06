@@ -1,4 +1,4 @@
-<?
+<?php
 include 'lang.php';
 
 include 'connect.php';
@@ -13,9 +13,7 @@ $fastlane='phpx-services.php'; //change this name if HAProxy is set up to route 
 
 $userroles=array(
 	'admins'=>'standard admin rights',
-	'accounts'=>_tr('rights_accounts'),
-	'upgrademods'=>'upgrade modules',
-	'dbadmin'=>'db admin'	//uncomment this to reveal the dbadmin option for SQL Comp tool
+	'accounts'=>_tr('rights_accounts')
 );
 
 

@@ -30,9 +30,9 @@ function showdatepicker(){
 		
 ?>
 <div id="timepicker">
-	<?showtimepicker($y,$m,$d,$hstart,$hend,60);?>
+	<?php showtimepicker($y,$m,$d,$hstart,$hend,60);?>
 </div>
-<?	
+<?php	
 		return;	
 	}//nodate
 
@@ -71,37 +71,37 @@ function showdatepicker(){
 ?>
 <div style="width:100%;text-align:center;padding-top:10px;" id="cale_daypicker">
 
-<div style="width:100%;position:relative;margin-top:5px;text-align:center;"><?echo $dmdate;?>
-<span style="position:absolute;top:2px;left:12px;cursor:pointer;" onclick="<?if ($mode=='datetime'){?>
-pickdatetime(null,{start:'<?echo $hstart;?>',end:'<?echo $hend;?>',mini:<?echo $mini;?>},'<?echo "$py-$pm"?>');
-<?} else {?>
-if (!document.hotspot) {pickdate(null,{mini:<?echo $mini;?>},'<?echo "$py-$pm"?>');return;} document.hotspot.value='<?echo "$py-$pm"?>';pickdate(document.hotspot,{mini:<?echo $mini;?>},null);
-<?}?>"><img class="img-calel" src="imgs/t.gif" width="5" height="12"></span>
+<div style="width:100%;position:relative;margin-top:5px;text-align:center;"><?php echo $dmdate;?>
+<span style="position:absolute;top:2px;left:12px;cursor:pointer;" onclick="<?php if ($mode=='datetime'){?>
+pickdatetime(null,{start:'<?php echo $hstart;?>',end:'<?php echo $hend;?>',mini:<?php echo $mini;?>},'<?php echo "$py-$pm"?>');
+<?php } else {?>
+if (!document.hotspot) {pickdate(null,{mini:<?php echo $mini;?>},'<?php echo "$py-$pm"?>');return;} document.hotspot.value='<?php echo "$py-$pm"?>';pickdate(document.hotspot,{mini:<?php echo $mini;?>},null);
+<?php }?>"><img class="img-calel" src="imgs/t.gif" width="5" height="12"></span>
 
-<span style="position:absolute;top:2px;right:12px;cursor:pointer;" onclick="<?if ($mode=='datetime'){?>
-pickdatetime(null,{start:'<?echo $hstart;?>',end:'<?echo $hend;?>',mini:<?echo $mini;?>},'<?echo "$ny-$nm"?>');
-<?} else {?>
-if (!document.hotspot) {pickdate(null,{mini:<?echo $mini;?>},'<?echo "$ny-$nm"?>');return;} document.hotspot.value='<?echo "$ny-$nm"?>';pickdate(document.hotspot,{mini:<?echo $mini;?>},null);<?}?>"><img class="img-caler" src="imgs/t.gif" width="5" height="12"></span>
+<span style="position:absolute;top:2px;right:12px;cursor:pointer;" onclick="<?php if ($mode=='datetime'){?>
+pickdatetime(null,{start:'<?php echo $hstart;?>',end:'<?php echo $hend;?>',mini:<?php echo $mini;?>},'<?php echo "$ny-$nm"?>');
+<?php } else {?>
+if (!document.hotspot) {pickdate(null,{mini:<?php echo $mini;?>},'<?php echo "$ny-$nm"?>');return;} document.hotspot.value='<?php echo "$ny-$nm"?>';pickdate(document.hotspot,{mini:<?php echo $mini;?>},null);<?php }?>"><img class="img-caler" src="imgs/t.gif" width="5" height="12"></span>
 </div>
 
 <div id="calepicker" style="font-size:12px;width:100%;height:200px;margin:0 auto;margin-top:5px;">
-<?for ($i=0;$i<7;$i++){?>
+<?php for ($i=0;$i<7;$i++){?>
 <div style="width:14%;float:left;">
-<div style="height:20px;border:solid 1px #ffffff;margin-left:1px;"><?echo $wdays[$i];?></div>
+<div style="height:20px;border:solid 1px #ffffff;margin-left:1px;"><?php echo $wdays[$i];?></div>
 </div>
-<?}?>
-<?for ($i=0;$i<$w;$i++){?>
+<?php }?>
+<?php for ($i=0;$i<$w;$i++){?>
 <div style="width:14%;float:left;">
 <div style="height:25px;border:solid 1px #444444;margin:1px;"></div>
 </div>
-<?}?>
-<?
+<?php }?>
+<?php
 for ($i=1;$i<=$ld;$i++){
 ?>
-<div onclick="<?if ($mode!='datetime'){?>if (document.hotspot) {document.hotspot.value='<?echo "$y-$m-$i"?>'; if (document.hotspot.lookupview) document.hotspot.lookupview.style.display='none';if (gid(document.hotspot.id+'_lookup')) gid(document.hotspot.id+'_lookup').style.display='none';}else showday('<?echo "$y-$m-$i"?>');<?} else {?>gid('cale_daypicker').style.display='none';ajxpgn('timepicker',document.appsettings.codepage+'?cmd=showtimepicker&y=<?echo $y;?>&m=<?echo $m;?>&d=<?echo $i;?>&start=<?echo $hstart;?>&end=<?echo $hend;?>&res=60',1);<?}?>" style="cursor:pointer;width:14%;float:left;">
-<div style="height:25px;border:solid 1px #444444;margin:1px;<?if ($today=="$y-$m-$i") echo 'font-weight:bold;color:#ab0200';?>"><?echo $i;?>
+<div onclick="<?php if ($mode!='datetime'){?>if (document.hotspot) {document.hotspot.value='<?php echo "$y-$m-$i"?>'; if (document.hotspot.lookupview) document.hotspot.lookupview.style.display='none';if (gid(document.hotspot.id+'_lookup')) gid(document.hotspot.id+'_lookup').style.display='none';}else showday('<?php echo "$y-$m-$i"?>');<?php } else {?>gid('cale_daypicker').style.display='none';ajxpgn('timepicker',document.appsettings.codepage+'?cmd=showtimepicker&y=<?php echo $y;?>&m=<?php echo $m;?>&d=<?php echo $i;?>&start=<?php echo $hstart;?>&end=<?php echo $hend;?>&res=60',1);<?php }?>" style="cursor:pointer;width:14%;float:left;">
+<div style="height:25px;border:solid 1px #444444;margin:1px;<?php if ($today=="$y-$m-$i") echo 'font-weight:bold;color:#ab0200';?>"><?php echo $i;?>
 </div></div>
-<?
+<?php
 }
 ?>
 </div>
@@ -111,7 +111,7 @@ for ($i=1;$i<=$ld;$i++){
 <div id="timepicker" style="display:none;width:100%;position:relative;">
 	
 </div>
-<?
+<?php
 }
 
 function showtimepicker($y=null,$m=null,$d=null,$start=null,$end=null,$res=null,$h24=1){
@@ -164,20 +164,20 @@ function showtimepicker($y=null,$m=null,$d=null,$start=null,$end=null,$res=null,
 		if ($dkey!=$daykey&&$dkey!=$ldaykey) continue;
 	?>
 		<div style="position:relative;height:30px;border-bottom:solid 1px #999999;">
-			<?if ($i>$rstart-$res*60){?>
-			<a style="padding:10px 5px;display:block;margin-right:50px;" onclick="picklookup('<?echo $picked;?>',<?echo $val;?>);"><?echo $t;?>
-				<?if ($ds){?><img src="imgs/t.gif" class="daylightsaving"><?}?>
+			<?php if ($i>$rstart-$res*60){?>
+			<a style="padding:10px 5px;display:block;margin-right:50px;" onclick="picklookup('<?php echo $picked;?>',<?php echo $val;?>);"><?php echo $t;?>
+				<?php if ($ds){?><img src="imgs/t.gif" class="daylightsaving"><?php }?>
 			</a>
-			<?}?>
-			<?if ($res>1&&$mdkey==$daykey){?>
+			<?php }?>
+			<?php if ($res>1&&$mdkey==$daykey){?>
 			<a style="position:absolute;display:block;padding:1px 5px;font-size:10px;border-radius:5px;background-color:#666666;color:#ffffff;top:20px;right:10px;"
-				onclick="this.style.display='none';ajxpgn('subtime_<?echo $i;?>',document.appsettings.codepage+'?cmd=showtimepicker&nodate=<?echo $_GET['nodate']+0;?>&y=<?echo $y;?>&m=<?echo $m;?>&d=<?echo $d;?>&rstart=<?echo $hstart;?>&rend=<?echo $hend;?>&res=<?echo $nextres;?>');">...</a>
-			<?}?>
+				onclick="this.style.display='none';ajxpgn('subtime_<?php echo $i;?>',document.appsettings.codepage+'?cmd=showtimepicker&nodate=<?php echo $_GET['nodate']+0;?>&y=<?php echo $y;?>&m=<?php echo $m;?>&d=<?php echo $d;?>&rstart=<?php echo $hstart;?>&rend=<?php echo $hend;?>&res=<?php echo $nextres;?>');">...</a>
+			<?php }?>
 		</div>
-		<div id="subtime_<?echo $i;?>" style="margin:0 10px;">
+		<div id="subtime_<?php echo $i;?>" style="margin:0 10px;">
 		
 		</div>
-	<?
+	<?php
 		
 	} //for i
 	

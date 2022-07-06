@@ -9,10 +9,10 @@ function showtabledata(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?echo $dbname;?> &raquo; <?echo $tablename;?></div>
+	<div class="sectiontitle"><?php echo $dbname;?> &raquo; <?php echo $tablename;?></div>
 <div class="stable_">
 <table class="subtable" border="1" cellpadding="1" cellspacing="0">
-<?		
+<?php		
 	$query="select * from $tablename";
 	$rs=sql_query($query,$db);
 	
@@ -22,26 +22,26 @@ function showtabledata(){
 		if ($idx==0){
 		foreach ($myrow as $k=>$v){
 	?>
-	<td><b><?echo $k;?></b></td>
-	<?		
+	<td><b><?php echo $k;?></b></td>
+	<?php		
 		}
 	?>
 	</tr>
-	<?	
+	<?php	
 			
 		}
 	?>
 	<tr>
-	<?	
+	<?php	
 		foreach ($myrow as $k=>$v){
 			$v=htmlspecialchars($v);
 	?>
-	<td><?echo $v;?></td>
-	<?		
+	<td><?php echo $v;?></td>
+	<?php		
 		}
 	?>
 	</tr>
-	<?	
+	<?php	
 		$idx++;		
 	}//while
 ?>
@@ -49,5 +49,5 @@ function showtabledata(){
 </div><!-- .stable -->
 
 </div><!-- section -->
-<?	
+<?php	
 }

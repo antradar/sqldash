@@ -1,3 +1,0 @@
-//AsyncD
-	case 'asyncdaddtask': include 'icl/asyncdicl.inc.php'; asyncdaddtask(); break;
-	case 'asyncdstatus': include 'icl/asyncdicl.inc.php'; asyncdstatus(); break;

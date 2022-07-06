@@ -185,7 +185,7 @@ function runquery(){
 		}
 	?>	
 	</tr>
-	<?	
+	<?php	
 		
 		$idx++;
 	}
@@ -195,7 +195,7 @@ function runquery(){
 </div>
 </div>
 <textarea style="display:none;" class="inplong" id="colnames_<?php echo $queryidx;?>"><?php echo json_encode($colnames);?></textarea>
-<?	
+<?php	
 	
 	$tb=microtime(1);
 	

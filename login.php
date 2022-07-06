@@ -91,7 +91,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 ?>
 <html>
 <head>
-	<title><?tr('login');?></title>
+	<title><?php tr('login');?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="refresh" content="1800" />
 	<meta name = "viewport" content = "width=device-width, init-scale=1.0, user-scalable=no" />
@@ -132,9 +132,9 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 <div id="loginbox">
 	<form method="POST" style="padding:20px;margin:0;padding-top:10px;" onsubmit="return checkform();">
 	<img src="imgs/logo.png" style="margin:10px 0;width:100%;">
-	<?if ($error_message!=''){?>
-	<div style="color:#ab0200;font-weight:bold;padding-top:10px;"><?echo $error_message;?></div>
-	<?}?>
+	<?php if ($error_message!=''){?>
+	<div style="color:#ab0200;font-weight:bold;padding-top:10px;"><?php echo $error_message;?></div>
+	<?php }?>
 
 	<div style="padding-top:10px;padding-bottom:5px;">Engine:</div>
 	<select style="width:100%;" id="sqlmode" class="lfinp" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
@@ -144,46 +144,46 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	</select>
 		
 	<div style="padding-top:10px;padding-bottom:5px;">Host:</div>
-	<input style="width:100%;" id="dbhost" class="lfinp" type="text" name="dbhost" value="<?echo isset($_POST['dbhost'])?$_POST['dbhost']:'localhost';?>">
+	<input style="width:100%;" id="dbhost" class="lfinp" type="text" name="dbhost" value="<?php echo isset($_POST['dbhost'])?$_POST['dbhost']:'localhost';?>">
 
 	<div id="apiportview" style="display:none<?php if ($_POST['sqlmode']=='clichouse') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">API Port:</div>
-		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?echo isset($_POST['dbhost'])?$_POST['apiport']:'8123';?>">
+		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?php echo isset($_POST['dbhost'])?$_POST['apiport']:'8123';?>">
 	</div>
 	
 	<div id="dbview" style="display:none<?php if ($_POST['sqlmode']=='sqlsrv') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">Database:</div>
-		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?echo isset($_POST['dbname'])?$_POST['dbname']:'';?>">
+		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?php echo isset($_POST['dbname'])?$_POST['dbname']:'';?>">
 	</div>
 
 	
-	<div style="padding-top:10px;"><?tr('username');?>: <?if ($passreset){?><b><?echo stripslashes($_POST['login']);?></b> &nbsp; <a href="<?echo $_SERVER['PHP_SELF'];?>"><em><?tr('switch_user');?></em></a><?}?></div>
+	<div style="padding-top:10px;"><?php tr('username');?>: <?php if ($passreset){?><b><?php echo stripslashes($_POST['login']);?></b> &nbsp; <a href="<?php echo $_SERVER['PHP_SELF'];?>"><em><?php tr('switch_user');?></em></a><?php }?></div>
 	<div style="padding-top:5px;padding-bottom:10px;">
-	<input style="width:100%;<?if ($passreset) echo 'display:none;';?>" id="login" class="lfinp" type="text" name="login" autocomplete="off" <?if ($passreset) echo 'readonly';?> value="<?if ($passreset) echo stripslashes($_POST['login']);?>"></div>
+	<input style="width:100%;<?php if ($passreset) echo 'display:none;';?>" id="login" class="lfinp" type="text" name="login" autocomplete="off" <?php if ($passreset) echo 'readonly';?> value="<?php if ($passreset) echo stripslashes($_POST['login']);?>"></div>
 
 	<div id="passview">
-		<div><?tr('password');?>:</div>
+		<div><?php tr('password');?>:</div>
 		<div style="padding-top:5px;padding-bottom:15px;">
 		<input style="width:100%;" class="lfinp" id="password" type="password" name="password"></div>
 	
 
-	<?if ($passreset){?>
-	<div><?tr('new_password');?>:</div>
+	<?php if ($passreset){?>
+	<div><?php tr('new_password');?>:</div>
 	<div style="padding-top:5px;padding-bottom:15px;">
 	<input style="width:100%;" class="lfinp" id="password" type="password" name="newpassword"></div>
 		
-	<div><?tr('repeat_password');?>:</div>
+	<div><?php tr('repeat_password');?>:</div>
 	<div style="padding-top:5px;padding-bottom:15px;">
 	<input style="width:100%;" id="password" type="password" name="newpassword2"></div>
 	<input type="hidden" name="passreset" value="1">
-	<?}?>
+	<?php }?>
 
-	<div style="width:100%;margin-bottom:10px;<?if (count($langs)<2) echo 'display:none;';?>"><select style="width:100%;" name="lang" onchange="document.skipcheck=true;">
-	<?
+	<div style="width:100%;margin-bottom:10px;<?php if (count($langs)<2) echo 'display:none;';?>"><select style="width:100%;" name="lang" onchange="document.skipcheck=true;">
+	<?php
 	foreach ($langs as $langkey=>$label){
 	?>
-	<option value="<?echo $langkey;?>" <?if ($lang==$langkey) echo 'selected';?>><?echo $label;?></option>
-	<?	
+	<option value="<?php echo $langkey;?>" <?php if ($lang==$langkey) echo 'selected';?>><?php echo $label;?></option>
+	<?php	
 	}//foreach
 	?>
 	</select>
@@ -191,30 +191,30 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	
 	<div id="cardinfo"></div>
 	
-		<div  style="text-align:center;"><input id="loginbutton" type="submit" value="<?echo $passreset?_tr('change_password'):_tr('signin');?>"></div>
+		<div  style="text-align:center;"><input id="loginbutton" type="submit" value="<?php echo $passreset?_tr('change_password'):_tr('signin');?>"></div>
 		<div id="cardlink">
 			<a href=# onclick="cardauth();return false;">Load ID Card</a>
 		</div>
 	</div><!-- passview -->
 	<div id="cardview" style="display:none;">
-		<div style="text-align:center;"><input id="loginbutton" type="submit" value="<?tr('signin');?>" onclick="if (!cardauth()) return false;"></div>
+		<div style="text-align:center;"><input id="loginbutton" type="submit" value="<?php tr('signin');?>" onclick="if (!cardauth()) return false;"></div>
 		<div id="passlink">
 			<a href=# onclick="passview();return false;">Sign in with password</a>
 		</div>
 	</div>
-	<input name="cfk" value="<?echo $csrfkey;?>" type="hidden">
+	<input name="cfk" value="<?php echo $csrfkey;?>" type="hidden">
 	<div style="display:none;"><textarea name="certid" id="certid"></textarea></div>
 	</form>
 	&nbsp;
 </div>
 </div></div>	
-	<?
+	<?php
 	$version=GYROSCOPE_VERSION;
 	if (VENDOR_VERSION!='') $version.=VENDOR_VERSION;
 	if (VENDOR_NAME) $version.=' '.VENDOR_NAME;
 	$power='Antradar Gyroscope&trade; '.$version;
 	?>
-	<div class="powered"><?tr('powered_by_',array('power'=>$power));?></div>
+	<div class="powered"><?php tr('powered_by_',array('power'=>$power));?></div>
 	
 	<script src="nano.js"></script>
 	<script>
@@ -228,11 +228,11 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 			
 			return true;
 		}
-		<?if ($passreset){?>
+		<?php if ($passreset){?>
 		gid('password').focus();
-		<?}else{?>	
+		<?php }else{?>	
 		gid('login').focus();
-		<?}?>
+		<?php }?>
 	</script>
 
 <script src="smartcard.js"></script>

@@ -1,3 +1,0 @@
-asyncdpgn(gid('#command#button_'+#keyfield#),'#waitid#',
-		'#command#&#keyfield#='+#keyfield#,
-		'still processing...',function(){alert('done!');},1);

@@ -66,19 +66,19 @@ function rptactionlog(){
 ?>
 <div class="section">
 <form onsubmit="reloadtab('actionlog',null,'rptactionlog&key='+encodeHTML(gid('actionlog_key').value)+'&pairs='+encodeHTML(gid('actionlog_pairs').value),null,null,{persist:true});return false;">
-Search: <input id="actionlog_key" placeholder="Keyword in Action" value="<?echo stripslashes($key);?>"> 
-	<input id="actionlog_pairs" placeholder="Advanced Pattern" value="<?echo stripslashes($opairs);?>"> <input type="submit" value="Go">
+Search: <input id="actionlog_key" placeholder="Keyword in Action" value="<?php echo stripslashes($key);?>"> 
+	<input id="actionlog_pairs" placeholder="Advanced Pattern" value="<?php echo stripslashes($opairs);?>"> <input type="submit" value="Go">
 </form>
 
-<div style="padding:20px 30px;font-size:16px;<?if ($key!=''||$opairs!='') echo 'display:none;';?>">
-<?if (isset($prevday)){?>
-<a onclick="reloadtab('actionlog',null,'rptactionlog&date=<?echo $prevday;?>',null,null,{persist:true});"><img class="img-calel" width="5" height="12" src="imgs/t.gif"></a> 
-<?}?>
-&nbsp; &nbsp; <span style="font-size:18px;"><?echo date('M j, Y',$now);?></span>
+<div style="padding:20px 30px;font-size:16px;<?php if ($key!=''||$opairs!='') echo 'display:none;';?>">
+<?php if (isset($prevday)){?>
+<a onclick="reloadtab('actionlog',null,'rptactionlog&date=<?php echo $prevday;?>',null,null,{persist:true});"><img class="img-calel" width="5" height="12" src="imgs/t.gif"></a> 
+<?php }?>
+&nbsp; &nbsp; <span style="font-size:18px;"><?php echo date('M j, Y',$now);?></span>
 &nbsp; &nbsp;
-<?if (isset($nextday)){?>
-<a onclick="reloadtab('actionlog',null,'rptactionlog&date=<?echo $nextday;?>',null,null,{persist:true});"><img class="img-caler" width="5" height="12" src="imgs/t.gif"></a>
-<?}?>
+<?php if (isset($nextday)){?>
+<a onclick="reloadtab('actionlog',null,'rptactionlog&date=<?php echo $nextday;?>',null,null,{persist:true});"><img class="img-caler" width="5" height="12" src="imgs/t.gif"></a>
+<?php }?>
 </div>
 
 <div class="stable">
@@ -86,7 +86,7 @@ Search: <input id="actionlog_key" placeholder="Keyword in Action" value="<?echo 
 <tr>
 	<td style="padding-right:20px;"><b>Time</b></td><td><b>User</b></td><td><b>Action</b></td><td><b>Extra</b></td>
 </tr>
-<?
+<?php
 	while ($myrow=sql_fetch_array($rs)){
 		$username=$myrow['login'];
 		if ($username=='') $username='<span style="color:#ee6666;">'.$myrow['logname'].'</span>';
@@ -99,11 +99,11 @@ Search: <input id="actionlog_key" placeholder="Keyword in Action" value="<?echo 
 		foreach ($obj as $k=>$v) $extra.="; $k=$v";
 		$extra=trim($extra,'; ');
 ?>
-<td valign="top"><?echo $dlogdate;?></td>
-<td valign="top"><?echo $username;?></td><td><?echo $logmessage;?></td>
-<td valign="top"><?echo $extra;?></td>
+<td valign="top"><?php echo $dlogdate;?></td>
+<td valign="top"><?php echo $username;?></td><td><?php echo $logmessage;?></td>
+<td valign="top"><?php echo $extra;?></td>
 </tr>
-<?
+<?php
 	
 	}//while
 ?>
@@ -111,6 +111,6 @@ Search: <input id="actionlog_key" placeholder="Keyword in Action" value="<?echo 
 </div>
 
 </div>
-<?
+<?php
 	
 }

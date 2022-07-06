@@ -11,18 +11,8 @@ function showwelcome(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?tr('hometab_welcome');?></div>
+	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
 	
-<?
-/*
-	<input id="test" onfocus="pickdatetime(this,{start:0,end:24});" onkeyup="_pickdatetime(this,{start:0,end:24});">
-	<span id="test_val2"></span>
-	<?makelookup('test',1);?>
-	<br><br>
-	<input id="test2" onfocus="picktime(this,{start:0,end:24,y:2015,m:11,d:1});">
-	<?makelookup('test2',1);?>
-*/
-?>
 <div class="sectionheader">Database Status</div>
 <div class="stable">
 <div class="grid">
@@ -34,7 +24,7 @@ function showwelcome(){
 <tr>
 	<td><b>Current Database:</b></td>
 	<td>
-		<b><?echo htmlspecialchars($dbname);?></b> &nbsp; &nbsp;
+		<b><?php echo htmlspecialchars($dbname);?></b> &nbsp; &nbsp;
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','');">Run Query</button>
 	</td>
 </tr>
@@ -120,7 +110,7 @@ function showwelcome(){
 
 	
 </div><!-- section -->
-<?
+<?php
 }
 
 function auto_welcome(){
@@ -129,12 +119,12 @@ function auto_welcome(){
 	?>
 	<div class="section">
 
-	<?
+	<?php
 	foreach ($toolbaritems as $modid=>$ti){
 	if (isset($ti['type'])&&$ti['type']=='custom'){
 	?>
-	<?echo $ti['desktop'];?>
-	<?	
+	<?php echo $ti['desktop'];?>
+	<?php	
 		continue;
 	}
 	
@@ -152,16 +142,16 @@ function auto_welcome(){
 	
 ?>	
 	<div class="welcometile">
-	<a onclick="<?echo $action;?>"><img style="vertical-align:middle;margin-right:5px;" class="<?echo $ti['icon'];?>-light" src="imgs/t.gif" width="32" height="32"> <span style="vertical-align:middle;"><?echo $ti['title'];?></span></a>
+	<a onclick="<?php echo $action;?>"><img style="vertical-align:middle;margin-right:5px;" class="<?php echo $ti['icon'];?>-light" src="imgs/t.gif" width="32" height="32"> <span style="vertical-align:middle;"><?php echo $ti['title'];?></span></a>
 	</div>
 	
-<?}//foreach
+<?php }//foreach
 ?>
 
 	
 	<div class="clear"></div>
 </div>
-<?
+<?php
 		
 }
 

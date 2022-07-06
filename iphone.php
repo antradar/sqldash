@@ -1,4 +1,4 @@
-<?
+<?php
 include 'lb.php';
 if ($usehttps) include 'https.php';
 
@@ -37,17 +37,17 @@ body{font-family:helvetica;}
 <div id="toolbg" style="position:fixed;width:100%;z-index:1000;top:0;background:#333333;opacity:0.9"></div>
 <div id="toolicons" style="position:fixed;width:100%;z-index:2000;top:0;">
 
-	<div id="toollist" style="overflow:auto;width:100%;"><div style="width:<?echo 50*(count($toolbaritems)+2);?>px;">
+	<div id="toollist" style="overflow:auto;width:100%;"><div style="width:<?php echo 50*(count($toolbaritems)+2);?>px;">
 		
 	<div class="menuitem"><a id="speechstart" href=# onclick="speech_startstop(1);return false;" style="display:none;"><img style="" class="img-speechrecog" src="imgs/t.gif" border="0" width="32" height="32"></a></div>
 
-	<?foreach ($toolbaritems as $modid=>$ti){
+	<?php foreach ($toolbaritems as $modid=>$ti){
 		if ($ti['type']=='break') continue;
 		if ($ti['noiphone']) continue;	
 		if ($ti['type']=='custom'){
 		?>
-		<?echo $ti['iphone'];?>
-		<?	
+		<?php echo $ti['iphone'];?>
+		<?php	
 			continue;
 		}
 		
@@ -63,12 +63,12 @@ body{font-family:helvetica;}
 		}
 		
 	?>
-	<div class="menuitem"><a href=# onclick="<?echo $action;?>return false;"><img class="<?echo $ti['icon'];?>" src="imgs/t.gif" border="0" width="32" height="32"></a></div>
-	<?}?>
+	<div class="menuitem"><a href=# onclick="<?php echo $action;?>return false;"><img class="<?php echo $ti['icon'];?>" src="imgs/t.gif" border="0" width="32" height="32"></a></div>
+	<?php }?>
 
 	</div></div>
 		
-	<a href="login.php?from=<?echo $_SERVER['PHP_SELF'];?>" style="position:absolute;top:10px;right:10px;"><img border="0" width="16" height="16" src="imgs/t.gif" class="admin-logout"></a>
+	<a href="login.php?from=<?php echo $_SERVER['PHP_SELF'];?>" style="position:absolute;top:10px;right:10px;"><img border="0" width="16" height="16" src="imgs/t.gif" class="admin-logout"></a>
 </div><!-- toolicons -->
 <div id="pusher" style="width:100%;height:50px;"></div>
 
@@ -77,9 +77,9 @@ body{font-family:helvetica;}
 	<div id="tooltitle" style="width:150px;position:fixed;top:50px;z-index:1000;height:25px;"></div>
 	<div id="tooltitleshadow" style="width:150px;height:25px;"></div>
 	<div id="lvviews">
-	<?foreach ($toolbaritems as $modid=>$ti){?>
-		<div id="lv<?echo $modid;?>" style="background-color:#ffffff;display:none;"></div>
-	<?}?>	
+	<?php foreach ($toolbaritems as $modid=>$ti){?>
+		<div id="lv<?php echo $modid;?>" style="background-color:#ffffff;display:none;"></div>
+	<?php }?>	
 	</div>
 	<div id="lkv" style="height:100%;">
 		<div id="lkvtitle"><a id="lkvt"></a><img id="lkvx" src="imgs/t.gif" onclick="hidelookup();" width="30" height="24"></div>
@@ -89,7 +89,7 @@ body{font-family:helvetica;}
 </div>
 <div id="content" style="float:left;width:320px;">
 
-	<div id="backlist" style="display:none;position:fixed;width:100%;z-index:1000;"><a id="backlistbutton"><img onclick="navback();" src="iphone/bb_<?echo $lang;?>.png"></a></div>
+	<div id="backlist" style="display:none;position:fixed;width:100%;z-index:1000;"><a id="backlistbutton"><img onclick="navback();" src="iphone/bb_<?php echo $lang;?>.png"></a></div>
 	<div id="backlistshadow" style="display:none;width:100%;"></div>
 
 	<div id="tabtitles" style="width:325px;position:fixed;z-index:1000;"></div>
@@ -108,9 +108,9 @@ body{font-family:helvetica;}
 
 
 <script>
-document.appsettings={codepage:'<?echo $codepage;?>',fastlane:'<?echo $fastlane;?>', views:<?echo json_encode(array_keys($toolbaritems));?>};
+document.appsettings={codepage:'<?php echo $codepage;?>',fastlane:'<?php echo $fastlane;?>', views:<?php echo json_encode(array_keys($toolbaritems));?>};
 </script>
-<script src="lang/dict.<?echo $lang;?>.js"></script>
+<script src="lang/dict.<?php echo $lang;?>.js"></script>
 <script src="nano.js"></script>
 <script>
 hdpromote('toolbar_hd.css');
@@ -146,7 +146,7 @@ function showdeck(){
 
 function rotate(){
 	
-<?
+<?php
 	$ori_portrait_backward=180;
 	$ori_portrait_forward=0;
 	$ori_landscape_backward=-90;
@@ -166,8 +166,8 @@ function rotate(){
 ?>	
 	var ori=90;
 	if (window.matchMedia){
-		if (window.matchMedia('(orientation: landscape)').matches) ori=<?echo $ori_landscape_forward;?>;
-		else if (window.matchMedia('(orientation: portrait)').matches) ori=<?echo $ori_portrait_forward;?>;
+		if (window.matchMedia('(orientation: landscape)').matches) ori=<?php echo $ori_landscape_forward;?>;
+		else if (window.matchMedia('(orientation: portrait)').matches) ori=<?php echo $ori_portrait_forward;?>;
 	}
 	
 	if (window.operamini) ori=0;	
@@ -181,7 +181,7 @@ function rotate(){
 	var vw=document.body.clientWidth;
 	
 	switch(ori){
-	case <?echo $ori_portrait_backward;?>: case <?echo $ori_portrait_forward;?>: 
+	case <?php echo $ori_portrait_backward;?>: case <?php echo $ori_portrait_forward;?>: 
 		
 		//gid('panel2').style.display='block';
 		showdeck();
@@ -206,7 +206,7 @@ function rotate(){
 
 		
 	break;
-	case <?echo $ori_landscape_forward;?>: case <?echo $ori_landscape_backward;?>: 
+	case <?php echo $ori_landscape_forward;?>: case <?php echo $ori_landscape_backward;?>: 
 		//gid('panel2').style.display='none';
 		gid('leftview').style.display='block';
 		gid('leftview').style.width='210px';
@@ -246,7 +246,7 @@ function portrait_ignore(ttl){
 	setTimeout(function(){document.portraitlock=null;},ttl);
 }
 
-addtab('welcome','<?tr('tab_welcome');?>','wk',null,null,{noclose:true});
+addtab('welcome','<?php tr('tab_welcome');?>','wk',null,null,{noclose:true});
 
 function onrotate(){
 	if (document.resizetimer) clearTimeout(document.resizetimer);
@@ -270,7 +270,7 @@ scaleall(document.body);
 </script>
 <script src="wss.js"></script>
 <script>
-<?include 'ws_js.php';?>
+<?php include 'ws_js.php';?>
 </script>
 
 <script src="speech.js"></script>

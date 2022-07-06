@@ -1,4 +1,4 @@
-<?
+<?php
 
 function authpump(){
 	$hb=$_GET['hb'];

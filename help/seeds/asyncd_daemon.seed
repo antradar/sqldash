@@ -1,9 +1,0 @@
-start on startup
-stop on shutdown
-
-respawn 
-
-script 
-  cd /path/to/asyncd
-  hhvm asyncd.php Alice
-end script

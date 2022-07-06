@@ -89,15 +89,15 @@ function apperror($str,$msg=null){if (!isset($msg)) $msg=$str;header('apperror: 
 
 function makelookup($id,$fullscale=0){
 ?>
-<div class="minilookup" id="<?echo $id;?>_lookup"><a id="<?echo $id;?>_lookup_closer" class="labelbutton closer" onclick="gid('<?echo $id;?>_lookup').style.display='none';"><?tr('lookup_closer')?></a>
-<div id="<?echo $id;?>_lookup_view" class="lookupview"<?if ($fullscale) echo ' style="height:auto;overflow:normal;"';?>></div></div>
-<?	
+<div class="minilookup" id="<?php echo $id;?>_lookup"><a id="<?php echo $id;?>_lookup_closer" class="labelbutton closer" onclick="gid('<?php echo $id;?>_lookup').style.display='none';"><?php tr('lookup_closer')?></a>
+<div id="<?php echo $id;?>_lookup_view" class="lookupview"<?php if ($fullscale) echo ' style="height:auto;overflow:normal;"';?>></div></div>
+<?php 	
 }
 
 function cancelpickup($id){
 ?>
-<a class="labelbutton" onclick="cancelpickup('<?echo $id;?>');"><?tr('pickup_edit');?></a>
-<?	
+<a class="labelbutton" onclick="cancelpickup('<?php echo $id;?>');"><?php tr('pickup_edit');?></a>
+<?php 	
 }
 
 function logaction($message,$rawobj=null,$syncobj=null){

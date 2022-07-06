@@ -30,14 +30,14 @@ function listdatabases(){
 	</form>
 </div>
 <div id="databaselist">
-<?
+<?php
 	}//embed
 
 	while ($myrow=sql_fetch_array($rs)){
 		$dbname=$myrow[0];
 	?>
-	<div class="listitem"><a onclick="setdatabase('<?echo $dbname;?>');"><?echo $dbname;?></a></div>
-	<?	
+	<div class="listitem"><a onclick="setdatabase('<?php echo $dbname;?>');"><?php echo $dbname;?></a></div>
+	<?php	
 			
 	}//while	
 	
@@ -50,6 +50,6 @@ function listdatabases(){
 	gid('tooltitle').innerHTML='<a>Databases</a>';
 </script>
 
-<?
+<?php
 	}
 }

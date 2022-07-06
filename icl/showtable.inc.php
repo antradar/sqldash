@@ -11,7 +11,7 @@ function showtable(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?echo $dbname;?> &raquo; <?echo $tablename;?></div>
+	<div class="sectiontitle"><?php echo $dbname;?> &raquo; <?php echo $tablename;?></div>
 	
 	<div style="margin-bottom:10px;">
 	<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>');">Run Query</button>
@@ -34,7 +34,7 @@ function showtable(){
 			<?php echo htmlspecialchars($myrow['Comment']);?>
 		</div>
 		</div><!-- section -->
-		<?	
+		<?php	
 			return;
 		}
 	
@@ -83,7 +83,7 @@ function showtable(){
 	<td><?php echo htmlspecialchars($type);?></td>
 	<td><b><?php echo htmlspecialchars($extra);?></b></td>
 	</tr>
-	<?	
+	<?php	
 		$idx++;
 	}//while
 ?>
@@ -109,6 +109,6 @@ if (in_array($SQL_ENGINE,array('MySQL','MySQLi','ClickHouse'))){
 ?>	
 
 </div><!-- section -->
-<?	
+<?php	
 }
 

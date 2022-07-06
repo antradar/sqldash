@@ -10,18 +10,18 @@ function showguide(){
 	
 	<div id="codegenlist" style="padding:20px 20px;background-color:#444444;color:#ffffff;display:none;">
 		
-		<?foreach ($codegen_seeds as $seed=>$seedinfo){
+		<?php foreach ($codegen_seeds as $seed=>$seedinfo){
 			$label=isset($seedinfo['name'])?$seedinfo['name']:'';
 			$type=isset($seedinfo['type'])?$seedinfo['type']:'';
 			if ($type=='break'){
 			?>
 		<div class="clear"></div>
-			<?
+			<?php
 				continue;
 			}
 		?>
-			<a style="float:left;margin-right:15px;margin-bottom:10px;display:block;font-size:12px;background-color:#333333;border-radius:4px;padding:5px 8px;white-space:nowrap;" onclick="ajxjs(self.codegen,'codegen.js');codegen_makeform('<?echo $seed;?>');"><?echo $label;?></a>
-		<?	
+			<a style="float:left;margin-right:15px;margin-bottom:10px;display:block;font-size:12px;background-color:#333333;border-radius:4px;padding:5px 8px;white-space:nowrap;" onclick="ajxjs(self.codegen,'codegen.js');codegen_makeform('<?php echo $seed;?>');"><?php echo $label;?></a>
+		<?php	
 		}
 		?>
 		<div class="clear"></div>
@@ -34,7 +34,7 @@ function showguide(){
 	<div id="codegen_view" style="padding:20px;">
 	
 	</div>
-<?
+<?php
 }
 
 

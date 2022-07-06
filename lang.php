@@ -1,4 +1,4 @@
-<?
+<?php
 $deflang='en';
 
 $langs=array(

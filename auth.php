@@ -5,16 +5,12 @@ define ('GYROSCOPE_VERSION', '8.2');
 //remember to personalize the project name
 define ('GYROSCOPE_PROJECT', 'SQL Dash');
 
-define('SQLDASHKEY','!;L%zw~aAQ._lt7.j7.aNdT-|_|pi*%=+spy8.!kdM-zf|Hc|v');
+define('SQLDASHKEY','!;L%zw~aAQ._lt7.j7.aNdT-|_|pi*%=+spy8.!kdM-zf|Hc|v'); //change this per installation
 
 //ignore vendor settings if you are not a certified solution provider
 define ('VENDOR_VERSION',''); 
 define ('VENDOR_INITIAL','');
 define ('VENDOR_NAME','');
-
-//ignore modual settings if the product is a non-shared, custom solution
-//define ('MOD_SERVER','https://www.antradar.com/gyroscope_mods.php');
-//define ('MOD_KEY','mod_demo123');
 
 /*
 	a passphrase (or a "salt") has to be set
