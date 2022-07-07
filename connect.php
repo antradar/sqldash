@@ -1,9 +1,10 @@
 <?php
 include_once 'encdec.php';
+include_once 'forminput.php';
 
-$sqlmode=$_COOKIE['sqlmode'];
-if ($_GET['sqlmode']=='sqlsrv'||$_POST['sqlmode']=='sqlsrv') $sqlmode='sqlsrv';
-if ($_GET['sqlmode']=='clickhouse'||$_POST['sqlmode']=='clickhouse') $sqlmode='clickhouse';
+$sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
+if (SGET('sqlmode')=='sqlsrv'||SQET('sqlmode')=='sqlsrv') $sqlmode='sqlsrv';
+if (SGET('sqlmode')=='clickhouse'||SQET('sqlmode')=='clickhouse') $sqlmode='clickhouse';
 
 switch ($sqlmode){
 	case 'clickhouse': include_once 'sql-clickhouse.php'; break;

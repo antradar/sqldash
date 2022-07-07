@@ -1,14 +1,19 @@
 <?php
 
-function GETVAL($key){ $val=$_GET[$key]; if (!is_numeric($val)){header('apperror:invalid parameter '.$key);die('invalid parameter '.$key);} return $val;}
-function QETVAL($key){ $val=$_POST[$key]; if (!is_numeric($val)){header('apperror:invalid parameter '.$key);die('invalid parameter '.$key);} return $val;}
-function noapos($val){if (is_callable('sql_escape')) return sql_escape($val); return addslashes($val);}
-function GETSTR($key){ $val=decode_unicode_url(isset($_GET[$key])?$_GET[$key]:null); return noapos($val); }
-function QETSTR($key){ $val=decode_unicode_url(isset($_POST[$key])?$_POST[$key]:null); return noapos($val); }
+function GETVAL($key){ $val=trim(isset($_GET[$key])?$_GET[$key]:''); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val;}
+function QETVAL($key){ $val=trim(isset($_POST[$key])?$_POST[$key]:''); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val;}
+function noapos($val,$trimnl=1){$val=addslashes($val); if ($trimnl) $val=str_replace(array("\n","\r","\r\n"),' ',$val); return $val;}
+function GETSTR($key,$trim=1){$val=isset($_GET[$key])?$_GET[$key]:'';if ($trim) $val=trim($val);return noapos($val,0);}
+function QETSTR($key,$trim=1){$val=isset($_POST[$key])?$_POST[$key]:'';if ($trim) $val=trim($val);return noapos($val,0);}
 
-function hspc($str){
-	return htmlspecialchars($str,ENT_SUBSTITUTE);
-}
+function GETCUR($key){$val=trim($_GET[$key]); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
+function QETCUR($key){$val=trim($_POST[$key]); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
+
+function SGET($key,$trim=1){$val=isset($_GET[$key])?$_GET[$key]:'';if ($trim) $val=trim($val);return $val;}
+function SQET($key,$trim=1){$val=isset($_POST[$key])?$_POST[$key]:'';if ($trim) $val=trim($val);return $val;}
+
+function hspc($str){return htmlspecialchars($str,ENT_SUBSTITUTE|ENT_COMPAT);}
+
 
 function utf8_fix($str){
 	list($res,$_)=_utf8_fix($str);

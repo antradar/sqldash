@@ -62,10 +62,10 @@ function listtables(){
 	?>
 	<div class="listitem">
 	<a onclick="showtable('<?php echo $tablename;?>','<?php echo $dbname;?>');"><?php echo $tablename;?>
-		<?php if ($tabletypes[$tablename]!=''){?>
+		<?php if (isset($tabletypes[$tablename])&&$tabletypes[$tablename]!=''){?>
 		<span class="labelbutton"><?php echo $tabletypes[$tablename];?></span>
 		<?php }?>
-		<?php if ($tableopts[$tablename]!=''){
+		<?php if (isset($tableopts[$tablename])&&$tableopts[$tablename]!=''){
 			$dopts=$tableopts[$tablename];
 			if ($dopts=='partitioned') $dopts='Par';
 			if ($dopts=='ENCRYPTION="Y"') $dopts='Enc';

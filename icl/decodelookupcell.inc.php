@@ -1,14 +1,16 @@
 <?php
 
 function decodelookupcell(){
-	$fval=$_GET['fval'];
-	$pfval=$_POST['pfval'];
+	$fval=SGET('fval');
+	$pfval=SQET('pfval');
 	global $db;
 	
 	$valmode='inline';
 	if (strlen($pfval)>strlen($fval)) {$valmode='block';$fval=$pfval;}
 	
 	$decoder=$_GET['decoder'];
+	
+	$res='';
 		
 	switch ($decoder){
 	case 'datetime':

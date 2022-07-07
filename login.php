@@ -39,25 +39,22 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 		$login=str_replace("'",'',$raw_login);
 		
 		$dbhost=$_POST['dbhost'];
-		if ($_POST['sqlmode']=='clickhouse'&&is_numeric($_POST['apiport'])) $dbhost.=':'.$_POST['apiport'];
+		if (SQET('sqlmode')=='clickhouse'&&is_numeric(SQET('apiport'))) $dbhost.=':'.$_POST['apiport'];
 		$dbname=$_POST['dbname'];
 		if ($dbname=='') $dbname=null;
 		
-		$db=sql_get_db($dbhost,$dbname,$raw_login,$password);
+		$db=@sql_get_db($dbhost,$dbname,$raw_login,$password);
 		if (isset($db)&&$db){
 		
-			$groupnames=$myrow['groupnames'];
-			$auth=md5($salt.$userid.$groupnames.$salt.$raw_login);
+			$auth=md5($salt.$salt.$raw_login);
 			
 			setcookie('auth',$auth);
-			setcookie('userid',$userid);
-			setcookie('login',$login);
-			setcookie('groupnames',$groupnames);
+			setcookie('login',$raw_login);
 			setcookie('dashpass',$dashpass);
 			setcookie('dbhost',$dbhost);
 			$cdbname=$dbname.'';
 			setcookie('dbname',$cdbname);
-			setcookie('sqlmode',$_POST['sqlmode']);
+			setcookie('sqlmode',SQET('sqlmode'));
 			
 			if (isset($_POST['lang'])){
 				if (!in_array($_POST['lang'],array_keys($langs))) $_POST['lang']=$deflang;
@@ -132,26 +129,42 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 <div id="loginbox">
 	<form method="POST" style="padding:20px;margin:0;padding-top:10px;" onsubmit="return checkform();">
 	<img src="imgs/logo.png" style="margin:10px 0;width:100%;">
-	<?php if ($error_message!=''){?>
-	<div style="color:#ab0200;font-weight:bold;padding-top:10px;"><?php echo $error_message;?></div>
+	
+	<?php 
+	
+	if (SQLDASHKEY=='') {
+		$error_message='Incomplete Setup:<br><br>';
+		if (!file_exists('sqldashkey.php')) $error_message.='sqldashkey.php must be created; SQLDASHKEY must be set to a unique value.';
+		else $error_message.='SQLDASHKEY not set in sqldashkey.php';
+	}
+	
+	
+	if ($error_message!=''){
+		
+	?>
+	<div style="color:#ab0200;font-weight:bold;padding-top:10px;line-height:1.4em;"><?php echo $error_message;?></div>
 	<?php }?>
+	
+	<?php
+	if (SQLDASHKEY!=''){
+	?>
 
 	<div style="padding-top:10px;padding-bottom:5px;">Engine:</div>
 	<select style="width:100%;" id="sqlmode" class="lfinp" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
 		<option value="mysqli">MySQLi</option>
-		<option value="sqlsrv" <?php if ($_POST['sqlmode']=='sqlsrv') echo 'selected';?>>SQLSrv</option>
-		<option value="clickhouse" <?php if ($_POST['sqlmode']=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
+		<option value="sqlsrv" <?php if (SQET('sqlmode')=='sqlsrv') echo 'selected';?>>SQLSrv</option>
+		<option value="clickhouse" <?php if (SQET('sqlmode')=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
 	</select>
 		
 	<div style="padding-top:10px;padding-bottom:5px;">Host:</div>
 	<input style="width:100%;" id="dbhost" class="lfinp" type="text" name="dbhost" value="<?php echo isset($_POST['dbhost'])?$_POST['dbhost']:'localhost';?>">
 
-	<div id="apiportview" style="display:none<?php if ($_POST['sqlmode']=='clichouse') echo 'a';?>;">
+	<div id="apiportview" style="display:none<?php if (SQET('sqlmode')=='clickhouse') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">API Port:</div>
 		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?php echo isset($_POST['dbhost'])?$_POST['apiport']:'8123';?>">
 	</div>
 	
-	<div id="dbview" style="display:none<?php if ($_POST['sqlmode']=='sqlsrv') echo 'a';?>;">
+	<div id="dbview" style="display:none<?php if (SQET('sqlmode')=='sqlsrv') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">Database:</div>
 		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?php echo isset($_POST['dbname'])?$_POST['dbname']:'';?>">
 	</div>
@@ -206,6 +219,9 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	<div style="display:none;"><textarea name="certid" id="certid"></textarea></div>
 	</form>
 	&nbsp;
+	<?php
+	}
+	?>
 </div>
 </div></div>	
 	<?php

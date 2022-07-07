@@ -15,8 +15,6 @@ login(true); //silent mode
 
 $cmd=$_GET['cmd'];
 
-include 'forminput.php';
-
 
 switch($cmd){
 

@@ -66,11 +66,11 @@ function showtable(){
 	$rs=sql_prep($query,$db);
 	$idx=0;
 	while ($myrow=sql_fetch_assoc($rs)){
-		$field=$myrow['Field'];
-		$type=$myrow['Type'];
-		$nullable=$myrow['Null'];
-		$keytype=$myrow['Key'];
-		$extra=$myrow['Extra'];
+		$field=isset($myrow['Field'])?$myrow['Field']:'';
+		$type=isset($myrow['Type'])?$myrow['Type']:'';
+		$nullable=isset($myrow['Null'])?$myrow['Null']:'';
+		$keytype=isset($myrow['Key'])?$myrow['Key']:'';
+		$extra=isset($myrow['Extra'])?$myrow['Extra']:'';
 		if ($SQL_ENGINE=='ClickHouse'){
 			$field=$myrow['name'];
 			$type=$myrow['type'];
@@ -100,7 +100,7 @@ if (in_array($SQL_ENGINE,array('MySQL','MySQLi','ClickHouse'))){
 	$query="show create table $tablename";
 	$rs=sql_query($query,$db);
 	$myrow=sql_fetch_assoc($rs);
-	$stmt=$myrow['Create Table'];
+	$stmt=isset($myrow['Create Table'])?$myrow['Create Table']:'';
 	if ($stmt==''&&$myrow['statement']!='') $stmt=$myrow['statement'];
 ?>
 	<textarea style="display:none;" class="inplong" id="tablecreater_<?php echo $dbname;?>_<?php echo $tablename;?>"><?php echo htmlspecialchars($stmt);?></textarea>

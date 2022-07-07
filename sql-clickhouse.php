@@ -410,6 +410,7 @@ function sql_fetch_assoc(&$rs){
 function sql_fetch_array(&$rs){
 	$combo=array();
 	$assoc=sql_fetch_assoc($rs);
+	if (!isset($assoc)) return $combo;
 	$idx=0;
 	foreach ($assoc as $k=>$v){
 		$combo[$idx]=$v;

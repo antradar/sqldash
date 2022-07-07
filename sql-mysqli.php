@@ -7,6 +7,8 @@ if (!defined('MYSQLI_STORE_RESULT')) define('MYSQLI_STORE_RESULT',0);
 if (!defined('MYSQLI_ASYNC')) define('MYSQLI_ASYNC',8);
 
 $SQL_ENGINE="MySQLi";
+//$SQL_READONLY=1; //uncomment to trigger readonly mode
+
 
 function sql_escape($str){
 	global $db;
@@ -34,6 +36,13 @@ function sql_get_db($dbhost,$dbsource,$dbuser,$dbpass,$lazyname=null){
 
 function sql_prep($query,&$db,$params=null){
 	global $gsdbprofile;
+	global $SQL_READONLY;
+	
+	if ($SQL_READONLY){
+		$tokens=explode(' ',trim($query));
+		$verb=strtolower($tokens[0]);
+		if ($verb!='select'&&$verb!='show') return;
+	}
 	
 	if (is_string($db)){
 		global $dbdefers;
@@ -41,11 +50,14 @@ function sql_prep($query,&$db,$params=null){
 		$db=sql_get_db($dbinfo['host'],$dbinfo['source'],$dbinfo['user'],$dbinfo['pass']);
 	}	
 	
-	if (!is_array($params)) $params=array($params);
-	
+	if (isset($params)){
+		if (!is_array($params)) $params=array($params);
+	} else $params=array();
+		
 	$a=microtime(1);
 	
 	$typestr=str_pad('',count($params),'s');
+			
 	$stmt=mysqli_stmt_init($db);
 	mysqli_stmt_prepare($stmt,$query);
 		
@@ -55,23 +67,36 @@ function sql_prep($query,&$db,$params=null){
 		return;
 	}
 	
+
+	if ($typestr!=''){
 		
 	///////// [[[ ////////	< PHP 5.6
 		
+	/*
 	$cparams=array($stmt,$typestr);
 	foreach ($params as $param) array_push($cparams,isset($param)?$param.'':null);
 	$func=new ReflectionFunction('mysqli_stmt_bind_param');
-	$func->invokeArgs($cparams);
+	@$func->invokeArgs($cparams);
+	*/
 	
 	////////// ]]] ///////	>= PHP 5.6
-	
-	// mysqli_stmt_bind_param($stmt,$typestr,...$params);
+		
+	mysqli_stmt_bind_param($stmt,$typestr,...$params);
+
+	}//need to bind
 	
 	///////////////////////
 		
-	if (!mysqli_stmt_execute($stmt)) echo "sql query error: ".$query.' '.$stmt->error;
+	if (!mysqli_stmt_execute($stmt)) {
+		$backtrace=debug_backtrace();
+		$file=basename($backtrace[0]['file']);
+		$line=$backtrace[0]['line'];
+
+		echo "@$file [$line] sql query error: ".$query.' '.$stmt->error."\r\n";
+	}
+	
 	$rs=mysqli_stmt_get_result($stmt);
-		
+	
 	if ($rs==null){
 		$rs=array(
 			'type'=>'stmt',
@@ -90,7 +115,14 @@ function sql_prep($query,&$db,$params=null){
 
 function sql_query($query,&$db,$mode=MYSQLI_STORE_RESULT){
 	global $gsdbprofile;
+	global $SQL_READONLY;
 	
+	if ($SQL_READONLY){
+		$tokens=explode(' ',trim($query));
+		$verb=strtolower($tokens[0]);
+		if ($verb!='select'&&$verb!='show') return;
+	}
+		
 	if (is_string($db)){
 		global $dbdefers;
 		$dbinfo=$dbdefers[$db];
@@ -101,7 +133,13 @@ function sql_query($query,&$db,$mode=MYSQLI_STORE_RESULT){
 	$rs=mysqli_query($db,$query,$mode);
 	$b=microtime(1);
 			
-	if ((!$rs)&&$mode==MYSQLI_STORE_RESULT) echo "sql_error: ".$query.' '.mysqli_error();
+	if ((!$rs)&&$mode==MYSQLI_STORE_RESULT) {
+		$backtrace=debug_backtrace();
+		$file=basename($backtrace[0]['file']);
+		$line=$backtrace[0]['line'];
+		
+		echo "@$file [$line] sql_error: ".$query.' '.mysqli_error($db)."\r\n";
+	}
 	if (is_array($gsdbprofile)) array_push($gsdbprofile,array('query'=>$query,'time'=>$b-$a));
 	return $rs;
 }
@@ -125,16 +163,51 @@ function sql_copy_from_query($query,$db,$omits,$table){
 	return $id;
 }
 
+function sql_save_chunks($db,$table,$chunks){
+	
+		/*
+		//example:
+		$chunks=array(
+			array('carname'=>$carname, 'carmake'=>$carmake,... ),
+			...
+		);
+		*/
+	
+		$query="insert into $table (".implode(',',array_keys($chunks[0])).") values ";
+		
+		$qs=array();
+		$vs=array();
+		
+		foreach ($chunks as $chunk){
+			$qqs=array();
+			foreach ($chunk as $v) {
+				array_push($qqs,'?');
+				array_push($vs,$v);
+			}
+			array_push($qs,'('.implode(',',$qqs).')');			
+			
+		}//foreach chunk
+		
+		$query.=implode(',',$qs);
+		
+		sql_prep($query,$db,$vs);
+				
+}
+
 function sql_fetch_array($rs){
 	return mysqli_fetch_array($rs);
 
 }
 
 function sql_fetch_assoc($rs){
+	if (!$rs) return $rs;
 	return mysqli_fetch_assoc($rs);
 }
 
 function sql_insert_id($db,$rs=null){
+	global $SQL_READONLY;
+	
+	if ($SQL_READONLY) return 0;	
 
 	if (is_array($rs)&&$rs['type']=='stmt'&&isset($rs['insert_id'])) return $rs['insert_id'];
 	if (!isset($rs)) return mysqli_insert_id();

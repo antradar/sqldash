@@ -1,11 +1,12 @@
 <?php
+if (file_exists('sqldashkey.php')) include 'sqldashkey.php';
+else define('SQLDASHKEY','');
 
 define ('GYROSCOPE_VERSION', '8.2');
 
 //remember to personalize the project name
 define ('GYROSCOPE_PROJECT', 'SQL Dash');
 
-define('SQLDASHKEY','!;L%zw~aAQ._lt7.j7.aNdT-|_|pi*%=+spy8.!kdM-zf|Hc|v'); //change this per installation
 
 //ignore vendor settings if you are not a certified solution provider
 define ('VENDOR_VERSION',''); 
@@ -46,10 +47,10 @@ function login($silent=false){
 	$dashpass=null;
 	$signed=0;
 	
-	$dbhost=$_COOKIE['dbhost'];
+	$dbhost=isset($_COOKIE['dbhost'])?$_COOKIE['dbhost']:null;
 	if (!isset($dbhost)) $dbhost='localhost';
 
-	$dbname=$_COOKIE['dbname'];
+	$dbname=isset($_COOKIE['dbname'])?$_COOKIE['dbname']:null;
 	if ($dbname=='') $dbname=null;
 	
 	if (isset($login)&&$login!=''){

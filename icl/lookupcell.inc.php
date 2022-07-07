@@ -84,7 +84,7 @@ function lookupcell(){
 	
 	list($fval,$itr)=_utf8_fix($myrow[$fkey]);
 	
-	$viewmode=$_GET['viewmode'];
+	$viewmode=SGET('viewmode');
 	
 	if ($viewmode==''){
 		if (in_array($colinfo['Type'],array('blob','mediumblob','longblob','geography'))) $viewmode='bin';	

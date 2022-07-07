@@ -7,7 +7,7 @@ function showwelcome(){
 	global $db;
 	global $SQL_ENGINE;
 	
-	$dbname=$_COOKIE['dbname'];
+	$dbname=isset($_COOKIE['dbname'])?$_COOKIE['dbname']:null;
 	
 ?>
 <div class="section">
@@ -62,7 +62,9 @@ function showwelcome(){
 	<?php
 		
 	}//while
-	
+
+	if (isset($dbname)){
+			
 	$query="SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM INFORMATION_SCHEMA.TABLES WHERE table_schema like ? and CREATE_OPTIONS LIKE '%ENCRYPTION=\"Y\"%';";
 	$rs=sql_prep($query,$db,$dbname);
 	$c=sql_affected_rows($db,$rs);
@@ -87,6 +89,7 @@ function showwelcome(){
 
 	}
 	
+	}//dbname
 ?>
 </table>
 </div>

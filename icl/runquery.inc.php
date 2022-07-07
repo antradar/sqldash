@@ -56,7 +56,7 @@ function runquery(){
 			
 			$rs=sql_prep($dquery,$db);
 			while ($myrow=sql_fetch_assoc($rs)){
-				if ($myrow['Key']=='PRI') $pkey=$myrow['Field'];
+				if (isset($myrow['Key'])&&$myrow['Key']=='PRI') $pkey=$myrow['Field'];
 				if ($SQL_ENGINE=='SQLSRV'&&$myrow['COLUMN_NAME']!='') $pkey=$myrow['COLUMN_NAME'];
 				if ($pkey==''&&$SQL_ENGINE=='ClickHouse'){
 					if ($myrow['type']=='UInt64'&&preg_match('/id$/',$myrow['name'])||$myrow['type']=='UUID'||$myrow['comment']=='identity') $pkey=$myrow['name'];
@@ -79,7 +79,7 @@ function runquery(){
 	<?php	
 		
 		$perpage=30;
-		$page=$_GET['page']+0;
+		$page=isset($_GET['page'])?intval($_GET['page']):0;
 		$maxpage=ceil($c/$perpage)-1;
 		if ($maxpage<0) $maxpage=0;
 		if ($page>$maxpage) $page=$maxpage;
