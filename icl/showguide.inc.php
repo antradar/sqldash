@@ -2,6 +2,7 @@
 
 function showguide(){
 	global $codegen_seeds;
+	if (!is_array($codegen_seeds)) return;
 	?>
 		
 <!-- {{ -->	

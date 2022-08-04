@@ -6,7 +6,6 @@
 $SQL_ENGINE="SQLSRV";
 
 function sql_get_db($dbhost,$dbsource,$dbuser=null,$dbpass=null,$lazyname=null){
-
 	if (isset($lazyname)){
 		global $dbdefers;
 		if (!isset($dbdefers)) $dbdefers=array();
@@ -20,6 +19,8 @@ function sql_get_db($dbhost,$dbsource,$dbuser=null,$dbpass=null,$lazyname=null){
 	$config=array('Database'=>$dbsource);
 	if (isset($dbuser)) $config['UID']=$dbuser;
 	if (isset($dbpass)) $config['PWD']=$dbpass;
+	
+	$config['CharacterSet']='UTF-8'; // the default SQLSRV_ENC_CHAR is problematic in Linux
 
 	$db=sqlsrv_connect($dbhost,$config);
 	return $db;

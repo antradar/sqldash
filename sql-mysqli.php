@@ -78,7 +78,6 @@ function sql_prep($query,&$db,$params=null){
 	$func=new ReflectionFunction('mysqli_stmt_bind_param');
 	@$func->invokeArgs($cparams);
 	*/
-	
 	////////// ]]] ///////	>= PHP 5.6
 		
 	mysqli_stmt_bind_param($stmt,$typestr,...$params);
@@ -200,7 +199,7 @@ function sql_fetch_array($rs){
 }
 
 function sql_fetch_assoc($rs){
-	if (!$rs) return $rs;
+	if (!isset($rs)||!is_object($rs)) return null;
 	return mysqli_fetch_assoc($rs);
 }
 
