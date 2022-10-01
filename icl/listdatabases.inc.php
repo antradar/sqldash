@@ -5,7 +5,6 @@ function listdatabases(){
 	$key=GETSTR('key');
 
 	global $SQL_ENGINE;
-
 	$query="show databases ";
 	if ($SQL_ENGINE=='SQLSRV') $query="select name from sys.databases";
 

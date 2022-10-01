@@ -57,9 +57,12 @@ function login($silent=false){
 		$rawpass=base64_decode($_COOKIE['dashpass']);
 		$dashpass=decstr($rawpass,SQLDASHKEY);
 		
-		$db=sql_get_db($dbhost,$dbname,$login,$dashpass);
-		if (isset($db)&&$db) $signed=1;
-			
+		$db=sql_get_db($dbhost,$dbname,$login,$dashpass,null,'sqldashdb');
+		if (isset($db)&&(
+			(is_array($db)&&isset($db['raw'])&&$db['raw'])
+			||
+			is_object($db)
+			)) $signed=1;
 	}
 
 	if (!$signed) {
