@@ -58,7 +58,8 @@ function login($silent=false){
 		$dashpass=decstr($rawpass,SQLDASHKEY);
 		
 		$db=sql_get_db($dbhost,$dbname,$login,$dashpass,null,'sqldashdb');
-		if (isset($db)&&(
+		//sync the condition with login.php
+		if (isset($db)&&$db!==false&&(
 			(is_array($db)&&isset($db['raw'])&&$db['raw'])
 			||
 			is_object($db)

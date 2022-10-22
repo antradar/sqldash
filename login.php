@@ -44,7 +44,12 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 		if ($dbname=='') $dbname=null;
 		
 		$db=@sql_get_db($dbhost,$dbname,$raw_login,$password);
-		if (isset($db)&&$db){
+
+		if (isset($db)&&$db!==false&&(
+			(is_array($db)&&isset($db['raw'])&&$db['raw'])
+			||
+			is_object($db)
+			)){
 		
 			$auth=md5($salt.$salt.$raw_login);
 			
@@ -60,7 +65,6 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 				if (!in_array($_POST['lang'],array_keys($langs))) $_POST['lang']=$deflang;
 				setcookie('userlang',$_POST['lang'],time()+3600*24*30*6); //keep for 6 months
 			}
-			
 			if (isset($_GET['from'])&&trim($_GET['from'])!='') {
 			  $from=$_GET['from'];
 			  $from=str_replace('://','',$from);
@@ -106,8 +110,9 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 #cardlink{display:none;}
 #cardinfo{padding:5px;font-size:12px;padding-left:26px;background:#fcfcdd url(imgs/smartcard.png) no-repeat 5px 50%;margin-bottom:10px;display:none;}
 
-.lfinp{border:solid 1px #999999;padding:5px;box-sizing:border-box;display:block;height:34px;line-height:32px;margin-bottom:5px;border-radius:3px;-webkit-appearance:none;}
-.lfinp:active, .lfinp:focus{outline:0;border:solid 2px #29abe2;}
+.lfinp,.lfsel{border:solid 1px #999999;padding:5px;box-sizing:border-box;display:block;height:34px;line-height:32px;margin-bottom:5px;border-radius:3px;}
+.lfinp{-webkit-appearance:none;}
+.lfinp:active, .lfinp:focus, .lfsel:active, .lfsel:focus{outline:0;border:solid 2px #29abe2;}
 
 @media screen and (max-width:400px){
 	#loginbox__,.powered{width:90%;}
@@ -150,7 +155,7 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	?>
 
 	<div style="padding-top:10px;padding-bottom:5px;">Engine:</div>
-	<select style="width:100%;" id="sqlmode" class="lfinp" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
+	<select style="width:100%" id="sqlmode" class="lfsel" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
 		<option value="mysqli">MySQLi</option>
 		<option value="sqlsrv" <?php if (SQET('sqlmode')=='sqlsrv') echo 'selected';?>>SQLSrv</option>
 		<option value="clickhouse" <?php if (SQET('sqlmode')=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
