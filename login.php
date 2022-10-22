@@ -16,6 +16,29 @@ $error_message='';
 
 $passreset=0;
 
+
+$defsqlmode='';
+$defdbhost='';
+$defapiport='';
+
+if (isset($_COOKIE['defsqlmode'])) $defsqlmode=$_COOKIE['defsqlmode'];
+if (isset($_POST['sqlmode'])) $defsqlmode=$_POST['sqlmode'];
+
+if (isset($_COOKIE['dbhost'])) {
+	$basehost=$_COOKIE['dbhost'];
+	if ($defsqlmode=='clickhouse'){
+		$hostparts=explode(':',$basehost);
+		$basehost=$hostparts[0];	
+	}
+	$defdbhost=$basehost;
+}
+if (isset($_POST['dbhost'])) $defdbhost=$_POST['dbhost'];
+if ($defdbhost=='') $defdbhost='localhost';
+
+if (isset($_COOKIE['apiport'])) $defapiport=$_COOKIE['apiport'];
+if (isset($_POST['apiport'])) $defapiport=$_POST['apiport'];
+if ($defapiport=='') $defapiport='8123';
+
 if (isset($_POST['lang'])&&in_array($_POST['lang'],array_keys($langs))) {
 	$lang=$_POST['lang'];include 'lang/dict.'.$lang.'.php';  
 	setcookie('userlang',$_POST['lang'],time()+3600*24*30*6); //keep for 6 months
@@ -44,6 +67,18 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 		if ($dbname=='') $dbname=null;
 		
 		$db=@sql_get_db($dbhost,$dbname,$raw_login,$password);
+		
+		//clickhouse - try at least a simple query, if not authenticated, empty the $db
+		if (SQET('sqlmode')=='clickhouse'){
+			ob_start();
+			$query="select 1";
+			$rs=sql_prep($query,$db);
+			$err=ob_get_clean();
+			if (!$rs){
+				$error_message=$err;
+				unset($db);	
+			}	
+		}
 
 		if (isset($db)&&$db!==false&&(
 			(is_array($db)&&isset($db['raw'])&&$db['raw'])
@@ -56,10 +91,12 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 			setcookie('auth',$auth);
 			setcookie('login',$raw_login);
 			setcookie('dashpass',$dashpass);
-			setcookie('dbhost',$dbhost);
+			setcookie('dbhost',$dbhost,time()+3600*24*30*6);
 			$cdbname=$dbname.'';
 			setcookie('dbname',$cdbname);
 			setcookie('sqlmode',SQET('sqlmode'));
+			setcookie('defsqlmode',SQET('sqlmode'),time()+3600*24*30*6);
+			setcookie('apiport',SQET('apiport'),time()+3600*24*30*6);
 			
 			if (isset($_POST['lang'])){
 				if (!in_array($_POST['lang'],array_keys($langs))) $_POST['lang']=$deflang;
@@ -75,7 +112,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 			} else header('Location:index.php');
 			die();
 					
-		} else $error_message=_tr('invalid_password'); //passcheck
+		} else $error_message=$error_message!=''?$error_message:_tr('invalid_password'); //passcheck
 	
 	}//csrf
 	
@@ -157,19 +194,19 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	<div style="padding-top:10px;padding-bottom:5px;">Engine:</div>
 	<select style="width:100%" id="sqlmode" class="lfsel" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
 		<option value="mysqli">MySQLi</option>
-		<option value="sqlsrv" <?php if (SQET('sqlmode')=='sqlsrv') echo 'selected';?>>SQLSrv</option>
-		<option value="clickhouse" <?php if (SQET('sqlmode')=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
+		<option value="sqlsrv" <?php if ($defsqlmode=='sqlsrv') echo 'selected';?>>SQLSrv</option>
+		<option value="clickhouse" <?php if ($defsqlmode=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
 	</select>
 		
 	<div style="padding-top:10px;padding-bottom:5px;">Host:</div>
-	<input style="width:100%;" id="dbhost" class="lfinp" type="text" name="dbhost" value="<?php echo isset($_POST['dbhost'])?$_POST['dbhost']:'localhost';?>">
+	<input style="width:100%;" id="dbhost" class="lfinp" type="text" name="dbhost" value="<?php echo $defdbhost;?>">
 
-	<div id="apiportview" style="display:none<?php if (SQET('sqlmode')=='clickhouse') echo 'a';?>;">
+	<div id="apiportview" style="display:none<?php if ($defsqlmode=='clickhouse') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">API Port:</div>
-		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?php echo isset($_POST['dbhost'])?$_POST['apiport']:'8123';?>">
+		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?php echo $defapiport;?>">
 	</div>
 	
-	<div id="dbview" style="display:none<?php if (SQET('sqlmode')=='sqlsrv') echo 'a';?>;">
+	<div id="dbview" style="display:none<?php if ($defsqlmode=='sqlsrv') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">Database:</div>
 		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?php echo isset($_POST['dbname'])?$_POST['dbname']:'';?>">
 	</div>
