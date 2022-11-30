@@ -1,4 +1,7 @@
 <?php
+
+$sqlite_root='/opt/sqlite/';
+
 include 'lang.php';
 
 include 'connect.php';
@@ -25,8 +28,18 @@ $toolbaritems=array(
 'core.users'=>array('title'=>'Users','icon'=>'','modversion'=>'78','lockdown'=>1),
 'sqldash.databases'=>array('title'=>'Databases','icon'=>'img-databases','modversion'=>'1'),
 'sqldash.tables'=>array('title'=>'Tables','icon'=>'img-tables','modversion'=>'1'),
+'sqldash.sqlite'=>array('title'=>'SQLite','icon'=>'img-sqlite'),	
 'core.reports'=>array('title'=>'Reports','icon'=>'img-reports','modversion'=>'78','lockdown'=>1,'groups'=>'admins'),
 );
+
+$sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
+
+
+
+if ($sqlmode=='mysqli'){
+	$toolbaritems['ghostsql']=array('title'=>'GhostSQL','icon'=>'img-ghostsql');	
+}
+
 
 
 foreach ($toolbaritems as $idx=>$item) if (!$item) unset($toolbaritems[$idx]);

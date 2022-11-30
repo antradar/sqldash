@@ -1,15 +1,27 @@
 <?php
+include 'fsql-sqlite.php';
 
 function runquery(){
 	global $db;
 	global $SQL_ENGINE;
+	
+	global $sqlite_root;
 
 	$dbname=GETSTR('dbname');
 	$queryidx=GETVAL('queryidx');
 	$shortview=GETVAL('shortview');
 	$usemacros=GETVAL('usemacros');
 	
+	$sqlmode=SGET('sqlmode');
+	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
+		
+	if ($sqlmode=='sqlite'){
+		$dbname=basename($dbname);
+		$fdb=fsql_get_db($sqlite_root.$dbname);
+		$db=null;
+	}
+	
 	
 	$query=trim($_POST['query']);
 
@@ -35,7 +47,7 @@ function runquery(){
 	$tablename='';
 	$pkey='';
 	
-	if ($token0=='select'){
+	if (isset($db)&&$token0=='select'){
 		//get table name
 		preg_match('/ from (\S+)?/i',$query,$matches);
 		$tablenames=explode(',',noapos($matches[1]));
@@ -68,8 +80,15 @@ function runquery(){
 		
 	if ($token0=='select'&&!preg_match('/limit\s*/i',$query)){
 		$cquery="select count(*) as c from ($query) count_query";
-		$rs=sql_prep($cquery,$db);
-		$myrow=sql_fetch_assoc($rs);
+		if (isset($db)) {
+			$rs=sql_prep($cquery,$db);
+			$myrow=sql_fetch_assoc($rs);
+		}
+		if (isset($fdb)) {
+			$rs=fsql_query($cquery,$fdb);
+			$myrow=fsql_fetch_assoc($rs);
+		}
+
 		$c=$myrow['c'];
 		
 	?>
@@ -91,11 +110,11 @@ function runquery(){
 		if ($maxpage>0){
 ?>
 <div class="listpager">
-	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page-1;?>');">&laquo; Prev</a>
+	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page-1;?>','<?php echo $sqlmode;?>');">&laquo; Prev</a>
 	&nbsp; &nbsp;
-	Page <a class="pageskipper" onclick="var pagenum=sprompt('Go to page:',1);if (pagenum==null||parseInt(pagenum,0)!=pagenum) return false;runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page='+(pagenum-1),null,null,{persist:true});"><?php echo $page+1;?></a> of <?php echo $maxpage+1;?>
+	Page <a class="pageskipper" onclick="var pagenum=sprompt('Go to page:',1);if (pagenum==null||parseInt(pagenum,0)!=pagenum) return false;runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page='+(pagenum-1),null,null,{persist:true},'<?php echo $sqlmode;?>');"><?php echo $page+1;?></a> of <?php echo $maxpage+1;?>
 	&nbsp;
-	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page+1;?>');">Next &raquo;</a>
+	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page+1;?>','<?php echo $sqlmode;?>');">Next &raquo;</a>
 	&nbsp; &nbsp;
 	<em><?php echo $perpage;?> per page</em>
 </div>
@@ -105,10 +124,15 @@ function runquery(){
 	
 	$ta=microtime(1);
 
-		
-	$rs=sql_prep($query,$db);
-	if (!isset($c)) $c=sql_affected_rows($db,$rs);
+	if (isset($db)) {
+		$rs=sql_prep($query,$db);
+		if (!isset($c)) $c=sql_affected_rows($db,$rs);
+	}
 	
+	if (isset($fdb)) {
+		$rs=fsql_query($query,$fdb);
+		if (!isset($c)) $c=fsql_affected_rows($fdb,$rs);
+	}
 	
 	$idx=0;
 	
@@ -117,9 +141,12 @@ function runquery(){
 <div class="stable" id="queryview_<?php echo $queryidx;?>">
 <div class="grid">
 <table>
-<?php	
+<?php
+
+	$fetchfunc='sql_fetch_assoc';
+	if (isset($fdb)) $fetchfunc='fsql_fetch_assoc';
 	
-	while ($myrow=sql_fetch_assoc($rs)){
+	while ($myrow=$fetchfunc($rs)){
 		if ($idx==0&&$c>1){
 	?>
 	<tr class="gridheader">
@@ -141,7 +168,7 @@ function runquery(){
 		if ($c>1){
 			foreach ($myrow as $k=>$v){
 				$pval='';
-				if (isset($pkey)) $pval=$myrow[$pkey];
+				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
 				if ($shortview){
 					if (mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
@@ -161,7 +188,7 @@ function runquery(){
 		} else {//single mode
 			foreach ($myrow as $k=>$v){
 				$pval='';
-				if (isset($pkey)) $pval=$myrow[$pkey];
+				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
 				if ($shortview){
 					if (mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}

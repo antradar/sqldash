@@ -52,12 +52,13 @@ function login($silent=false){
 
 	$dbname=isset($_COOKIE['dbname'])?$_COOKIE['dbname']:null;
 	if ($dbname=='') $dbname=null;
-	
+
 	if (isset($login)&&$login!=''){
 		$rawpass=base64_decode($_COOKIE['dashpass']);
 		$dashpass=decstr($rawpass,SQLDASHKEY);
 		
 		$db=sql_get_db($dbhost,$dbname,$login,$dashpass,null,'sqldashdb');
+
 		//sync the condition with login.php
 		if (isset($db)&&$db!==false&&(
 			(is_array($db)&&isset($db['raw'])&&$db['raw'])

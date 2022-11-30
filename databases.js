@@ -16,3 +16,7 @@ setdatabase=function(dbname){
 		showview('sqldash.tables');
 	});
 }
+
+setlitedb=function(dbfn){
+	addtab('litedb_'+dbfn,dbfn,'slite_showdb&dbfn='+dbfn);	
+}

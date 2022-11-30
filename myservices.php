@@ -18,6 +18,14 @@ $cmd=$_GET['cmd'];
 
 switch($cmd){
 
+//SQLite
+	case 'slv_sqldash__sqlite': include 'icl/slite_listdbs.inc.php'; slite_listdbs(); break;
+	case 'slite_showdb': include 'icl/slite_showdb.inc.php'; slite_showdb(); break;
+		
+//Ghost Bridge
+	case 'slv_ghostsql': include 'icl/ghost_listfiles.inc.php'; ghost_listfiles(); break;
+	case 'ghost_listtables': include 'icl/ghost_listtables.inc.php'; ghost_listtables(); break;
+	
 //Databases
 	case 'slv_sqldash__databases': include 'icl/listdatabases.inc.php'; listdatabases(); break;
 	case 'setdatabase': include 'icl/setdatabase.inc.php'; setdatabase(); break;

@@ -1,20 +1,22 @@
-addquery=function(dbname,tablename,fromid){
+addquery=function(dbname,tablename,fromid,sqlmode){
 	if (!tablename) tablename='';
+	if (!sqlmode) sqlmode='';
 	
 	if (!document.appsettings.queryidx) document.appsettings.queryidx=0;
 	document.appsettings.queryidx++;
 	
 	var myidx=document.appsettings.queryidx;
 	
-	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename,function(){
+	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename+'&sqlmode='+sqlmode,function(){
 		if (fromid!=null&&gid('query_'+fromid)) gid('query_'+myidx).value=gid('query_'+fromid).value;
 	});
 	
 }
 
-runquery=function(queryidx,dbname){
+runquery=function(queryidx,dbname,sqlmode){
 	var oquery=gid('query_'+queryidx);
 	var query=oquery.value;
+	if (!sqlmode) sqlmode='';
 	
 	var shortview=0;
 	if (gid('shortview_'+queryidx).checked) shortview=1;
@@ -30,7 +32,7 @@ runquery=function(queryidx,dbname){
 	}
 	
 	
-	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros,0,0,'query='+encodeHTML(query),null,null,1);
+	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode,0,0,'query='+encodeHTML(query),null,null,1);
 		
 }
 

@@ -7,6 +7,7 @@ function showquery(){
 
 	$dbname=GETSTR('dbname');
 	$tablename=GETSTR('tablename');
+	$sqlmode=SGET('sqlmode');
 	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
@@ -18,7 +19,7 @@ function showquery(){
 			
 	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?>select * from <?php echo $tablename;?><?php }?></textarea>
 	<div class="inputrow">
-		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>');">Execute</button>
+		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
 		&nbsp; &nbsp;
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
 	</div>

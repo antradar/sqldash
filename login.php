@@ -80,12 +80,13 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 			}	
 		}
 
+
 		if (isset($db)&&$db!==false&&(
 			(is_array($db)&&isset($db['raw'])&&$db['raw'])
 			||
 			is_object($db)
 			)){
-		
+
 			$auth=md5($salt.$salt.$raw_login);
 			
 			setcookie('auth',$auth);
