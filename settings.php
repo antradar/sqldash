@@ -37,7 +37,7 @@ $sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
 
 
 if ($sqlmode=='mysqli'){
-	$toolbaritems['ghostsql']=array('title'=>'GhostSQL','icon'=>'img-ghostsql');	
+	$toolbaritems['ghostsql']=array('title'=>'GhostSQL','icon'=>'img-ghost');	
 }
 
 

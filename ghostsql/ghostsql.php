@@ -233,7 +233,7 @@ if (defined('STDIN')){
 				foreach ($files as $file){
 				?>
 				<div class="listitem">
-					<a onclick="addtab('ghost_<?php echo $file['name'];?>','<?php echo $file['name'];?>','ghost_listtables&fn=<?php echo $file['name'];?>&auth=<?php echo $auth;?>',function(){ajxpgn('ghosttables_<?php echo $file['name'];?>','ghostsql/ghostsql.php?cmd=tables&format=gyroscope&fn=<?php echo $file['name'];?>&auth=<?php echo $auth;?>');});">
+					<a onclick="addtab('ghost_<?php echo $file['name'];?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-ghost&quot;><?php echo $file['name'];?>','ghost_listtables&fn=<?php echo $file['name'];?>&auth=<?php echo $auth;?>',function(){ajxpgn('ghosttables_<?php echo $file['name'];?>','ghostsql/ghostsql.php?cmd=tables&format=gyroscope&fn=<?php echo $file['name'];?>&auth=<?php echo $auth;?>');});">
 						<?php echo htmlspecialchars($file['name']);?>
 						<br>
 						<em style="color:#666666;"><?php echo number_format($file['size']/1024/1024);?> MB</em>

@@ -112,7 +112,7 @@ function runquery(){
 <div class="listpager">
 	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page-1;?>','<?php echo $sqlmode;?>');">&laquo; Prev</a>
 	&nbsp; &nbsp;
-	Page <a class="pageskipper" onclick="var pagenum=sprompt('Go to page:',1);if (pagenum==null||parseInt(pagenum,0)!=pagenum) return false;runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page='+(pagenum-1),null,null,{persist:true},'<?php echo $sqlmode;?>');"><?php echo $page+1;?></a> of <?php echo $maxpage+1;?>
+	Page <a class="pageskipper" onclick="var pagenum=sprompt('Go to page:',1);if (pagenum==null||parseInt(pagenum,0)!=pagenum) return false;runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page='+(pagenum-1),'<?php echo $sqlmode;?>');"><?php echo $page+1;?></a> of <?php echo $maxpage+1;?>
 	&nbsp;
 	<a class="hovlink" onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>&page=<?php echo $page+1;?>','<?php echo $sqlmode;?>');">Next &raquo;</a>
 	&nbsp; &nbsp;

@@ -42,9 +42,9 @@ body{font-family:helvetica;}
 	<div class="menuitem"><a id="speechstart" href=# onclick="speech_startstop(1);return false;" style="display:none;"><img style="" class="img-speechrecog" src="imgs/t.gif" border="0" width="32" height="32"></a></div>
 
 	<?php foreach ($toolbaritems as $modid=>$ti){
-		if ($ti['type']=='break') continue;
-		if ($ti['noiphone']) continue;	
-		if ($ti['type']=='custom'){
+		if (isset($ti['type'])&&$ti['type']=='break') continue;
+		if (isset($ti['noiphone'])&&$ti['noiphone']) continue;	
+		if (isset($ti['type'])&&$ti['type']=='custom'){
 		?>
 		<?php echo $ti['iphone'];?>
 		<?php	
@@ -52,7 +52,7 @@ body{font-family:helvetica;}
 		}
 		
 		$action="showview('".$modid."',null,1);";
-		if ($ti['action']!='') $action=$ti['action'];
+		if (isset($ti['action'])&&$ti['action']!='') $action=$ti['action'];
 		if (!isset($ti['icon'])||$ti['icon']=='') continue;
 		
 		if (isset($ti['groups'])){
@@ -157,7 +157,7 @@ function rotate(){
 	if (preg_match('/playbook/i',$agent)||preg_match('/android/i',$agent)) $ori_invert=1;
 	if (preg_match('/mobile/i',$agent)) $ori_invert=0; //do not invert any phones
 	
-	if ($ori_invert){
+	if (isset($ori_invert)&&$ori_invert){
 		$ori_portrait_backward=-90;
 		$ori_portrait_forward=90;
 		$ori_landscape_backward=180;

@@ -18,5 +18,5 @@ setdatabase=function(dbname){
 }
 
 setlitedb=function(dbfn){
-	addtab('litedb_'+dbfn,dbfn,'slite_showdb&dbfn='+dbfn);	
+	addtab('litedb_'+dbfn,'<img src="imgs/t.gif" class="ico-sqlite">'+dbfn,'slite_showdb&dbfn='+dbfn);	
 }

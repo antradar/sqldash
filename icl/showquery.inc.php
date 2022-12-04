@@ -7,7 +7,11 @@ function showquery(){
 
 	$dbname=GETSTR('dbname');
 	$tablename=GETSTR('tablename');
+	$dtablename=$tablename;
+	
 	$sqlmode=SGET('sqlmode');
+	
+	if ($sqlmode=='sqlite') $dtablename="[$tablename]";
 	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
@@ -17,7 +21,7 @@ function showquery(){
 	
 	<div style="margin-bottom:5px;"><em style="color:#666666;">use "#" on a single line to separate multiple queries; select part of the text for partial querying</em></div>
 			
-	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?>select * from <?php echo $tablename;?><?php }?></textarea>
+	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?>select * from <?php echo $dtablename;?><?php }?></textarea>
 	<div class="inputrow">
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
 		&nbsp; &nbsp;

@@ -67,6 +67,12 @@ input:disabled{
 .img-reports{background:transparent url(imgs/toolbar.gif) no-repeat -224px 0;}
 .img-reports-light{background:transparent url(imgs/toolbar.gif) no-repeat -224px -32px;}
 
+.img-sqlite{background:transparent url(imgs/toolbar.gif) no-repeat -320px 0;}
+.img-sqlite-light{background:transparent url(imgs/toolbar.gif) no-repeat -320px -32px;}
+
+.img-ghost{background:transparent url(imgs/toolbar.gif) no-repeat -352px 0;}
+.img-ghost-light{background:transparent url(imgs/toolbar.gif) no-repeat -352px -32px;}
+
 .img-databases{background:transparent url(imgs/toolbar.gif) no-repeat -384px 0;}
 .img-databases-light{background:transparent url(imgs/toolbar.gif) no-repeat -384px -32px;}
 
@@ -84,6 +90,12 @@ input:disabled{
 
 .ico-setting{background:transparent url(imgs/toolbar.gif) no-repeat -480px 0;width:16px;height:16px;vertical-align:middle;margin-right:8px;}
 .dulltab .ico-setting{background:transparent url(imgs/toolbar.gif) no-repeat -480px -16px;}
+
+.ico-sqlite{background:transparent url(imgs/toolbar.gif) no-repeat -288px 0;width:16px;height:16px;vertical-align:middle;margin-right:8px;}
+.dulltab .ico-sqlite{background:transparent url(imgs/toolbar.gif) no-repeat -288px -16px;}
+
+.ico-ghost{background:transparent url(imgs/toolbar.gif) no-repeat -304px 0;width:16px;height:16px;vertical-align:middle;margin-right:8px;}
+.dulltab .ico-ghost{background:transparent url(imgs/toolbar.gif) no-repeat -304px -16px;}
 
 .ico-query{background:transparent url(imgs/toolbar.gif) no-repeat -256px 0;width:16px;height:16px;vertical-align:middle;margin-right:8px;}
 .dulltab .ico-query{background:transparent url(imgs/toolbar.gif) no-repeat -256px -16px;}

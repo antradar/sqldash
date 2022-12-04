@@ -50,9 +50,9 @@ function fsql_affected_rows($db,$rs){
 	global $last_sqlite_select;
 	
 	$query="select count(*) as c from ($last_sqlite_select)t ";
-	$rs=sql_query($query,$db,1);
+	$rs=fsql_query($query,$db,1);
 	
-	$myrow=sql_fetch_assoc($rs);
+	$myrow=fsql_fetch_assoc($rs);
 	$count=$myrow['c'];
 	
 	return max($count,$db->changes());
