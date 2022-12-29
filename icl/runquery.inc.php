@@ -78,7 +78,8 @@ function runquery(){
 	}
 
 		
-	if ($token0=='select'&&!preg_match('/limit\s*/i',$query)){
+	if ($token0=='select'&&(!preg_match('/limit\s*/i',$query)||!preg_match('/fetch\s*next\s*\d+\s*rows\s*only/i',$query) )){
+
 		$cquery="select count(*) as c from ($query) count_query";
 		if (isset($db)) {
 			$rs=sql_prep($cquery,$db);
@@ -170,11 +171,14 @@ function runquery(){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
 				if ($shortview){
-					if (mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
+					if (is_string($v)&&mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
 				$dv=hspc($v);
 				if ($v==null&&!isset($v)) $dv='<span style="color:#EE00AA;">NULL</span>';
 				if (isset($v)&&$v==='') $dv='<em style="color:#669966;">(empty)</em>';
+				if (is_a($dv,'DateTime')){
+					$dv=date_format($dv,'Y-n-j H:i:s e');	
+				}
 		?>
 			<td valign="top"><acronym 
 				style="cursor:pointer;" 
@@ -190,11 +194,14 @@ function runquery(){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
 				if ($shortview){
-					if (mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
+					if (is_string($v)&&mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
 				$dv=hspc($v);
 				if ($v==null&&!isset($v)) $dv='<span style="color:#000088;">NULL</span>';
 				if (isset($v)&&$v==='') $dv='<em style="color:#666666;">(empty)</em>';
+				if (is_a($dv,'DateTime')){
+					$dv=date_format($dv,'Y-n-j H:i:s e');	
+				}				
 		?>
 		<tr>
 			<td valign="top"><?php echo hspc($k);?></td>

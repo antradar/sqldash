@@ -35,6 +35,7 @@ function listtables(){
 	if ($SQL_ENGINE=='SQLSRV') {
 		$query="select TABLE_NAME from [$dbname].INFORMATION_SCHEMA.TABLES where TABLE_TYPE='BASE TABLE'";
 		if ($key!='') $query.=" and TABLE_NAME like '%${key}%' ";
+		$query.=" order by TABLE_NAME ";
 	}
 
 	
