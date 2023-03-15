@@ -37,6 +37,8 @@ switch($cmd){
 	case 'lookupcell': include 'icl/lookupcell.inc.php'; lookupcell(); break;
 	case 'updatecell': include 'icl/updatecell.inc.php'; updatecell(); break;
 	
+	case 'showtablesizes': include 'icl/showtablesizes.inc.php'; showtablesizes(); break;
+	
 //Queries
 
 	case 'showquery': include 'icl/showquery.inc.php'; showquery(); break;

@@ -77,8 +77,27 @@ function runquery(){
 		}	
 	}
 
+	$perpage=30;
+	$page=isset($_GET['page'])?intval($_GET['page']):0;
 		
+	if ($token0=='select'){
+		if (preg_match('/\s*limit\s*(\d+)$/',$query,$matches)){//promote to a,b paging
+			$query=preg_replace('/\s*limit\s*\d+$/',' limit 0,'.$matches[1],$query);
+		}
+		
+		if (preg_match('/\s*limit\s*(\d+)\s*,\s*(\d+)$/',$query,$matches)){
+			$rstart=$matches[1];
+			$perpage=$matches[2];
+			if (!isset($_GET['page'])) $page=ceil($rstart/$perpage);
+			$start=$page*$perpage;
+			
+			$query=preg_replace('/\s*limit\s*\d+\s*,\s*\d+$/','',$query);
+			
+		}
+	}
+	
 	if ($token0=='select'&&(!preg_match('/limit\s*/i',$query)||!preg_match('/fetch\s*next\s*\d+\s*rows\s*only/i',$query) )){
+		
 
 		$cquery="select count(*) as c from ($query) count_query";
 		if (isset($db)) {
@@ -98,12 +117,10 @@ function runquery(){
 	</div>
 	<?php	
 		
-		$perpage=30;
-		$page=isset($_GET['page'])?intval($_GET['page']):0;
 		$maxpage=ceil($c/$perpage)-1;
 		if ($maxpage<0) $maxpage=0;
 		if ($page>$maxpage) $page=$maxpage;
-		
+				
 		$start=$page*$perpage;
 		if (in_array($SQL_ENGINE,array('MySQL','MySQLi','ClickHouse'))) $query.=" limit $start,$perpage ";
 		if ($SQL_ENGINE=='SQLSRV') $query.=" order by @@identity offset $start rows fetch next $perpage rows only ";	
@@ -127,7 +144,7 @@ function runquery(){
 
 	if (isset($db)) {
 		$rs=sql_prep($query,$db);
-		if (!isset($c)) $c=sql_affected_rows($db,$rs);
+		$c=sql_affected_rows($db,$rs);
 	}
 	
 	if (isset($fdb)) {

@@ -89,6 +89,17 @@ function showwelcome(){
 
 	}
 	
+	?>
+	<tr>
+	<td colspan="2">
+		<a class="hovlink" onclick="ajxpgn('home_tablesizes',document.appsettings.codepage+'?cmd=showtablesizes');">show table sizes</a>
+		<div id="home_tablesizes">
+
+		</div>
+	</td>
+	</tr>
+	<?php
+	
 	}//dbname
 ?>
 </table>
