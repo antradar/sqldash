@@ -1,4 +1,4 @@
-addquery=function(dbname,tablename,fromid,sqlmode){
+addquery=function(dbname,tablename,fromid,sqlmode,instant){
 	if (!tablename) tablename='';
 	if (!sqlmode) sqlmode='';
 	
@@ -9,10 +9,12 @@ addquery=function(dbname,tablename,fromid,sqlmode){
 	
 	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename+'&sqlmode='+sqlmode,function(){
 		if (fromid!=null&&gid('query_'+fromid)) gid('query_'+myidx).value=gid('query_'+fromid).value;
+		if (instant) runquery(myidx,tablename,sqlmode);
 	});
 	
 }
 
+	
 runquery=function(queryidx,dbname,sqlmode){
 	var oquery=gid('query_'+queryidx);
 	var query=oquery.value;
@@ -31,6 +33,11 @@ runquery=function(queryidx,dbname,sqlmode){
 		if (sel!='') query=sel;
 	}
 	
+	if (!document.querydims) document.querydims={};
+	document.querydims[queryidx]={};
+	
+	if (!document.sqlmodes) document.sqlmodes={};
+	document.sqlmodes[queryidx]=sqlmode;
 	
 	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode,0,0,'query='+encodeHTML(query),null,null,1);
 		
@@ -81,3 +88,84 @@ bindecodelookupcell=function(decoder,dbname,tablename,pkey,pval,fkey){
 	ajxpgn('celllookupdecoder',document.appsettings.codepage+'?cmd=bindecodelookupcell&decoder='+decoder+'&dbname='+dbname+'&table='+tablename+'&pkey='+pkey+'&pval='+pval+'&fkey='+fkey);	
 }
 
+////
+
+renderquerydims=function(queryidx){
+	if (!document.querydims) return;
+	if (!document.querydims[queryidx]) return;
+	var dimgroups=document.querydims[queryidx];
+
+	var html=[];
+	
+	var dimtypenames={
+		'dim':'Discrete Dimension',
+		'range':'Numeric Range',
+		'daterange':'Date Range',	
+	}
+	
+	var hasdims=0;
+	
+	for (dimtypekey in dimgroups){
+		hasdims=1;
+		var dims=dimgroups[dimtypekey];
+		var dimtypename=dimtypenames[dimtypekey];
+
+		html.push('<div><b>'+dimtypename+':</b></div><div style="padding:5px 10px;margin-bottom:10px;">');
+		for (dim in dims){
+			html.push('<nobr><u>'+dim+'</u> <a onclick="delquerydim('+queryidx+',\''+dimtypekey+'\',\''+dim+'\');"><img src="imgs/t.gif" class="img-del"></a></nobr> &nbsp;&nbsp;');
+		}
+		
+		html.push('</div>');
+	}
+	
+	if (hasdims){
+		html.push('<div class="inputrow buttonbelt"><button onclick="explorequerydims('+queryidx+');">Explore</button></div>');	
+	}
+	
+	gid('querydims_'+queryidx).innerHTML=html.join('');
+	
+}
+
+addquerydim=function(queryidx,dimtype,fkey){
+	if (!document.querydims) document.querydims={};
+	if (!document.querydims[queryidx]) document.querydims[queryidx]={};
+	
+	if (!document.querydims[queryidx][dimtype]) document.querydims[queryidx][dimtype]={};
+	document.querydims[queryidx][dimtype][fkey]=fkey;
+	
+	renderquerydims(queryidx);
+	
+}
+
+delquerydim=function(queryidx,dimtype,fkey){
+	if (!document.querydims) return;
+	if (!document.querydims[queryidx]) return;
+	if (!document.querydims[queryidx][dimtype]) return;
+	
+	delete document.querydims[queryidx][dimtype][fkey];
+	
+	var emptynode=1;
+	for (k in document.querydims[queryidx][dimtype]) emptynode=0;
+	
+	if (emptynode) delete document.querydims[queryidx][dimtype];
+	
+	renderquerydims(queryidx);
+}
+
+explorequerydims=function(queryidx){
+	if (!document.querydims) return;
+	if (!document.querydims[queryidx]) return;
+	
+	var oquery=gid('query_'+queryidx);
+	var query=encodeHTML(oquery.value);
+	
+	var sqlmode=document.sqlmodes[queryidx];
+		
+		
+	var strdims=JSON.stringify(document.querydims[queryidx]);
+	
+	closetab('querynav_'+queryidx);
+	addtab('querynav_'+queryidx,'Nav #'+queryidx,'dashquerydims&queryidx='+queryidx,function(){
+		nav_loadcharts('dashquerydims','dashquerydimkey','dashquerydims',queryidx);
+	},'dims='+encodeHTML(strdims)+'&query='+query+'&sqlmode='+sqlmode);
+}

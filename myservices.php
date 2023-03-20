@@ -18,6 +18,9 @@ $cmd=$_GET['cmd'];
 
 switch($cmd){
 
+	case 'lookupquerydim': include 'icl/lookupquerydim.inc.php'; lookupquerydim(); break;
+	case 'dashquerydims': include 'icl/dashquerydims.inc.php'; dashquerydims(); break;
+	
 //SQLite
 	case 'slv_sqldash__sqlite': include 'icl/slite_listdbs.inc.php'; slite_listdbs(); break;
 	case 'slite_showdb': include 'icl/slite_showdb.inc.php'; slite_showdb(); break;

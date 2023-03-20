@@ -383,12 +383,128 @@ function pastetotextarea(id,text){
 	
 }
 
+/////////
 
-// svn merge boundary bed99e5db57749f375e738c1c0258047 - 
+nav_setfilter=function(container,keyid,cmd,filter,queryidx){
+	var codepage=document.appsettings.codepage;
+	if (!queryidx) queryidx=0;
+	var sqlmode='';
+	var query='';
+	var strdims='';
+	
+	if (queryidx!=null){//forward query-specific dim info
+		if (!document.querydims||!document.querydims[parseInt(queryidx,10)]){
+			alert('Dimension information is no longer available. Run the query and launch the explorer again?');
+			return;	
+		}
+		
+		oquery=gid('query_'+queryidx);
+		query=encodeHTML(oquery.value);
+	
+		sqlmode=document.sqlmodes[queryidx];
+		
+		strdims=JSON.stringify(document.querydims[queryidx]);
+	
+	}
+	
+	ajxpgn(container,codepage+'?cmd='+cmd+'&mode=embed&queryidx='+queryidx+'&key='+encodeHTML(gid(keyid).value)+filter,0,0,
+		'dims='+encodeHTML(strdims)+'&query='+query+'&sqlmode='+sqlmode
+	,function(){
+		if (gid(container+'_chartrelay')) {
+			gid(container+'_chartrelay').value=filter;
+			if (gid(container+'_chartrelay').onchange) gid(container+'_chartrelay').onchange();
+		}
+		
+		if (gid(container+'_extrakey_relay')) {
+			if (gid(container+'_extrakey_relay').onchange) gid(container+'_extrakey_relay').onchange();
+		}
+		
+	});
+	if (gid(container+'_relay')) {
+		gid(container+'_relay').value=filter;
+		if (gid(container+'_relay').onchange) gid(container+'_relay').onchange();
+	}
+}
 
+nav_loadcharts=function(container,keyid,cmd,queryidx){
+	xajxjs('google.charts','https://www.gstatic.com/charts/loader.js?',function(){	
+	
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(function(){
+			
+			var cf=function(c,d){return function(){
+				var sel=c.getSelection()[0];
+				if (sel){
+					nav_setfilter(container+'_'+queryidx,keyid+'_'+queryidx,cmd,d[sel.row]['f'],queryidx);
+				}
+								
+			}};				
+			
+			var charts=eval('('+gid(container+'_chartdata_'+queryidx).value+')');
+			if (charts==null) return;
+			for (var i=0;i<charts.length;i++){
+				if (!gid(container+'_chartview_'+charts[i].fieldname+'_'+queryidx)) continue;
+				gid(container+'_chartview_'+charts[i].fieldname+'_'+queryidx).style.display='block';
+				switch (charts[i].type){
+				case 'pie':
+					var data = new google.visualization.DataTable();
+					data.addColumn('string','Type');
+					data.addColumn('number','Count');
+					var rows=[];
+					for (var j=0;j<charts[i].counts.length;j++){
+						rows.push([charts[i].counts[j]['n'],charts[i].counts[j]['a']]);
+					}//for each count
+										
+					data.addRows(rows); 				
+					var chart = new google.visualization.PieChart(gid(container+'_chart_'+charts[i].fieldname+'_'+queryidx));
+					
 
-// svn merge boundary 182eb2eb0c3b7d16cf92c0972fe64bcc - 
-
-
-// svn merge boundary 4d373b247a04253ee05a972964f7a7f3 -
-
+					
+					google.visualization.events.addListener(chart, 'select', cf(chart,charts[i].counts));
+					
+		        	chart.draw(data, 
+		        	{
+			        'title':charts[i].title,
+			        'sliceVisibilityThreshold':0.02
+		        	});
+	        	break;
+	        	case 'column':
+	        	
+					var rows=[];
+					
+					rows.push(['Amount','Count']);
+					
+					if (charts[i].counts.length==0){
+						gid(container+'_chartview_'+charts[i].fieldname+'_'+queryidx).style.display='none';						
+						continue;
+					}
+										
+					for (var j=0;j<charts[i].counts[0].length;j++){
+						var xlabel=charts[i].counts[0][j]['min']+' to '+charts[i].counts[0][j]['max'];
+						if (charts[i].counts[0][j]['xlabel']&&charts[i].counts[0][j]['xlabel']!='') xlabel=charts[i].counts[0][j]['xlabel'];
+						if (xlabel!='null to null') rows.push([xlabel,charts[i].counts[0][j]['count']]);
+					}//for each count
+						        	
+					var data = new google.visualization.arrayToDataTable(rows);
+					
+					
+					var chart = new google.visualization.ColumnChart(gid(container+'_chart_'+charts[i].fieldname+'_'+queryidx));
+										
+					
+					google.visualization.events.addListener(chart, 'select', cf(chart,charts[i].counts[0]));					
+					
+		        	chart.draw(data, 
+		        	{
+			        'title':charts[i].title,
+			        'legend':{position:'none'}
+		        	});
+	        	
+	        	break;
+	        	
+        		}//switch chart type
+        	
+    		}//for each chart
+        				
+		});
+	});	
+}

@@ -171,10 +171,11 @@ function sql_insert_id($db,$rs=null){
 }
 
 function sql_affected_rows($db,$rs){
-	$c1=sqlsrv_rows_affected($db['raw']);
+	
+	//$c1=sqlsrv_rows_affected($db['raw']);
 	$c2=sqlsrv_num_rows($rs);
-
-	return max($c1,$c2);
+	return $c2;
+	//return max($c1,$c2);
 }
 
 function sql_copy_from_query($query,$db,$omits,$table){

@@ -80,6 +80,7 @@ function runquery(){
 	$perpage=30;
 	$page=isset($_GET['page'])?intval($_GET['page']):0;
 		
+	
 	if ($token0=='select'){
 		if (preg_match('/\s*limit\s*(\d+)$/',$query,$matches)){//promote to a,b paging
 			$query=preg_replace('/\s*limit\s*\d+$/',' limit 0,'.$matches[1],$query);
@@ -112,11 +113,12 @@ function runquery(){
 		$c=$myrow['c'];
 		
 	?>
+	<div id="querydims_<?php echo $queryidx;?>" style="padding:10px 0;"></div>
 	<div>
 	Found records: <?php echo number_format($c);?>
 	</div>
 	<?php	
-		
+		if ($page<0) $page=0;
 		$maxpage=ceil($c/$perpage)-1;
 		if ($maxpage<0) $maxpage=0;
 		if ($page>$maxpage) $page=$maxpage;
@@ -144,7 +146,7 @@ function runquery(){
 
 	if (isset($db)) {
 		$rs=sql_prep($query,$db);
-		$c=sql_affected_rows($db,$rs);
+		if (!isset($c)||$SQL_ENGINE!='SQLSRV') $c=sql_affected_rows($db,$rs);
 	}
 	
 	if (isset($fdb)) {
@@ -172,7 +174,20 @@ function runquery(){
 		foreach ($myrow as $k=>$v){
 			array_push($colnames,$k);
 	?>
-		<td id="colbm_<?php echo $queryidx;?>_<?php echo $k;?>"><b><?php echo hspc($k);?></b></td>
+		<td id="colbm_<?php echo $queryidx;?>_<?php echo $k;?>">
+		
+		<?php if($k!=$pkey){
+		?>
+		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
+		<?php
+		} else {
+		?>
+		<b><?php echo hspc($k);?></b>
+		<?php
+		}
+		?>
+
+		</td>
 	<?php		
 		}//foreach header col
 	?>

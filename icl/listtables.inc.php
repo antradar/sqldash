@@ -6,6 +6,8 @@ function listtables(){
 	
 	$dbname=checkdbname();
 	$mode=GETSTR('mode');
+
+	$sqlmode=SGET('sqlmode');	
 	
 	if ($mode!='embed'){
 	?>
@@ -62,7 +64,9 @@ function listtables(){
 		$tablename=$myrow[0];
 	?>
 	<div class="listitem">
-	<a onclick="showtable('<?php echo $tablename;?>','<?php echo $dbname;?>');"><?php echo $tablename;?>
+	<a onclick="showtable('<?php echo $tablename;?>','<?php echo $dbname;?>');">
+		<?php echo $tablename;?>
+		&nbsp; <span class="labelbutton" onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'<?php echo $sqlmode;?>',1);return false;">..</span>
 		<?php if (isset($tabletypes[$tablename])&&$tabletypes[$tablename]!=''){?>
 		<span class="labelbutton"><?php echo $tabletypes[$tablename];?></span>
 		<?php }?>
