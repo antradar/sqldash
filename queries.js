@@ -9,7 +9,7 @@ addquery=function(dbname,tablename,fromid,sqlmode,instant){
 	
 	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename+'&sqlmode='+sqlmode,function(){
 		if (fromid!=null&&gid('query_'+fromid)) gid('query_'+myidx).value=gid('query_'+fromid).value;
-		if (instant) runquery(myidx,tablename,sqlmode);
+		if (instant) runquery(myidx,dbname,sqlmode);
 	});
 	
 }
@@ -51,7 +51,7 @@ updatecell=function(dbname,tablename,pkey,pval,fkey,defsetnull){
 	
 	var setnull=0;
 	if (defsetnull) setnull=defsetnull;
-	
+	console.log('cell_'+dbname+'_'+tablename+'_'+fkey+'_'+pval);
 	var os=document.getElementsByClassName('cell_'+dbname+'_'+tablename+'_'+fkey+'_'+pval);
 	for (var i=0;i<os.length;i++){
 		var o=os[i];

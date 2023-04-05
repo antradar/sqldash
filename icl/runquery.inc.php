@@ -198,6 +198,7 @@ function runquery(){
 	?>
 	<tr class="gridrow <?php echo $idx%2==1?'even':'odd';?>">
 	<?php
+		
 		if ($c>1){
 			foreach ($myrow as $k=>$v){
 				$pval='';
