@@ -98,7 +98,15 @@ function runquery(){
 	}
 	
 	if ($token0=='select'&&(!preg_match('/limit\s*/i',$query)||!preg_match('/fetch\s*next\s*\d+\s*rows\s*only/i',$query) )){
+
+		if ($pkey!=''){
+	?>
+	<a class="labelbutton" onclick="if (!sconfirm('Are you sure you want to insert a blank record?')) return;ajxpgn('blankadder_<?php echo $queryidx;?>',document.appsettings.codepage+'?cmd=addblankrow&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>',1);">insert a blank row</a>
+	<div id="blankadder_<?php echo $queryidx;?>" style="margin-top:10px;padding:5px 10px;border:solid 1px #999999;display:none;">
 		
+	</div>
+	<?php		
+		}		
 
 		$cquery="select count(*) as c from ($query) count_query";
 		if (isset($db)) {

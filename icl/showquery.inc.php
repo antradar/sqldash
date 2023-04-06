@@ -11,13 +11,15 @@ function showquery(){
 	
 	$sqlmode=SGET('sqlmode');
 	
+	header('newtitle: #'.$queryidx);
+	
 	if ($sqlmode=='sqlite') $dtablename="[$tablename]";
 	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query</div>
+	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>',this.value);" value="#<?php echo $queryidx;?>"></div>
 	
 	<div style="margin-bottom:5px;"><em style="color:#666666;">use "#" on a single line to separate multiple queries; select part of the text for partial querying</em></div>
 			

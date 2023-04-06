@@ -46,6 +46,9 @@ switch($cmd){
 
 	case 'showquery': include 'icl/showquery.inc.php'; showquery(); break;
 	case 'runquery': include 'icl/runquery.inc.php'; runquery(); break;
+	
+	case 'addblankrow': include 'icl/addblankrow.inc.php'; addblankrow(); break;
+	
 	case 'decodelookupcell': include 'icl/decodelookupcell.inc.php'; decodelookupcell(); break;
 	case 'bindecodelookupcell': include 'icl/bindecodelookupcell.inc.php'; bindecodelookupcell(); break;
 	case 'lookupcolnav': include 'icl/lookupcolnav.inc.php'; lookupcolnav(); break;
