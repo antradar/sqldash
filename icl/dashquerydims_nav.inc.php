@@ -3,8 +3,7 @@
 function dashquerydims_countfield($fieldname,$limit=null){
 	global $db;
 	
-	$xquery=QETSTR('query');
-		
+	$xquery=SQET('query'); $xquery=trim($xquery,';');
 	$filters=dashquerydims_makefilters();
 
 	//if a 1-N sum is used, use *count(distinct querytable.querykey)/count(querytable.querykey)	
@@ -339,7 +338,7 @@ function dashquerydims_showrange($container,$cmd, $title,$fieldname){
 
 	$params=array();
 	
-	$xquery=QETSTR('query');
+	$xquery=SQET('query'); $xquery=trim($xquery,';');
 	
 	$query="select min($fieldname) as a, max($fieldname) as b from ($xquery) t where 1=1 ".$sqlfilters['clauses'];
 	$params=array_merge($params,$sqlfilters['params']);
@@ -355,9 +354,7 @@ function dashquerydims_showrange($container,$cmd, $title,$fieldname){
 	$filter=dashquerydims_strfilters($filters,$nbasefilters);
 	
 	$bucketsize=($max-$min)/10;
-	
-	$xquery=QETSTR('query');	
-				
+					
 	$params=array();
 	
 	$query="select count(distinct $fieldname) as c,min($bucketsize*floor($fieldname/$bucketsize)) as cmin, max($bucketsize*floor($fieldname/$bucketsize+1)) as cmax 
@@ -406,7 +403,7 @@ function dashquerydims_showdaterange($container,$cmd, $title,$fieldname,$subdims
 	global $pcharts;
 	
 	$queryidx=GETVAL('queryidx');
-	$xquery=QETSTR('query');	
+	$xquery=SQET('query'); $xquery=trim($xquery,';');
 	
 	$bfilters=dashquerydims_makefilters();
 	$basefilters=$bfilters['filters'];

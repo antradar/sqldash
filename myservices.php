@@ -15,6 +15,7 @@ login(true); //silent mode
 
 $cmd=$_GET['cmd'];
 
+header('Cache-Control: no-store');
 
 switch($cmd){
 

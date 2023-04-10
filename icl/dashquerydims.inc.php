@@ -10,6 +10,7 @@ function dashquerydims(){
 	$dims=json_decode(SQET('dims'),1);
 	
 	$query=SQET('query');
+		
 	$sqlmode=SQET('sqlmode');
 	
 	

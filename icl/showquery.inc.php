@@ -11,7 +11,7 @@ function showquery(){
 	
 	$sqlmode=SGET('sqlmode');
 	
-	header('newtitle: #'.$queryidx);
+	header('newtitle: '.rawurlencode('<img src="imgs/t.gif" class="ico-query">'.$queryidx));
 	
 	if ($sqlmode=='sqlite') $dtablename="[$tablename]";
 	
@@ -19,7 +19,7 @@ function showquery(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>',this.value);" value="#<?php echo $queryidx;?>"></div>
+	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>"></div>
 	
 	<div style="margin-bottom:5px;"><em style="color:#666666;">use "#" on a single line to separate multiple queries; select part of the text for partial querying</em></div>
 			
