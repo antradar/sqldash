@@ -100,7 +100,8 @@ renderquerydims=function(queryidx){
 	var dimtypenames={
 		'dim':'Discrete Dimension',
 		'range':'Numeric Range',
-		'daterange':'Date Range',	
+		'daterange':'Date Range',
+		'attr':'<em style="color:#999999;">Non-Dim Attribute</em>',	
 	}
 	
 	var hasdims=0;

@@ -50,6 +50,7 @@ function lookupquerydim(){
 		'dim'=>'Discrete Dimension',
 		'range'=>'Numeric Range',
 		'daterange'=>'Date Range',
+		'attr'=>'<em>Non-Dim Attribute</em>',
 	);
 	
 	foreach ($dimtypes as $k=>$v){

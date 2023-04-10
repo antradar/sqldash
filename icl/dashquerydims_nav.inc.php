@@ -431,7 +431,7 @@ function dashquerydims_showdaterange($container,$cmd, $title,$fieldname,$subdims
 <div class="navgroupx ng_<?php echo $fieldname;?>">
 	<div class="navtitle"><?php echo $title;?></div>
 	<div class="navfilter">
-<a class="filterclear" onclick="nav_setfilter('<?php echo $container;?>','dashquerydimkey','<?php echo $cmd;?>','<?php echo $filter;?>');return false;">[x]</a>
+<a class="filterclear" onclick="nav_setfilter('<?php echo $container;?>_<?php echo $queryidx;?>','dashquerydimkey_<?php echo $queryidx;?>','<?php echo $cmd;?>','<?php echo $filter;?>','<?php echo $queryidx;?>');return false;">[x]</a>
 <?php echo $filters[$fieldname.'_a'].' - '.$filters[$fieldname.'_b'];?>
 
 	<?php if ($filters[$fieldname.'_a']==$filters[$fieldname.'_b']){
