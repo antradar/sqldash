@@ -53,6 +53,8 @@ switch($cmd){
 	case 'decodelookupcell': include 'icl/decodelookupcell.inc.php'; decodelookupcell(); break;
 	case 'bindecodelookupcell': include 'icl/bindecodelookupcell.inc.php'; bindecodelookupcell(); break;
 	case 'lookupcolnav': include 'icl/lookupcolnav.inc.php'; lookupcolnav(); break;
+	
+	case 'exportcsv': include 'icl/exportcsv.inc.php'; exportcsv(); break;
 		
 //Accounts
 	case 'showaccount': include 'icl/showaccount.inc.php'; showaccount(); break;

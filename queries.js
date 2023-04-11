@@ -14,6 +14,10 @@ addquery=function(dbname,tablename,fromid,sqlmode,instant){
 	
 }
 
+exportcsv=function(queryidx){
+	gid('csvquery_'+queryidx).value=gid('query_'+queryidx).value;
+	gid('csvqueryform_'+queryidx).submit();
+}
 	
 runquery=function(queryidx,dbname,sqlmode){
 	var oquery=gid('query_'+queryidx);

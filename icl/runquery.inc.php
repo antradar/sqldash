@@ -5,7 +5,9 @@ function runquery(){
 	global $db;
 	global $SQL_ENGINE;
 	
+	global $codepage;
 	global $sqlite_root;
+	
 
 	$dbname=GETSTR('dbname');
 	$queryidx=GETVAL('queryidx');
@@ -124,6 +126,11 @@ function runquery(){
 	<div id="querydims_<?php echo $queryidx;?>" style="padding:10px 0;"></div>
 	<div>
 	Found records: <?php echo number_format($c);?>
+	&nbsp; &nbsp;
+	<a class="hovlink" onclick="exportcsv(<?php echo $queryidx;?>,'<?php echo $sqlmode;?>');">Export to CSV</a>
+		<form style="display:none;" id="csvqueryform_<?php echo $queryidx;?>" action="<?php echo $codepage;?>?cmd=exportcsv&dbname=<?php echo $dbname;?>&tablename=<?php echo $tablename;?>&queryidx=<?php echo $queryidx;?>" method="POST" target=_blanks>
+			<textarea id="csvquery_<?php echo $queryidx;?>" name="csvquery_<?php echo $queryidx;?>"></textarea>
+		</form>
 	</div>
 	<?php	
 		if ($page<0) $page=0;
