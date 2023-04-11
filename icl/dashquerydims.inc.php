@@ -4,6 +4,7 @@ include 'icl/dashquerydims_nav.inc.php';
 function dashquerydims(){
 	
 	global $db;
+	global $SQL_ENGINE;
 	
 	$queryidx=GETVAL('queryidx');
 	
@@ -56,7 +57,7 @@ function dashquerydims(){
 	
 	$strfields=implode(',',array_keys($fields));
 	
-	$cquery="select count(*) as c from ($query)t where 1 ".$sqlfilters['clauses'];
+	$cquery="select count(*) as c from ($query)t where 1=1 ".$sqlfilters['clauses'];
 	$rs=sql_prep($cquery,$db,$params);
 	$myrow=sql_fetch_assoc($rs);
 	$count=intval($myrow['c']);	
@@ -98,8 +99,14 @@ function dashquerydims(){
 	
 	echo $pager;
 	
-	$query="select * from ($query)t where 1 ".$sqlfilters['clauses']." order by $strfields limit $start,$perpage";
-	
+	$query="select * from ($query)t where 1=1 ".$sqlfilters['clauses']." order by $strfields ";
+			
+	if ($SQL_ENGINE=='SQLSRV'){
+		$query.=" offset $start rows fetch next $perpage rows only ";
+	} else {
+		$query.=" limit $start,$perpage";
+	}
+		
 	$rs=sql_prep($query,$db,$params);
 	
 	?>
@@ -108,7 +115,7 @@ function dashquerydims(){
 	<table class="subtable">
 	<?php
 	$idx=0;
-	
+		
 	while ($myrow=sql_fetch_assoc($rs)){
 		if ($idx==0){
 	?>
