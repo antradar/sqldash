@@ -90,11 +90,17 @@ function dashquerydims(){
 		<a class="hovlink" onclick="nav_setfilter('dashquerydims_<?php echo $queryidx;?>','dashquerydimkey_<?php echo $queryidx;?>','dashquerydims',gid('searchfilter_dashquerydims_<?php echo $queryidx;?>').value+'&page=<?php echo $page+1;?>','<?php echo $queryidx;?>');">Next &raquo;</a>
 		
 		&nbsp; &nbsp;
-		<em><?php echo $perpage;?> per page</em>
+		<em><?php echo $count;?> record<?php echo $count==1?'':'s';?>, <?php echo $perpage;?> per page</em>
 	</div>
 	<?php	
 		
 		$pager=ob_get_clean();	
+	} else {
+	?>
+	<div style="padding:10px 0;">
+		<em>showing <?php echo $count;?> record<?php echo $count==1?'':'s';?></em>
+	</div>
+	<?php		
 	}
 	
 	echo $pager;

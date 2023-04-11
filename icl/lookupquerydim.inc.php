@@ -6,6 +6,7 @@ function lookupquerydim(){
 	$queryidx=GETVAL('queryidx');
 	$table=GETSTR('table');
 	$fkey=SGET('fkey');
+	$pkey=intval(SGET('pkey'));
 	
 	global $db;
 	
@@ -52,6 +53,12 @@ function lookupquerydim(){
 		'daterange'=>'Date Range',
 		'attr'=>'<em>Non-Dim Attribute</em>',
 	);
+	
+	if ($pkey){
+		$dimtypes=array(
+			'attr'=>'<em>Non-Dim Attribute</em>',		
+		);
+	}
 	
 	foreach ($dimtypes as $k=>$v){
 	?>

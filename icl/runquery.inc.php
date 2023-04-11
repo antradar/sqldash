@@ -49,7 +49,7 @@ function runquery(){
 	
 	if (isset($db)&&$token0=='select'){
 		//get table name
-		preg_match('/ from (\S+)?/i',$query,$matches);
+		preg_match('/\s*from (\S+)?/i',$query,$matches);
 		$tablenames=explode(',',noapos($matches[1]));
 		$tablename=trim($tablenames[0]);
 		
@@ -184,9 +184,9 @@ function runquery(){
 	?>
 		<td id="colbm_<?php echo $queryidx;?>_<?php echo $k;?>">
 		
-		<?php if($k!=$pkey){
+		<?php if($k!=$pkey||true){
 		?>
-		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
+		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>&pkey=<?php if ($k==$pkey) echo '1'; else echo '0';?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
 		<?php
 		} else {
 		?>
