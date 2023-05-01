@@ -51,7 +51,7 @@ function runquery(){
 	$pkey='';
 	
 	$user=userinfo();
-	if ($token0!='select'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
+	if ($token0!='select'&&$token0!='describe'&&$token0!='show'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
 	
 	if (isset($db)&&$token0=='select'){
 		//get table name

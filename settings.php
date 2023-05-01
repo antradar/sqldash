@@ -23,13 +23,16 @@ $conntypes=array(
 $userroles=array(
 	//'admins'=>'standard admin rights',
 	'accounts'=>_tr('rights_accounts'),
+	'connedit'=>'create and edit connections',
 	'insert'=>'insert records',
 	'delete'=>'delete records',
 	'alter'=>'alter tables',
 	'create'=>'create tables',
+	'truncate'=>'truncate collections',
 	'drop'=>'drop tables',
 );
 
+$userrolelocks=array_keys($userroles);
 
 
 $user=userinfo();

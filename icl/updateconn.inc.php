@@ -18,6 +18,8 @@ function updateconn(){
 	$user=userinfo();
 	$gsid=$user['gsid'];
 	
+	if (!isset($user['groups']['connedit'])) apperror('access denied');
+	
 	checkgskey('updateconn_'.$connid);
 
 

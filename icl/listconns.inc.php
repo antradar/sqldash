@@ -28,9 +28,15 @@ function listconns(){
 		<input type="image" src="imgs/mg.gif" class="searchsubmit" value=".">
 	</form>
 
+	<?php
+	if (isset($user['groups']['connedit'])){
+	?>
 	<div style="padding-top:10px;">
 	<a class="recadder" onclick="addtab('conn_new','<?php tr('list_conn_add_tab');?>','newconn');"> <img src="imgs/t.gif" class="img-addrec"><?php tr('list_conn_add');?></a>
 	</div>
+	<?php
+	}
+	?>
 </div>
 
 <div id="connlist">
@@ -104,8 +110,13 @@ function listconns(){
 ?>
 <div class="listitem">
 <a style="<?php if ($connid==$defconnid) echo 'font-weight:bold;';?>">
-	<span onclick="setactiveconn(<?php echo $connid;?>);"><?php echo htmlspecialchars($conntitle);?></span> &nbsp;
+	<span onclick="setactiveconn(<?php echo $connid;?>);"><?php echo htmlspecialchars($conntitle);?></span>
+	<?php if (isset($user['groups']['connedit'])){?>
+	 &nbsp;
 	<span class="labelbutton" onclick="showconn(<?php echo $connid;?>,'<?php echo $dbconntitle;?>');">edit</span>
+	<?php
+	}
+	?>
 </a>
 </div>
 	

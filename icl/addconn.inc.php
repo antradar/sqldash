@@ -17,6 +17,8 @@ function addconn(){
 	$user=userinfo();
 	$userid=intval($user['userid']);
 	
+	if (!isset($user['groups']['connedit'])) apperror('access denied');	
+	
 	checkgskey('addconn');
 	
 	//todo: clickhouse special case?

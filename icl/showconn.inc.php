@@ -7,6 +7,8 @@ function showconn($connid=null){
 	
 	$user=userinfo();
 	
+	if (!isset($user['groups']['connedit'])) apperror('access denied');
+	
 	$query="select * from conns where connid=$connid";
 	$rs=$sdb->query($query);
 
