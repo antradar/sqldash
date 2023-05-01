@@ -5,12 +5,12 @@ function listtables(){
 	global $db;
 	global $SQL_ENGINE;
 	global $connname;
-	
+			
 	$dbname=checkdbname();
 	$mode=GETSTR('mode');
-
+		
 	$sqlmode=SGET('sqlmode');	
-	
+		
 	if ($mode!='embed'){
 				
 	?>

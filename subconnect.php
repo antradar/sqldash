@@ -18,10 +18,18 @@ if (1==SQLDASH_AUTH_MODE){
 	$connpass=$myrow['connpass'];
 	$conndbname=$myrow['conndbname'];
 	
+	$conntype=$myrow['conntype'];
+	$connapiport=$myrow['connapiport'];
+	
 	$connpass=decstr($connpass,SQLDASH_DB_TOKEN);
 	
-	//todo: clickhouse special case?
+	if ($conntype=='clickhouse'){
+		$connhost=$connhost.':'.$connapiport;
+		$conndbname=isset($_COOKIE['dbname'])?$_COOKIE['dbname']:null;
+		if ($conndbname=='') $conndbname=null;		
+	}
 		
 	$db=@sql_get_db($connhost,$conndbname,$connuser,$connpass);
+		
 
 }//AUTH_MODE	

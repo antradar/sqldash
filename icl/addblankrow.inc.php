@@ -17,7 +17,7 @@ function addblankrow(){
 	
 	$user=userinfo();
 	
-	if (!isset($user['groups']['insert'])) apperror('Access denied');
+	if (1==SQLDASH_AUTH_MODE&&!isset($user['groups']['insert'])) apperror('Access denied');
 	
 	$query="insert into $table () values ()";
 	$rs=sql_prep($query,$db);

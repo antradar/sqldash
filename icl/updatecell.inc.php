@@ -1,8 +1,14 @@
 <?php
 
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
+
 function updatecell(){
 	global $db;
 	global $SQL_ENGINE;
+	
+	$user=userinfo();
+	
+	if (1==SQLDASH_AUTH_MODE&&!isset($user['groups']['update'])) apperror('Access denied');
 
 	$dbname=GETSTR('dbname');
 	$tablename=GETSTR('table');

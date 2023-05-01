@@ -4,6 +4,7 @@ include 'subconnect.php';
 function listdatabases(){
 	global $db;
 	global $connname;
+	global $sqlmode;
 	
 	$key=GETSTR('key');
 

@@ -5,6 +5,8 @@ if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.ph
 function lookupcell(){
 	global $db;
 	global $SQL_ENGINE;
+	
+	$user=userinfo();
 
 	if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') $dbname=checkdbname();
 		
@@ -46,6 +48,8 @@ function lookupcell(){
 	
 	$colinfo=array();
 	$canedit=1;
+	
+	if (1==SQLDASH_AUTH_MODE&&!isset($user['groups']['update'])) $canedit=0;
 	
 	$query="describe $tablename";
 	if ($SQL_ENGINE=='SQLSRV') $query="select * from information_schema.columns where table_name = '$tablename'";

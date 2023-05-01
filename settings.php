@@ -24,6 +24,7 @@ $userroles=array(
 	//'admins'=>'standard admin rights',
 	'accounts'=>_tr('rights_accounts'),
 	'connedit'=>'create and edit connections',
+	'update'=>'update records',
 	'insert'=>'insert records',
 	'delete'=>'delete records',
 	'alter'=>'alter tables',
@@ -55,9 +56,9 @@ if (1!=SQLDASH_AUTH_MODE){
 	unset($toolbaritems['core.settings']);
 }
 
-if ($sqlmode=='mysqli'){
+//if ($sqlmode=='mysqli'){
 	$toolbaritems['ghostsql']=array('title'=>'GhostSQL','icon'=>'img-ghost');	
-}
+//}
 
 
 
