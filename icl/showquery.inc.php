@@ -1,4 +1,5 @@
 <?php
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 
 function showquery(){
 	$queryidx=GETVAL('queryidx');
@@ -15,7 +16,7 @@ function showquery(){
 	
 	if ($sqlmode=='sqlite') $dtablename="[$tablename]";
 	
-	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
+	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
 ?>
 <div class="section">

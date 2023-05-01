@@ -1,8 +1,11 @@
 <?php
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 
 function lookupquerydim(){
 	global $SQL_ENGINE;
-	
+
+	if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') $dbname=checkdbname();
+		
 	$queryidx=GETVAL('queryidx');
 	$table=GETSTR('table');
 	$fkey=SGET('fkey');

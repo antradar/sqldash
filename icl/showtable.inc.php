@@ -1,4 +1,5 @@
 <?php
+include 'subconnect.php';
 
 function showtable(){
 	global $db;

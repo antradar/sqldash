@@ -1,6 +1,13 @@
 <?php
 
 include 'lb.php';
+
+if (1==SQLDASH_AUTH_MODE){
+	include 'login_sec.php';
+	die();	
+}
+
+
 include 'lang.php';
 
 //if (isset($usehttps)&&$usehttps) include 'https.php'; 
@@ -124,7 +131,8 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 	setcookie('groupnames',NULL,time()-3600);
 	setcookie('dashpass',NULL,time()-3600);
 	setcookie('dbname',NULL,time()-3600);		
-	setcookie('sqlmode',NULL,time()-3600);		
+	setcookie('sqlmode',NULL,time()-3600);
+	setcookie('connid',NULL,time()-3600);	
 }
 
 ?>

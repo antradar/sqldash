@@ -6,23 +6,23 @@ function showuser($userid=null){
 	$user=userinfo();
 	if (!$user['groups']['accounts']) die('Access denied');
 	
-	global $db;
+	global $sdb;
 	global $userroles;
 	
-	$query="select * from users where userid=$userid";
-	$rs=sql_query($query,$db);
+	$jsroles=str_replace('"',"'",json_encode(array_keys($userroles)));	
 	
-	if (!$myrow=sql_fetch_array($rs)) die('This user record has been removed');
+	$query="select * from users where userid=$userid";
+	$rs=$sdb->query($query);
+	
+	if (!$myrow=$rs->fetchArray(SQLITE3_ASSOC)) die('This user record has been removed');
 	
 	$login=$myrow['login'];
+	$dispname=$myrow['dispname'];
 	$active=$myrow['active'];
 	$virtual=$myrow['virtualuser'];
 	$passreset=$myrow['passreset'];
 	$groupnames=$myrow['groupnames'];
 	$groups=explode('|',$groupnames);
-	$needcert=$myrow['needcert'];
-	$certname=$myrow['certname'];
-	if ($certname=='') $certname='<em>not set</em>';
 	
 	header('newtitle: '.$login);
 	
@@ -35,12 +35,20 @@ function showuser($userid=null){
 
 	<div class="inputrow">
 		<div class="formlabel"><?php tr('username');?>:</div>
-		<input class="inpmed" id="login_<?php echo $userid;?>" value="<?php echo htmlspecialchars($login);?>">
+		<input class="inpmed" id="login_<?php echo $userid;?>" value="<?php echo htmlspecialchars($login);?>"
+			onblur="if (gid('dispname_new').value==''&&this.value!='') {var val=this.value.charAt(0).toUpperCase()+this.value.slice(1);gid('dispname_new').value=val;}"		
+		>
 	</div>
 	<div class="inputrow">
+		<div class="formlabel">Display Name:</div>
+		<input class="inpmed" id="dispname_<?php echo $userid;?>" value="<?php echo htmlspecialchars($dispname);?>" onfocus="document.hotspot=this;this.select();">
+	</div>		
+	<div class="inputrow">
 		<input type="checkbox" id="active_<?php echo $userid;?>" <?php if ($active) echo 'checked';?>> <label for="active_<?php echo $userid;?>"><?php tr('account_active');?></label>
+		<span style="display:none;">
 		&nbsp;&nbsp;
 		<input type="checkbox" id="virtual_<?php echo $userid;?>" <?php if ($virtual) echo 'checked';?> onclick="if (this.checked) gid('userpasses_<?php echo $userid;?>').style.display='none'; else gid('userpasses_<?php echo $userid;?>').style.display='block';"> <label for="virtual_<?php echo $userid;?>"><?php tr('account_virtual');?></label>
+		</span>
 	</div>
 	<div id="userpasses_<?php echo $userid;?>" style="<?php if ($virtual) echo 'display:none;';?>">
 	<div class="inputrow">
@@ -54,15 +62,6 @@ function showuser($userid=null){
 	
 	<div class="inputrow">
 		<input type="checkbox" id="passreset_<?php echo $userid;?>" <?php if ($passreset) echo 'checked';?>> <label for="passreset_<?php echo $userid;?>"><?php tr('account_login_reset');?></label>
-	</div>
-
-	<div class="inputrow" id="cardsettings_<?php echo $userid;?>">
-		<div class="formlabel">ID Card: &nbsp; 
-			<span style="font-weight:normal;" id="cardstatus_<?php echo $userid;?>"><?php echo $certname;?></span> <a class="labelbutton" onclick="loadsmartcard(<?php echo $userid;?>);">load card</a>
-			<span style="display:none;"><textarea id="cert_<?php echo $userid;?>" value=""></textarea></span>
-		</div>
-		<input type="checkbox" id="needcert_<?php echo $userid;?>" <?php if ($needcert) echo 'checked';?>> card must be present at sign-in
-
 	</div>
 	
 	<div class="inputrow">
@@ -79,7 +78,7 @@ function showuser($userid=null){
 	</div><!-- userpasses -->
 	
 	<div class="inputrow">
-		<button onclick="updateuser(<?php echo $userid;?>);"><?php tr('button_update');?></button>
+		<button onclick="updateuser(<?php echo $userid;?>,<?php echo $jsroles;?>);"><?php tr('button_update');?></button>
 
 		&nbsp; &nbsp;
 		<button class="warn" onclick="deluser(<?php echo $userid;?>);"><?php tr('button_delete');?></button>

@@ -1,10 +1,12 @@
 <?php
 
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
+
 function lookupcell(){
 	global $db;
 	global $SQL_ENGINE;
 
-	$dbname=checkdbname();
+	if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') $dbname=checkdbname();
 		
 	$tablename=$_GET['table'];
 	$pkey=$_GET['pkey'];

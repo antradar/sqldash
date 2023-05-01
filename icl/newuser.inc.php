@@ -5,6 +5,9 @@ function newuser(){
 	if (!$user['groups']['accounts']) die('Access denied');
 	
 	global $userroles;	
+	
+	$jsroles=str_replace('"',"'",json_encode(array_keys($userroles)));
+	
 ?>
 <div class="section">
 	<div class="sectiontitle"><?php tr('list_user_add_tab');?></div>
@@ -12,12 +15,20 @@ function newuser(){
 	
 	<div class="inputrow">
 		<div class="formlabel"><?php tr('username');?>:</div>
-		<input class="inp" id="login_new">
+		<input class="inp" id="login_new" 
+			onblur="if (gid('dispname_new').value==''&&this.value!='') {var val=this.value.charAt(0).toUpperCase()+this.value.slice(1);gid('dispname_new').value=val;}"
+		>
 	</div>
 	<div class="inputrow">
+		<div class="formlabel">Display Name:</div>
+		<input class="inpmed" id="dispname_new" value="" onfocus="document.hotspot=this;this.select();">
+	</div>	
+	<div class="inputrow">
 		<input type="checkbox" id="active_new" checked> <label for="active_new"><?php tr('account_active');?></label>
+		<span style="display:none;">
 		&nbsp; &nbsp;
 		<input type="checkbox" id="virtual_new" onclick="if (this.checked) gid('userpasses_new').style.display='none'; else gid('userpasses_new').style.display='block';"> <label for="virtual_new"><?php tr('account_virtual');?></label>
+		</span>
 	</div>
 	<div id="userpasses_new">
 		<div class="inputrow">
@@ -45,7 +56,7 @@ function newuser(){
 	</div>
 		
 		<div class="inputrow">
-			<button onclick="adduser();"><?php tr('button_user_add');?></button>
+			<button onclick="adduser(<?php echo $jsroles;?>);"><?php tr('button_user_add');?></button>
 		</div>
 
 </div>

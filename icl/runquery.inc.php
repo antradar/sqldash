@@ -1,5 +1,6 @@
 <?php
 include 'fsql-sqlite.php';
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 
 function runquery(){
 	global $db;
@@ -16,7 +17,7 @@ function runquery(){
 	
 	$sqlmode=SGET('sqlmode');
 	
-	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
+	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 		
 	if ($sqlmode=='sqlite'){
 		$dbname=basename($dbname);
@@ -48,6 +49,9 @@ function runquery(){
 	
 	$tablename='';
 	$pkey='';
+	
+	$user=userinfo();
+	if ($token0!='select'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
 	
 	if (isset($db)&&$token0=='select'){
 		//get table name
@@ -193,7 +197,7 @@ function runquery(){
 		
 		<?php if($k!=$pkey||true){
 		?>
-		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>&pkey=<?php if ($k==$pkey) echo '1'; else echo '0';?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
+		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&sqlmode=<?php echo $sqlmode;?>&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>&pkey=<?php if ($k==$pkey) echo '1'; else echo '0';?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
 		<?php
 		} else {
 		?>
@@ -232,7 +236,7 @@ function runquery(){
 				style="cursor:pointer;" 
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
-				onclick="lookupentity(this,'cell&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
+				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
 				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"><?php echo $dv;?></acronym>
 			</td>
 		<?php
@@ -257,7 +261,7 @@ function runquery(){
 				style="cursor:pointer"
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
-				onclick="lookupentity(this,'cell&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
+				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
 				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"			
 			><?php echo $dv;?></span></td>
 		</tr>

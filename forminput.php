@@ -6,13 +6,16 @@ function noapos($val,$trimnl=1){$val=addslashes($val); if ($trimnl) $val=str_rep
 function GETSTR($key,$trim=1){$val=isset($_GET[$key])?$_GET[$key]:'';if ($trim) $val=trim($val);return noapos($val,0);}
 function QETSTR($key,$trim=1){$val=isset($_POST[$key])?$_POST[$key]:'';if ($trim) $val=trim($val);return noapos($val,0);}
 
-function GETCUR($key){$val=trim($_GET[$key]); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
-function QETCUR($key){$val=trim($_POST[$key]); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
+function GETCUR($key){$val=trim(isset($_GET[$key])?$_GET[$key]:''); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
+function QETCUR($key){$val=trim(isset($_POST[$key])?$_POST[$key]:''); $val=str_replace(_tr('currency_separator_thousands'),'',$val); $val=str_replace(_tr('currency_separator_decimal'),'.',$val); if (!is_numeric($val)) apperror('apperror:invalid parameter '.$key); return $val; }
 
-function SGET($key,$trim=1){$val=isset($_GET[$key])?$_GET[$key]:'';if ($trim) $val=trim($val);return $val;}
-function SQET($key,$trim=1){$val=isset($_POST[$key])?$_POST[$key]:'';if ($trim) $val=trim($val);return $val;}
+function SGET($key,$trim=1){$val=isset($_GET[$key])?$_GET[$key]:'';if ($trim&&is_string($val)) $val=trim($val);return $val;}
+function SQET($key,$trim=1){$val=isset($_POST[$key])?$_POST[$key]:'';if ($trim&&is_string($val)) $val=trim($val);return $val;}
 
 function hspc($str){if (!is_string($str)) return $str;return htmlspecialchars($str,ENT_SUBSTITUTE|ENT_COMPAT);}
+
+//array with nullable nodes
+function narray_val($arr,$key){if (!isset($arr[$key])) return null; return $arr[$key];}
 
 
 function utf8_fix($str){
@@ -21,9 +24,7 @@ function utf8_fix($str){
 }
 
 function _utf8_fix($str){
-	
-	if (!is_string($str)) return array($str,0);
-	
+	if (!is_string($str)) return array($str,0);	
 	$tstr=utf8_encode($str);
 	$oqc=0; for ($i=0;$i<strlen($str);$i++) if ($str[$i]=='?') $oqc++;
 	$itr=0;
@@ -65,6 +66,8 @@ function decode_unicode_url($str){
 	
 	return $res . substr($str, $i);
 }
+
+function tabtitle($str) {return rawurlencode($str);}
 
 function tzconvert($stamp,$src,$dst){
 	
@@ -143,7 +146,7 @@ function logaction($message,$rawobj=null,$syncobj=null){
 }
 
 function timeformat($sec){
-	$sec_num = $sec+0; // don't forget the second param
+	$sec_num = intval($sec);
 	$hours = floor($sec_num / 3600);
 	$minutes = floor(($sec_num - ($hours * 3600)) / 60);
 	$seconds = $sec_num - ($hours * 3600) - ($minutes * 60);
@@ -154,3 +157,77 @@ function timeformat($sec){
 	$time  = "$hours:$minutes:$seconds";
 	return $time;	
 }
+
+function duration_format($sec){
+	$sec=intval($sec);
+	
+	if ($sec<60) return "$sec secs";
+	if ($sec<3600) {
+		$mins=floor($sec/60);
+		$secs=$sec-$mins*60;
+		$res="$mins min";
+		if ($mins>1) $res.='s';
+		if ($secs>0) $res.=", $secs secs";
+		return $res;
+	}
+
+	if ($sec<3600*24){
+		$hours=floor($sec/3600);
+		$mins=floor(($sec-$hours*3600)/60);
+		$secs=$sec-$hours*3600-$mins*60;
+		$res="$hours hour";
+		if ($hours>1) $res.='s';
+		if ($mins>0) $res.=", $mins min";
+		if ($mins>1) $res.='s';
+		
+		return $res;
+			
+	}
+	
+	$days=floor($sec/3600/24);
+	$hours=floor(($sec-$days*3600*24)/3600);
+	
+	$res="$days day";
+	if ($days>1) $res.='s';
+	if ($hours>0) $res.=", $hours hour";
+	if ($hours>1) $res.='s';
+
+	
+	return $res;
+}
+
+function currency_format($val,$digits=2,$bracket=0,$omitzero=0){
+	if (!is_numeric($val)) return 0;	
+
+	$separator_decimal=_tr('currency_separator_decimal');
+	$separator_thousands=_tr('currency_separator_thousands');
+
+	$inverted=0;	
+	if ($bracket||$omitzero){
+		$val=round($val,2);
+		if ($val==0&&$omitzero) return '';
+		if ($val<0&&$bracket) {$val=$val*-1;$inverted=1;}	
+	}
+	
+	$num=number_format($val,$digits,$separator_decimal,$separator_thousands);
+	if ($inverted) $num="($num)";
+	
+	return $num;
+	
+}
+
+function dumpgsdbprofile($sort=0){
+
+	global $gsdbprofile;
+	if (!isset($gsdbprofile)) return;
+	
+	if ($sort){
+	uasort($gsdbprofile,function($a,$b){
+		$ta=$a['time']; $tb=$b['time'];
+		if ($ta===$tb) return 0; if ($ta>$tb) return -1; else return 1;
+	});		
+	}
+	
+	echo '<pre>'; print_r($gsdbprofile); echo '</pre>';	
+}
+

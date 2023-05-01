@@ -2,7 +2,7 @@
 
 include 'lb.php';
 
-include 'connect.php';
+include 'connect.php'; 
 include 'settings.php';
 include 'xss.php';
 
@@ -17,10 +17,54 @@ $cmd=$_GET['cmd'];
 
 header('Cache-Control: no-store');
 
+$user=userinfo();
+$userid=intval($user['userid']??0);
+
+if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','pump','imgqrcode','testgapin','resetgapin','addyubikey','testyubikey','setaccount'))){
+	$query="select usega,useyubi from users where userid=$userid";
+	$rs=$sdb->query($query);
+	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
+	$usega=$myrow['usega'];
+	$useyubi=$myrow['useyubi'];
+	
+	if (!$usega&&!$useyubi) {
+		$missing2fa=true;
+		
+		if ($cmd=='wk') $cmd='showaccount';
+		else die();
+	}
+	
+	
+}//2fa enforcement
+
+
+
+
 switch($cmd){
+	
+
+//Connections
+
+	case 'slv_codegen__conns': include 'icl/listconns.inc.php'; listconns(); break;
+	case 'dash_codegen__conns': include 'icl/dashconns.inc.php'; dashconns(); break;
+	case 'showconn': include 'icl/showconn.inc.php'; showconn(); break;
+	case 'newconn': include 'icl/newconn.inc.php'; newconn(); break;
+	case 'addconn': include 'icl/addconn.inc.php'; addconn(); break;
+	case 'delconn': include 'icl/delconn.inc.php'; delconn(); break;
+	case 'updateconn': include 'icl/updateconn.inc.php'; updateconn(); break;
+	
+	case 'setactiveconn': include 'icl/setactiveconn.inc.php'; setactiveconn(); break;
+
+	case 'imgqrcode': include 'icl/imgqrcode.inc.php'; imgqrcode(); break;
 
 	case 'lookupquerydim': include 'icl/lookupquerydim.inc.php'; lookupquerydim(); break;
 	case 'dashquerydims': include 'icl/dashquerydims.inc.php'; dashquerydims(); break;
+	
+	case 'testgapin': include 'icl/testgapin.inc.php'; testgapin(); break;
+	case 'resetgakey': include 'icl/resetgakey.inc.php'; resetgakey(); break;
+	
+	case 'addyubikey': include 'icl/addyubikey.inc.php'; addyubikey(); break;
+	case 'testyubikey': include 'icl/testyubikey.inc.php'; testyubikey(); break;
 	
 //SQLite
 	case 'slv_sqldash__sqlite': include 'icl/slite_listdbs.inc.php'; slite_listdbs(); break;
@@ -74,6 +118,8 @@ switch($cmd){
 	case 'rptactionlog': include 'icl/rptactionlog.inc.php'; rptactionlog(); break;  	
 
 	case 'rptsqlcomp': include 'icl/rptsqlcomp.inc.php'; rptsqlcomp(); break;  
+	
+	case 'slv_core__settings': include 'icl/listsettings.inc.php'; listsettings(); break;
 			
 // svn merge boundary 80dd22a0883aaa1f8cd09b09e81bdd9b - 
 

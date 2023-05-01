@@ -10,13 +10,24 @@ include 'auth.php';
 $codepage='myservices.php';
 $fastlane='phpx-services.php'; //change this name if HAProxy is set up to route by filename to a dedicated server
 
+$conntypes=array(
+	'mysqli'=>'MySQLi',
+	'sqlsrv'=>'SQLSrv',
+	'clickhouse'=>'ClickHouse/HTTP'
+);
+
 //define constants that are shared by both front- and back-end code
 //repeat the settings in settings.tmpl.php
 
 
 $userroles=array(
-	'admins'=>'standard admin rights',
-	'accounts'=>_tr('rights_accounts')
+	//'admins'=>'standard admin rights',
+	'accounts'=>_tr('rights_accounts'),
+	'insert'=>'insert records',
+	'delete'=>'delete records',
+	'alter'=>'alter tables',
+	'create'=>'create tables',
+	'drop'=>'drop tables',
 );
 
 
@@ -25,16 +36,20 @@ $user=userinfo();
 
 
 $toolbaritems=array(
-'core.users'=>array('title'=>'Users','icon'=>'','modversion'=>'78','lockdown'=>1),
+'codegen.conns'=>array('title'=>'Connections','icon'=>'img-conns'),
 'sqldash.databases'=>array('title'=>'Databases','icon'=>'img-databases','modversion'=>'1'),
 'sqldash.tables'=>array('title'=>'Tables','icon'=>'img-tables','modversion'=>'1'),
 'sqldash.sqlite'=>array('title'=>'SQLite','icon'=>'img-sqlite'),	
+'core.settings'=>array('title'=>'Settings','icon'=>'img-settings','modversion'=>'78','lockdown'=>1),
+	'core.users'=>array('title'=>'Users'),
 'core.reports'=>array('title'=>'Reports','icon'=>'img-reports','modversion'=>'78','lockdown'=>1,'groups'=>'admins'),
 );
 
-$sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
+if (!isset($sqlmode)) $sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
 
-
+if (1!=SQLDASH_AUTH_MODE){
+	unset($toolbaritems['codegen.conns']);
+}
 
 if ($sqlmode=='mysqli'){
 	$toolbaritems['ghostsql']=array('title'=>'GhostSQL','icon'=>'img-ghost');	

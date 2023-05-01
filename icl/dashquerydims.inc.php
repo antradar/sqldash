@@ -1,11 +1,14 @@
 <?php
 include 'icl/dashquerydims_nav.inc.php';
+include 'subconnect.php';
 
 function dashquerydims(){
 	
 	global $db;
 	global $SQL_ENGINE;
 	
+	$dbname=checkdbname();
+		
 	$queryidx=GETVAL('queryidx');
 	
 	$mode=GETSTR('mode');

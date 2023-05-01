@@ -1,8 +1,10 @@
 <?php
+include 'subconnect.php';
 
 function listtables(){
 	global $db;
 	global $SQL_ENGINE;
+	global $connname;
 	
 	$dbname=checkdbname();
 	$mode=GETSTR('mode');
@@ -10,8 +12,9 @@ function listtables(){
 	$sqlmode=SGET('sqlmode');	
 	
 	if ($mode!='embed'){
+				
 	?>
-	<div class="sectionheader" style="margin:0;">Database: <?php echo $dbname;?></div>
+	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname).'//';?><?php echo $dbname;?></div>
 	<?php
 	}
 

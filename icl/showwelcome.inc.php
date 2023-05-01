@@ -2,10 +2,29 @@
 include 'icl/showgyroscopeupdater.inc.php';
 include 'icl/showguide.inc.php';
 
+$connid=isset($_COOKIE['connid'])?$_COOKIE['connid']:null;
+
+if (isset($connid)) include 'subconnect.php';
+
 function showwelcome(){
 	
 	global $db;
 	global $SQL_ENGINE;
+	
+	global $connid;
+	
+	if (!isset($connid)){
+?>
+<div class="section">
+	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
+
+	<div class="infobox">
+		Start by <a class="hovlink" onclick="showview('codegen.conns');">selecting a connection</a>.
+	</div>
+</div>
+<?php
+		return;		
+	}
 	
 	$dbname=isset($_COOKIE['dbname'])?$_COOKIE['dbname']:null;
 	

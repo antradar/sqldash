@@ -1,0 +1,8 @@
+<?php
+
+define ('SQLDASH_AUTH_MODE',%%authmode%%);
+define ('SQLDASH_AUTH_TOKEN','%%authtoken%%');
+define ('SQLDASH_DB_TOKEN','%%dbtoken%%');
+define ('SQLDASH_SETUP_COMPLETE',1);
+define ('SQLDASH_USERDB_PATH','%%userdbpath%%');
+

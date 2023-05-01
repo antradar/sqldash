@@ -30,6 +30,22 @@ $dict=array(
 	'lookup_closer'=>'close',
 	'pickup_edit'=>'edit',
 	
+	'icon_settings'=>'Settings',
+	'icon_accounts'=>'Users',
+	
+	'icon_conns'=>'Connections',
+	'list_conn_stab'=>'Connection',
+	'button_conn_add'=>'Add Connection',
+	'list_conn_add_tab'=>'New Connection',
+	'list_conn_add'=>'add a connection',	
+	'conn_label_connname'=>'Connection Name',
+	'conn_label_conntype'=>'Database Type',
+	'conn_label_connhost'=>'Host',
+	'conn_label_conndbname'=>'Default Database',
+	'conn_label_connapiport'=>'API Port',
+	'conn_label_connuser'=>'User',
+	'conn_label_connpass'=>'Password',
+			
 
 	'button_update'=>'Update',
 	'button_delete'=>'Delete',

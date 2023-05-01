@@ -1,10 +1,14 @@
 <?php
+include 'subconnect.php';
 
 function listdatabases(){
 	global $db;
+	global $connname;
+	
 	$key=GETSTR('key');
 
 	global $SQL_ENGINE;
+		
 	$query="show databases ";
 	if ($SQL_ENGINE=='SQLSRV') $query="select name from sys.databases";
 
@@ -14,10 +18,15 @@ function listdatabases(){
 		$query.=" like '%${key}%' ";
 	}
 	$mode=GETSTR('mode');
-	
+		
 	$rs=sql_query($query,$db);
 	
 	if ($mode!='embed'){
+		if (isset($connname)){
+	?>
+	<div class="sectionheader" style="margin:0;">Connection: <?php echo htmlspecialchars($connname);?></div>
+	<?php		
+		}
 ?>
 <div class="section">
 <div class="listbar">

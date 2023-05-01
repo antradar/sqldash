@@ -19,9 +19,10 @@ define ('VENDOR_NAME','');
 */
 
 
-$saltroot=SQLDASHKEY.'gyroscope_demo';
-$salt=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-h');
+$saltroot=SQLDASHKEY.SQLDASH_AUTH_TOKEN;
+$salt=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-j-H');
 
+$dbsalt=SQLDASH_DB_TOKEN;
 
 if (!is_callable('hash_equals')){
 	function hash_equals($a,$b){return $a==$b;}	
@@ -35,7 +36,7 @@ if (!is_callable('hash_equals')){
 function login($silent=false){
 	global $salt;
 	global $saltroot;
-	$salt2=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-h',time()-3600);
+	$salt2=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-j-H',time()-3600);
 	global $_COOKIE;
 	global $_SERVER;
 	global $db;
@@ -44,6 +45,37 @@ function login($silent=false){
 	
 	//check cookie authenticity
 	$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
+	
+	if (1==SQLDASH_AUTH_MODE){
+		
+		$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
+		$dispname=isset($_COOKIE['dispname'])?$_COOKIE['dispname']:null;
+		$userid=isset($_COOKIE['userid'])?$_COOKIE['userid']:null;
+		$auth=isset($_COOKIE['auth'])?$_COOKIE['auth']:null;
+	
+		$groupnames=isset($_COOKIE['groupnames'])?$_COOKIE['groupnames']:null;
+		
+		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
+		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname);
+				
+		if (!isset($login)||(!hash_equals($auth,$auth_)&&!hash_equals($auth,$auth2_))||$auth===''||$auth===null) {
+					
+			$tail='';
+			if (isset($_GET['keynav'])) $tail='?keynav';
+					
+			if (!$silent) header('location: login.php?from='.$_SERVER['PHP_SELF'].$tail); else {header('HTTP/1.0 403 Forbidden');header('X-STATUS: 403');die('.');}
+			die();
+		}
+		
+		if ($auth===$auth2_){
+			setcookie('auth',$auth_,null,null,null,$usehttps,true);
+		}
+
+		
+		return;	
+	}
+
+	
 	$dashpass=null;
 	$signed=0;
 	
@@ -79,12 +111,43 @@ function userinfo(){
 	global $salt;
 	global $saltroot;
 	global $_COOKIE;
+
+	$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
+		
+	if (1==SQLDASH_AUTH_MODE){
+	
+		$dispname=isset($_COOKIE['dispname'])?$_COOKIE['dispname']:null;
+		$userid=isset($_COOKIE['userid'])?$_COOKIE['userid']:null;
+		$auth=isset($_COOKIE['auth'])?$_COOKIE['auth']:null;
+			
+		$groupnames=isset($_COOKIE['groupnames'])?$_COOKIE['groupnames']:null;
+		$salt2=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-j-H',time()-3600);
+			
+		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
+		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname);
+			
+		
+		
+		if (!isset($login)||!isset($auth)||(!hash_equals($auth,$auth_)&&!hash_equals($auth,$auth2_))) return array('groups'=>array());
+		
+		$info=array(
+			'login'=>stripslashes($_COOKIE['login']),
+			'dispname'=>$_COOKIE['dispname'],
+			'userid'=>$_COOKIE['userid'],
+			'groups'=>array()
+		);	
+		
+		$groups=explode('|',($_COOKIE['groupnames']??''));
+		foreach ($groups as $group) $info['groups'][$group]=true;
+		
+		return $info;
+
+	}//auth	
 	
 		//check cookie authenticity
-	$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
 	
 	$info=array(
-		'login'=>$_COOKIE['login'],
+		'login'=>$_COOKIE['login']??null,
 	);	
 	
 	
@@ -104,4 +167,50 @@ function checkdbname(){
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 
 	return $dbname;
+}
+function makegskey($verb,$groupnames=''){
+	global $gsreqkey;
+	global $_SERVER;
+	global $_COOKIE;
+	
+	$user=userinfo();
+	$userid=$user['userid'];
+	
+	$gsfrac=preg_replace('/[^A-Za-z0-9-]/','',$_COOKIE['gsfrac']);
+		
+	$key=md5($gsfrac.$gsreqkey.'_'.$userid.'_'.$verb.'_'.$_SERVER['REMOTE_ADDR'].'-'.$_SERVER['O_IP']);
+	if ($groupnames!=''){
+		$found=0;
+		
+		$gns=explode(',',$groupnames);
+		foreach ($gns as $gn){
+			if (trim($gn)!=''&&in_array(trim($gn),array_keys($user['groups']))) {$found=1;break;}
+		}
+		
+		if (!$found) return '';
+	}
+	
+	
+	return $key;
+}
+
+function emitgskey($verb,$groupnames=''){
+	echo makegskey($verb,$groupnames);	
+}
+
+function checkgskey($verb){
+	global $gsreqkey;
+	global $_SERVER;
+
+	$user=userinfo();
+	$userid=$user['userid'];	
+		
+	//$key=$_SERVER['HTTP_X_GSREQ_KEY'];
+	$key=isset($_POST['X-GSREQ-KEY'])?$_POST['X-GSREQ-KEY']:'';
+
+		
+	$gsfrac=preg_replace('/[^A-Za-z0-9-]/','',$_COOKIE['gsfrac']);
+	
+	$key_=md5($gsfrac.$gsreqkey.'_'.$userid.'_'.$verb.'_'.$_SERVER['REMOTE_ADDR'].'-'.$_SERVER['O_IP']);
+	if ($key!==$key_) apperror('gskey: request denied');
 }

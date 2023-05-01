@@ -2,7 +2,7 @@
 
 function listusers(){
 	
-	global $db; 
+	global $sdb; 
 	
 	$mode=GETSTR('mode');
 	$key=GETSTR('key');
@@ -29,10 +29,13 @@ function listusers(){
 <?php		
 	}
 
-	$query="select * from users ";
-	if ($key!='') $query.=" where (login like '$key%') ";
-	$rs=sql_query($query,$db);
-	$count=sql_affected_rows($db,$rs);
+	$query="select * from users where 1 ";
+	if ($key!='') $query.=" and (login like '$key%') ";
+	
+	$cquery="select count(*) as c from ($query)t";
+	$rs=$sdb->query($cquery);
+	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
+	$count=$myrow['c'];	
 	
 	$perpage=20;
 	$maxpage=ceil($count/$perpage)-1;
@@ -55,12 +58,12 @@ function listusers(){
 	
 	$query.=" order by userid=$myuserid desc, virtualuser, login limit $start,$perpage";	
 	
-	$rs=sql_query($query,$db);
+	$rs=$sdb->query($query);
 	
-	while ($myrow=sql_fetch_array($rs)){
+	while ($myrow=$rs->fetchArray(SQLITE3_ASSOC)){
 		$userid=$myrow['userid'];
 		$login=$myrow['login'];
-		$virtual=$myrow['virtual'];
+		$virtual=$myrow['virtualuser'];
 		
 		$usertitle="$login"; //change this if needed
 		

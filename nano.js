@@ -307,6 +307,20 @@ function encodeHTML(code){
 	return encodeURIComponent(code);
 }
 
+function arrayBufferToString(arrayBuffer) {
+	return String.fromCharCode.apply(null, new Uint8Array(arrayBuffer));
+}
+
+function stringToArrayBuffer(str){
+	return Uint8Array.from(str,function(c){return c.charCodeAt(0);}).buffer;
+}
+
+function base64encode(arrayBuffer){
+	if (!arrayBuffer||arrayBuffer.length==0) return null;
+	return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)));
+}
+
+
 function showhide(id){
 	var d=gid(id);
 	if (!d) return;
@@ -319,4 +333,38 @@ function showhide(id){
 	}
 }
 
+if (window.Blob){
+	ajxblob=function(url,data,mode,func){
+		var rq=xmlHTTPRequestObject();
+		
+		rq.open('POST',url+'&hb='+hb(),true);
+		rq.setRequestHeader('Content-Type','application/x-www-form-urlencoded; charset=UTF-8');
+		rq.setRequestHeader('SENDBLOB','1');
+		rq.responseType='blob';
+		rq.onreadystatechange=function(){
+			if (rq.readyState==4){
+				var data=rq.response;
+				var blob=new Blob([data]);
+				func(blob);
+			}	  
+		}
+		rq.send(data);
+	}	
+}
+
+ajxblobimg=function(imgid,url_get,url_post,data){
+	if (!self.ajxblob){
+		gid(imgid).src=url_get;
+		return;	
+	}
+	
+	ajxblob(url_post,data,'image',function(blob){
+		var burl = URL.createObjectURL(blob);
+		gid(imgid).src=burl;
+		gid(imgid).onload=function(){
+			URL.revokeObjectURL(gid(imgid).src);	
+		}		
+	});
+	
+}
 

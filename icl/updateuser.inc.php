@@ -16,14 +16,9 @@ function updateuser(){
 	$virtual=GETVAL('virtual');
 	$passreset=GETVAL('passreset');
 
-	$newpass=QETSTR('pass');
-	$np=md5($dbsalt.$newpass);
+	$newpass=SQET('pass');
+	$np=password_hash($dbsalt.$newpass,PASSWORD_DEFAULT,array('cost'=>PASSWORD_COST));
 
-	$certname=QETSTR('certname');
-	$needcert=GETVAL('needcert');
-	$cert=QETSTR('cert');
-
-	$certhash=md5($dbsalt.$cert);
 
 		
 	$groupnames=GETSTR('groupnames');
@@ -33,22 +28,21 @@ function updateuser(){
 		$passreset=0;	
 	}
 
-	global $db;
+	global $sdb;
 
 	$query="select * from users where login='$login' and userid!=$userid";
-	$rs=sql_query($query,$db);
-	if ($myrow=sql_fetch_array($rs)){
+	$rs=$sdb->query($query);
+	if ($myrow=$rs->fetchArray(SQLITE3_ASSOC)){
 		header('apperror: User already exists. Use a different login.');die();		
 	}
 
-	$query="update users set login='$login',active=$active, virtualuser=$virtual, needcert=$needcert, passreset='$passreset', groupnames='$groupnames' ";
+	$query="update users set login='$login',active=$active, virtualuser=$virtual, passreset=$passreset, groupnames='$groupnames' ";
 	if (!$virtual&&$newpass!='') $query.=", password='$np' ";
-	if (trim($cert)!='') $query.=", certname='$certname', certhash='$certhash' ";
+
 
 	$query.=" where userid=$userid";
-	sql_query($query,$db);
+	$sdb->query($query);
 
-	logaction("updated User #$userid <u>$login</u>",array('userid'=>$userid,'login'=>"$login"),array('rectype'=>'reauth','recid'=>$userid));
 
 	reauth();
 	showuser($userid);

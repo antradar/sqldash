@@ -4,7 +4,6 @@ include 'lb.php';
 
 include 'mswitch.php'; //auto switch to mobile version
 
-
 include 'settings.php';
 
 include 'evict.php';
@@ -90,7 +89,7 @@ document.appsettings={codepage:'<?php echo $codepage;?>', fastlane:'<?php echo $
 </span><!-- iconbuttons -->
 
 <div id="logoutlink">
-<img src="imgs/t.gif" width="16" height="16" class="admin-user"><?php echo $user['login'];?>
+<acronym title="<?php echo htmlspecialchars($user['dispname']??'');?>"><a onclick="ajxjs(self.setaccountpass,'accounts.js');reloadtab('account','<?php tr('account_settings');?>','showaccount');addtab('account','<?php tr('account_settings');?>','showaccount');return false;"><img src="imgs/t.gif" id="mainuserprofile" class="admin-user"><span id="labellogin"><?php echo htmlspecialchars($user['dispname']??'');?></span><span id="labeldispname" style="display:none;"><?php echo htmlspecialchars($user['dispname']);?></span></a></acronym>
 &nbsp; &nbsp;
 &nbsp;
 <acronym title="<?php tr('signout');?>"><a title="<?php tr('signout');?>" onclick="skipconfirm();" href="login.php?from=<?php echo $_SERVER['PHP_SELF'];?>" onmouseover="hintstatus(this,'Logout');"><img src="imgs/t.gif" width="16" height="16" class="admin-logout"></a></acronym>
@@ -168,14 +167,7 @@ window.onbeforeunload=function(){
 <script src="speech.js"></script>
 
 
-<script src="smartcard.js"></script>
-<script>
-document.smartcard=true;
-smartcard_init('cardreader',{
-	'noplugin':function(){document.smartcard=null;},
-	'nohttps':function(){document.smartcard=null;}
-});
-</script>
+<script src="accounts.js"></script>
 
 </body>
 </html>
