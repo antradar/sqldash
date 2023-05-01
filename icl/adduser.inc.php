@@ -4,8 +4,9 @@ include 'icl/showuser.inc.php';
 
 function adduser(){
 	global $userroles;
+	global $userrolelocks;
 	global $dbsalt;
-	
+		
 	$user=userinfo();
 	if (!$user['groups']['accounts']) die('Access denied');
 		
@@ -14,13 +15,24 @@ function adduser(){
 	$virtual=GETVAL('virtual');
 	$passreset=GETSTR('passreset');
 	
-	$dispname=GETSTR('dispname');
+	$dispname=strip_tags(SGET('dispname'));
 	
 	$newpass=SQET('newpass');
 	
 	$np=password_hash($dbsalt.$newpass,PASSWORD_DEFAULT,array('cost'=>PASSWORD_COST));
 		
-	$groupnames=GETSTR('groupnames');	
+	$groupnames=GETSTR('groupnames');
+	
+	$gnames=explode('|',$groupnames);
+	foreach ($gnames as $idx=>$gname){
+		if (!isset($userroles[$gname])) unset($gnames[$idx]);
+		if (in_array($gname,$userrolelocks)){
+			if (!isset($user['groups'][$gname])) unset($gnames[$idx]);
+		}
+	}
+	
+	$groupnames=implode('|',$gnames);
+		
 	
 	if ($virtual){
 		$groupnames='users';

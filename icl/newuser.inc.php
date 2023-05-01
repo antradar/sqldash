@@ -5,6 +5,9 @@ function newuser(){
 	if (!$user['groups']['accounts']) die('Access denied');
 	
 	global $userroles;	
+	global $userrolelocks;
+	
+	
 	
 	$jsroles=str_replace('"',"'",json_encode(array_keys($userroles)));
 	
@@ -47,8 +50,8 @@ function newuser(){
 			<div class="formlabel"><?php tr('account_roles');?>:</div>
 			<?php foreach ($userroles as $role=>$label){
 			?>
-			<div style="padding-left:10px;margin-bottom:3px;">
-				<input type="checkbox" id="userrole_<?php echo $role;?>_new"> <label for="userrole_<?php echo $role;?>_new"><?php echo $label;?></label>
+			<div style="padding-left:10px;margin-bottom:3px;<?php if (in_array($role,$userrolelocks)&&(!isset($user['groups'][$role])||!$user['groups'][$role])) echo 'display:none;';?>">
+				<input <?php if (in_array($role,$userrolelocks)&&(!isset($user['groups'][$role])||!$user['groups'][$role])) echo 'disabled';?>  type="checkbox" id="userrole_<?php echo $role;?>_new"> <label for="userrole_<?php echo $role;?>_new"><?php echo $label;?></label>
 			</div>
 			<?php	
 			}?>
