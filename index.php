@@ -121,7 +121,9 @@ document.appsettings={codepage:'<?php echo $codepage;?>', fastlane:'<?php echo $
 <script src="lang/dict.<?php echo $lang;?>.js"></script>
 <script src="nano.js"></script>
 <script>
+
 hdpromote('toolbar_hd.css');
+hdpromote('gyroscope_hd.css');
 </script>
 <script src="tabs.js"></script>
 <script src="viewport.js"></script>

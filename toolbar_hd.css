@@ -16,7 +16,19 @@
 .listsearch{background:transparent url(imgs/bmg.gif) no-repeat 100% 5px;background-size:16px 16px;}
 */
 
+/*
 #statusinfo{background:#BBCDD5 url(imgs/gshd.png) no-repeat top right;background-size:150px 24px;}
+*/
 
 #applogo img{visibility:hidden;}
 #applogo{background:transparent url(imgs/clogo_hd.gif) no-repeat 0 0; background-size:70px 56px;}
+@media (prefers-color-scheme:dark) {
+	
+	
+	.daylightsaving, #wsswarn, #barcodewarn, #diagwarn, #sysreswarn, #imecree, #lI01, 
+	#gamepadicon, #gsnotesclip, #chatindicator, #chatindicator.offline,
+	.img-addrec, .img-speechrecog,
+	.img-speechrecog,
+	.img-pageleft, .img-pageright
+	{background-image:url(imgs/sysicons_hd.gif);background-size:240px 64px;}
+}

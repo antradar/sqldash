@@ -49,6 +49,7 @@ if (!isset($sqlmode)) $sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:''
 
 if (1!=SQLDASH_AUTH_MODE){
 	unset($toolbaritems['codegen.conns']);
+	unset($toolbaritems['core.settings']);
 }
 
 if ($sqlmode=='mysqli'){

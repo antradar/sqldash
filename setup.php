@@ -75,12 +75,12 @@ if ($authmode==1){
 		die();	
 	}
 	//todo: check existing settings
-	$authsalt=prompt('Enter a random session salt',null,null,function($res){
+	$authsalt=prompt('Enter a random session salt (min. 16 chars)',null,null,function($res){
 		if (strlen($res)<16) {echo "  Salt length too short. Must be at least 16 characters\r\n"; return false;}
 		return true;
 	});
 	
-	$dbsalt=prompt('Enter a random DB salt',null,null,function($res) use ($authsalt){
+	$dbsalt=prompt('Enter a random DB salt (min. 32 chars)',null,null,function($res) use ($authsalt){
 		if (strlen($res)<32) {echo "  Salt length too short. Must be at least 32 characters\r\n"; return false;}
 		if ($authsalt==$res) {echo "  DB salt cannot be the same as Session salt\r\n"; return false;}
 		return true;
@@ -96,7 +96,7 @@ if ($authmode==1){
 	
 	// /opt/sqllite/sqldash.db
 	
-	$dbfn=prompt('Full path for the user db',null,'/opt/sqldash.db',function($res){
+	$dbfn=prompt('Full path for the user db',null,'/opt/writable/sqldash.db',function($res){
 		if (strpos($res,"'")!==false) {echo "  Invalid file name.\r\n"; return false;}
 		//return true; //for now
 		if (file_exists($res)) {echo "  File already exists. Delete the .db file before proceeding.\r\n"; return false;}
@@ -171,6 +171,7 @@ if ($authmode==1){
 	)";
 	
 	$rs=$db->query($query);	
+
 	
 	chmod($dbfn,0777);
 	
@@ -187,6 +188,9 @@ if ($authmode==1){
 	}
 	
 	file_put_contents('config.php',$config);
+	
+	$ppath=str_replace('/'.basename($dbfn),'/',realpath($dbfn));
+	echo "\r\nRemember to chmod $ppath so that it is also writable\r\n\r\n";
 
 		
 }//authmode==1

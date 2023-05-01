@@ -1,6 +1,6 @@
 function ch(){
   var w=cw();
-  if (w*0.85<=485) return 270/0.85;
+  //if (w*0.85<=485) return 270/0.85;
   if (window.innerHeight) return window.innerHeight;
   if (document.documentElement.clientHeight) return document.documentElement.clientHeight;
   return document.body.clientHeight;
@@ -12,7 +12,28 @@ function cw(){
   return document.body.clientWidth;
 }
 
+function tabw(){
+	var idw=cw();
+	if (!document.tabafloat&&!document.widen) return idw-gid('tabviews').offsetLeft-40;
+	return idw-40;	
+}
+
+function tabh(){
+	var idh=ch();
+	if (!document.tabafloat) return idh-gid('tabtitles').offsetTop;
+	return idh;	
+		
+}
+
 function scaleall(root){
+	
+	//defer
+  if (document.scalealllock) {return;}
+  document.scalealllock=true;
+  if (document.scalealltimer) clearTimeout(document.scalealltimer);
+  document.scalealltimer=setTimeout(function(){
+	delete document.scalealllock; 
+  },10);  
     
   var i,j;
   var idh=ch();
@@ -205,8 +226,8 @@ function showview(idx,lazy){
   gid('lv'+idx).viewloaded=1;
   document.viewindex=idx;
   
-  gid('leftview').style.background=document.flashcolor;
-  setTimeout(function(){gid('leftview').style.background='#ffffff';},500);  
+  gid('leftview').className='bgflash';
+  setTimeout(function(){gid('leftview').className='bgready';},500);  
 }
 
 function showlookup(){
@@ -216,8 +237,8 @@ function showlookup(){
 	lkv.showing=true;
 	lkv.style.left='0px';
 
-	gid('lkvc').style.background='#ffffc0';
-	setTimeout(function(){gid('lkvc').style.background='#ffffff';},500);				
+	//gid('lkvc').style.background='#ffffc0';
+	//setTimeout(function(){gid('lkvc').style.background='#ffffff';},500);				
 }
 
 function hidelookup(){

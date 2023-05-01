@@ -216,8 +216,8 @@ function addtab(key,title,params,loadfunc,data,opts){
   }
 
 
-  gid('tabviews').style.background=document.flashcolor;
-  setTimeout(function(){gid('tabviews').style.background='#ffffff';},250);      
+  gid('tabviews').className='bgflash';
+  setTimeout(function(){gid('tabviews').className='bgready';},250);      
 
   var rq=xmlHTTPRequestObject();
   var scn=document.appsettings.codepage+'?cmd=';

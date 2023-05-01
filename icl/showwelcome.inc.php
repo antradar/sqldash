@@ -13,7 +13,7 @@ function showwelcome(){
 	
 	global $connid;
 	
-	if (!isset($connid)){
+	if (1==SQLDASH_AUTH_MODE&&!isset($connid)){
 ?>
 <div class="section">
 	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
