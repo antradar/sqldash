@@ -30,6 +30,5 @@ if (1==SQLDASH_AUTH_MODE){
 	}
 		
 	$db=@sql_get_db($connhost,$conndbname,$connuser,$connpass);
-		
-
+	
 }//AUTH_MODE	

@@ -49,6 +49,9 @@ function dashquerydims_sqlfilters(){
 	$filters='';
 	$params=array();
 	$key=GETSTR('key');
+	$sqlmode=SQET('sqlmode');
+
+	if ($sqlmode=='sqlite') die('SQLite not yet supported');	
 	
 	$dimtypes=json_decode(SQET('dims'),1);
 	
@@ -306,7 +309,15 @@ function dashquerydims_showrange($container,$cmd, $title,$fieldname){
 	global $db;
 	global $pcharts;
 	$queryidx=GETVAL('queryidx');
-	
+	$sqlmode=SQET('sqlmode');
+
+	if (stripos($fieldname,' ')!==false) $fieldname='['.$fieldname.']';
+		
+	if ($sqlmode=='sqlite'){
+		echo "SQLite not yet supported";
+		die();	
+	}
+		
 	$bfilters=dashquerydims_makefilters();
 	$basefilters=$bfilters['filters'];
 	$nbasefilters=$bfilters['nfilters'];

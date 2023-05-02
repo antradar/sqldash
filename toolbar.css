@@ -308,6 +308,13 @@ svg > g > g.google-visualization-tooltip { pointer-events: none }
 }
 
 @media (prefers-color-scheme:dark) {
+	
+	.navchart{border:solid 1px #545A7A;border-radius:4px;overflow:hidden;}
+	.navchart svg > rect {fill:#2C3041;}
+	.navchart svg > g > text {fill:#C9D1D9;}
+	.navchart svg > g > g > g > text {fill:#C9D1D9;}
+	.navchart div.google-visualization-tooltip > ul > li > span {color:#000000 !important;}
+	
 	#gsstickerview{background:rgba(53,41,46,0.9);color:#ffffff;border-color:#6A494C;}
 	.sectiontitle:hover .edithover{filter:invert(1);}
 	

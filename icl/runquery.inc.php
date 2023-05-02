@@ -14,9 +14,9 @@ function runquery(){
 	$queryidx=GETVAL('queryidx');
 	$shortview=GETVAL('shortview');
 	$usemacros=GETVAL('usemacros');
-	
+		
 	$sqlmode=SGET('sqlmode');
-	
+		
 	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 		
 	if ($sqlmode=='sqlite'){
@@ -43,7 +43,7 @@ function runquery(){
 	//check for select+limit
 	
 	$tokens=explode(' ',$query);
-	$token0=$tokens[0];
+	$token0=strtolower($tokens[0]);
 	
 	$tquery=preg_replace('/limit\s*(\d+),\s*\d+/','limit $1',$query);
 	
@@ -52,15 +52,20 @@ function runquery(){
 	
 	$user=userinfo();
 	if (1==SQLDASH_AUTH_MODE){
-		if ($token0!='select'&&$token0!='describe'&&$token0!='show'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
+		if ($token0!='select'&&$token0!='describe'&&$token0!='show'&&$token0!='explain'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
 	}
 	
-	if (isset($db)&&$token0=='select'){
+	if ($token0=='select'){
 		//get table name
-		preg_match('/\s*from (\S+)?/i',$query,$matches);
+		if (!preg_match('/\s*from (\[[\S\s]+?\])/',$query,$matches)){
+			preg_match('/\s*from (\S+)?/i',$query,$matches);
+		}
 		$tablenames=explode(',',noapos($matches[1]));
-		$tablename=trim($tablenames[0]);
-		
+		$tablename=trim($tablenames[0]);		
+	}
+
+	if (isset($db)&&$token0=='select'){
+
 		if ($tablename!=''){
 			$dquery="describe $tablename";
 			
@@ -84,7 +89,7 @@ function runquery(){
 			}
 		}	
 	}
-
+	
 	$perpage=30;
 	$page=isset($_GET['page'])?intval($_GET['page']):0;
 		
@@ -201,7 +206,7 @@ function runquery(){
 		
 		<?php if($k!=$pkey||true){
 		?>
-		<b><a style="color:#000088;" onclick="lookupentity(this,'querydim&sqlmode=<?php echo $sqlmode;?>&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>&pkey=<?php if ($k==$pkey) echo '1'; else echo '0';?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
+		<b><a class="hovlink" onclick="lookupentity(this,'querydim&sqlmode=<?php echo $sqlmode;?>&queryidx=<?php echo $queryidx;?>&table=<?php echo $tablename;?>&fkey=<?php echo $k;?>&pkey=<?php if ($k==$pkey) echo '1'; else echo '0';?>','Edit Dimensions');"><?php echo hspc($k);?></a></b>	
 		<?php
 		} else {
 		?>

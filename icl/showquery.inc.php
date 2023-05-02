@@ -38,7 +38,6 @@ function showquery(){
 		<label for="usemacros_<?php echo $queryidx;?>">use macros</label>
 	</div>
 	
-	
 	<div id="queryresult_<?php echo $queryidx;?>"></div>
 	
 </div>
