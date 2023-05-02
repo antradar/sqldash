@@ -35,9 +35,6 @@ function reauth(){
 	
 	if (!$active||$virtual){
 		setcookie('userid',NULL,time()-3600,null,null,$usehttps,true);
-		setcookie('gsid',NULL,time()-3600,null,null,$usehttps,true);
-		setcookie('gsexpiry',NULL,time()-3600,null,null,$usehttps,true);
-		setcookie('gstier',NULL,time()-3600,null,null,$usehttps,true);
 		setcookie('login',NULL,time()-3600,null,null,$usehttps,true);
 		setcookie('dispname',NULL,time()-3600,null,null,$usehttps,true);		
 		setcookie('auth',NULL,time()-3600,null,null,$usehttps,true);

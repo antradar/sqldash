@@ -40,6 +40,7 @@ function login($silent=false){
 	global $_COOKIE;
 	global $_SERVER;
 	global $db;
+	global $usehttps;
 	
 	$db=null;
 	
