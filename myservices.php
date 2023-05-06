@@ -20,7 +20,7 @@ header('Cache-Control: no-store');
 $user=userinfo();
 $userid=intval($user['userid']??0);
 
-if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','pump','imgqrcode','testgapin','resetgapin','addyubikey','testyubikey','setaccount'))){
+if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','pump','imgqrcode','testgapin','resetgapin','addyubikey','testyubikey','delyubikey','setaccount'))){
 	$query="select usega,useyubi from users where userid=$userid";
 	$rs=$sdb->query($query);
 	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
@@ -64,6 +64,7 @@ switch($cmd){
 	case 'resetgakey': include 'icl/resetgakey.inc.php'; resetgakey(); break;
 	
 	case 'addyubikey': include 'icl/addyubikey.inc.php'; addyubikey(); break;
+	case 'delyubikey': include 'icl/delyubikey.inc.php'; delyubikey(); break;
 	case 'testyubikey': include 'icl/testyubikey.inc.php'; testyubikey(); break;
 	
 //SQLite

@@ -315,6 +315,15 @@ function stringToArrayBuffer(str){
 	return Uint8Array.from(str,function(c){return c.charCodeAt(0);}).buffer;
 }
 
+function arrayBufferToHex(buf){
+	var data=new Uint8Array(buf);
+	var cs=[];
+	for (var i=0;i<data.length;i++) {
+		cs.push(data[i].toString(16).padStart(2,'0'));
+	}
+	return cs.join('');
+}
+
 function base64encode(arrayBuffer){
 	if (!arrayBuffer||arrayBuffer.length==0) return null;
 	return btoa(String.fromCharCode.apply(null, new Uint8Array(arrayBuffer)));

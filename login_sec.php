@@ -93,10 +93,11 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['gyroscope
 				$c=intval($myrow2['c']);
 				if ($c==0) $error_message='no security devices were found ';
 				else {
-					$attid=$_POST['attid'];
+					$attidbin=hex2bin($_POST['attid']);
+					$attid=base64_encode($attidbin);
 					$clientdata=$_POST['clientdata'];
-					$signature=$_POST['signature'];
-					$clientauth=$_POST['clientauth'];
+					$signature=base64_encode(hex2bin($_POST['signature']));
+					$clientauth=base64_encode(hex2bin($_POST['clientauth']));
 					
 					$query="select * from yubikeys where userid=$userid and attid='$attid'";
 					$rs2=$sdb->query($query);
@@ -564,7 +565,7 @@ if ($dark==0){
 	
 	<?php if (!$textmode){?>
 	
-	<script src="nano.js?v=4_9"></script>
+	<script src="nano.js?v=4_10"></script>
 	<script>
 		function checkform(){
 						
@@ -692,7 +693,7 @@ yubilogin=function(){
 		if (rawattids=='') return;
 		var attids=rawattids.split(',');
 		var creds=[];
-				
+		
 		for (var i=0;i<attids.length;i++){
 			creds.push({type:'public-key',id:Uint8Array.from(atob(attids[i]), function(c){return c.charCodeAt(0);}).buffer});
 		}
@@ -711,11 +712,11 @@ yubilogin=function(){
 			gid('loginbutton').style.opacity=1;
 			gid('loginbutton').style.filter='';		
 			var ass={ //assertion
-				id:base64encode(raw.rawId),
+				id:arrayBufferToHex(raw.rawId),
 				clientDataJSON:arrayBufferToString(raw.response.clientDataJSON),
-				userHandle:base64encode(raw.response.userHandle),
-				signature:base64encode(raw.response.signature),
-				authenticatorData:base64encode(raw.response.authenticatorData)
+				userHandle:arrayBufferToHex(raw.response.userHandle),
+				signature:arrayBufferToHex(raw.response.signature),
+				authenticatorData:arrayBufferToHex(raw.response.authenticatorData)
 			}
 			
 			//console.log(ass);

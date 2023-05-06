@@ -15,7 +15,6 @@ Rewritten by Schien Dong
 
 
 function cbor_decode($buf,&$offset=0){
-		
 	$first=cbor_getval($buf,$offset,'byte');
 	$offset++;
 	$type=$first>>5;
@@ -97,7 +96,9 @@ function cbor_parse_map($buf,&$offset,$val){
 function cbor_parse_authdata($data){
 	
 	$jsoffset=0;
-	if (strlen($data)<196) $jsoffset=196-strlen($data);
+	if (strlen($data)<152) {
+		$jsoffset=152-strlen($data);
+	}
 	
 	
 	$rpidhash=substr($data,0,32);

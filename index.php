@@ -119,7 +119,7 @@ document.appsettings={codepage:'<?php echo $codepage;?>', fastlane:'<?php echo $
 <div id="fsview"></div>
 
 <script src="lang/dict.<?php echo $lang;?>.js"></script>
-<script src="nano.js"></script>
+<script src="nano.js?v=2"></script>
 <script>
 
 hdpromote('toolbar_hd.css');

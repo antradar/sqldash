@@ -1,5 +1,4 @@
 <?php
-
 include 'lb.php';
 
 if (1==SQLDASH_AUTH_MODE){
