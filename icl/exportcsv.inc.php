@@ -10,6 +10,9 @@ function exportcsv(){
 		
 	$sqlmode=SQET('sqlmode');
 
+	$dbname=GETSTR('dbname');
+	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
+
 	$rs=sql_prep($query,$db);
 	$idx=0;
 	
