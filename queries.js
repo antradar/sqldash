@@ -19,7 +19,9 @@ exportcsv=function(queryidx){
 	gid('csvqueryform_'+queryidx).submit();
 }
 	
-runquery=function(queryidx,dbname,sqlmode){
+runquery=function(queryidx,dbname,sqlmode,explain){
+	if (!explain) explain=0;
+	
 	var oquery=gid('query_'+queryidx);
 	var query=oquery.value;
 	if (!sqlmode) sqlmode='';
@@ -43,7 +45,7 @@ runquery=function(queryidx,dbname,sqlmode){
 	if (!document.sqlmodes) document.sqlmodes={};
 	document.sqlmodes[queryidx]=sqlmode;
 	
-	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode,0,0,'query='+encodeHTML(query),null,null,1);
+	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode+'&explain='+explain,0,0,'query='+encodeHTML(query),null,null,1);
 		
 }
 

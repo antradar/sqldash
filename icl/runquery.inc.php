@@ -2,6 +2,8 @@
 include 'fsql-sqlite.php';
 if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 
+include 'pretty_array.php';
+
 function runquery(){
 	global $db;
 	global $SQL_ENGINE;
@@ -14,6 +16,8 @@ function runquery(){
 	$queryidx=GETVAL('queryidx');
 	$shortview=GETVAL('shortview');
 	$usemacros=GETVAL('usemacros');
+	
+	$explain=GETVAL('explain');
 		
 	$sqlmode=SGET('sqlmode');
 		
@@ -39,6 +43,8 @@ function runquery(){
 	if ($usemacros){
 		$query=str_replace('##NOW##',$now,$query);
 	}
+	
+	if ($explain) $query="explain format=json ".$query;
 
 	//check for select+limit
 	
@@ -185,14 +191,30 @@ function runquery(){
 	$idx=0;
 	
 	$colnames=array();
+	
+	$fetchfunc='sql_fetch_assoc';
+	if (isset($fdb)) $fetchfunc='fsql_fetch_assoc';	
+	
+	if ($explain){
+		$myrow=$fetchfunc($rs);
+		$res=$myrow['EXPLAIN'];
+		$eobj=json_decode($res,1);
+		if (count($eobj)==1){
+			foreach ($eobj as $k=>$v){
+				$eobj=$v;
+				break;	
+			}	
+		}
+		pretty_array($eobj,'explain_'.$queryidx,0);
+		return;
+	}
 ?>
 <div class="stable" id="queryview_<?php echo $queryidx;?>">
 <div class="grid">
 <table>
 <?php
 
-	$fetchfunc='sql_fetch_assoc';
-	if (isset($fdb)) $fetchfunc='fsql_fetch_assoc';
+
 	
 	while ($myrow=$fetchfunc($rs)){
 		if ($idx==0&&$c>1){

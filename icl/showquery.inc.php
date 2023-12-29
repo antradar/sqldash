@@ -29,6 +29,8 @@ function showquery(){
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
 		&nbsp; &nbsp;
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
+		&nbsp; &nbsp;
+		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>',1);">Explain</button>
 	</div>
 	<div class="inputrow">
 		<input id="shortview_<?php echo $queryidx;?>" type="checkbox" checked>
