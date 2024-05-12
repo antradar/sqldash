@@ -294,7 +294,8 @@ function runquery(){
 				foreach ($relmap as $rev_table=>$rev){
 					foreach ($rev as $rkey=>$r){
 						if ($r['table']==$tablename){
-							$revmap[$rev_table]=$rkey;	
+							if (!isset($revmap[$rev_table])) $revmap[$rev_table]=array();
+							$revmap[$rev_table][$r['pkey']]=$r['pkey'];	
 						}	
 					}	
 				}
@@ -309,10 +310,12 @@ function runquery(){
 			<td>
 				<?php 
 				//echo '<pre>'; print_r($revmap); echo '</pre>';
-				foreach ($revmap as $rtable=>$rpkey){
+				foreach ($revmap as $rtable=>$rpkeys){
+					foreach ($rpkeys as $rpkey){
 				?>
 				<nobr><a class="labelbutton" onclick="addquery('<?php echo $dbname;?>','<?php echo $rtable;?>',null,'',1,'<?php echo $rtable.'/'.$rpkey.'/'.$myrow[$rpkey];?>');"><?php echo htmlspecialchars($rtable);?></a></nobr> &nbsp;
 				<?php	
+					}
 				}
 				?>
 			</td>
