@@ -288,6 +288,39 @@ function runquery(){
 		<?php
 			}//foreach
 		} else {//single mode
+		
+			if (isset($relmap)){
+				$revmap=array();
+				foreach ($relmap as $rev_table=>$rev){
+					foreach ($rev as $rkey=>$r){
+						if ($r['table']==$tablename){
+							$revmap[$rev_table]=$rkey;	
+						}	
+					}	
+				}
+				
+				if (count($revmap)>0){
+		
+		?>
+		<tr>
+			<td>
+			See Also: 
+			</td>
+			<td>
+				<?php 
+				//echo '<pre>'; print_r($revmap); echo '</pre>';
+				foreach ($revmap as $rtable=>$rpkey){
+				?>
+				<nobr><a class="labelbutton" onclick="addquery('<?php echo $dbname;?>','<?php echo $rtable;?>',null,'',1,'<?php echo $rtable.'/'.$rpkey.'/'.$myrow[$rpkey];?>');"><?php echo htmlspecialchars($rtable);?></a></nobr> &nbsp;
+				<?php	
+				}
+				?>
+			</td>
+		</tr>
+		<?php
+				}//revmap
+			}
+			
 			foreach ($myrow as $k=>$v){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
