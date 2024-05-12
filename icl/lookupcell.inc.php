@@ -110,9 +110,26 @@ function lookupcell(){
 	<?php
 	if (isset($relmap)&&isset($relmap[$tablename])&&isset($colinfo['Field'])&&isset($relmap[$tablename][$colinfo['Field']])){
 		$rel=$relmap[$tablename][$colinfo['Field']];
+		if (isset($rel['opts'])){
 	?>
-	Open record in <a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $rel['table'].'/'.$rel['pkey'].'/'.intval($ofval);?>');"><?php echo htmlspecialchars($rel['table']);?></a><br>
+	Possible references:
+	<div style="padding:5px;margin-left:10px;">
 	<?php
+		foreach ($rel['opts'] as $opt){
+	?>
+		<div class="listitem"><a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $opt['table'].'/'.$opt['pkey'].'/'.intval($ofval);?>');""><?php echo $opt['table'];?></a></div>
+	<?php
+		}//foreach opt
+	?>
+	</div>
+	<?php		
+		} else {
+	?>
+	<div class="listitem">
+	Open record in <a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $rel['table'].'/'.$rel['pkey'].'/'.intval($ofval);?>');"><?php echo htmlspecialchars($rel['table']);?></a><br>
+	</div>
+	<?php
+		}//single reference
 	}
 	?>
 	

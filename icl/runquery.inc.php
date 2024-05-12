@@ -295,7 +295,7 @@ function runquery(){
 				$revmap=array();
 				foreach ($relmap as $rev_table=>$rev){
 					foreach ($rev as $rkey=>$r){
-						if ($r['table']==$tablename){
+						if (isset($r['table'])&&$r['table']==$tablename){
 							if (!isset($revmap[$rev_table])) $revmap[$rev_table]=array();
 							array_push($revmap[$rev_table],array('rkey'=>$rkey,'rpkey'=>$r['pkey']));	
 						}	
@@ -341,9 +341,8 @@ function runquery(){
 				if (is_a($dv,'DateTime')){
 					$dv=date_format($dv,'Y-n-j H:i:s e');	
 				}
-				
 				$reckv='';
-				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)){
+				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k]['table'])&&isset($relmap[$tablename][$k])&&is_numeric($v)){
 					$reckv=$relmap[$tablename][$k]['table'].'/'.$relmap[$tablename][$k]['pkey'].'/'.$v;	
 				}				
 		?>
