@@ -273,7 +273,7 @@ function runquery(){
 				}
 				
 				$reckv='';
-				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)){
+				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&isset($relmap[$tablename][$k]['table'])&&is_numeric($v)){
 					$reckv=$relmap[$tablename][$k]['table'].'/'.$relmap[$tablename][$k]['pkey'].'/'.$v;	
 				}				
 				
