@@ -295,7 +295,7 @@ function runquery(){
 					foreach ($rev as $rkey=>$r){
 						if ($r['table']==$tablename){
 							if (!isset($revmap[$rev_table])) $revmap[$rev_table]=array();
-							$revmap[$rev_table][$r['pkey']]=$r['pkey'];	
+							array_push($revmap[$rev_table],array('rkey'=>$rkey,'rpkey'=>$r['pkey']));	
 						}	
 					}	
 				}
@@ -311,9 +311,11 @@ function runquery(){
 				<?php 
 				//echo '<pre>'; print_r($revmap); echo '</pre>';
 				foreach ($revmap as $rtable=>$rpkeys){
-					foreach ($rpkeys as $rpkey){
+					foreach ($rpkeys as $rp){
+						$rkey=$rp['rkey'];
+						$rpkey=$rp['rpkey'];
 				?>
-				<nobr><a class="labelbutton" onclick="addquery('<?php echo $dbname;?>','<?php echo $rtable;?>',null,'',1,'<?php echo $rtable.'/'.$rpkey.'/'.$myrow[$rpkey];?>');"><?php echo htmlspecialchars($rtable);?></a></nobr> &nbsp;
+				<nobr><a class="labelbutton" onclick="addquery('<?php echo $dbname;?>','<?php echo $rtable;?>',null,'',1,'<?php echo $rtable.'/'.$rkey.'/'.$myrow[$rpkey];?>');"><?php echo htmlspecialchars($rtable);?></a></nobr> &nbsp;
 				<?php	
 					}
 				}
