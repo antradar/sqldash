@@ -137,6 +137,7 @@ function runquery(){
 		}		
 
 		$cquery="select count(*) as c from ($query) count_query";
+		$cta=microtime(1);
 		if (isset($db)) {
 			$rs=sql_prep($cquery,$db);
 			$myrow=sql_fetch_assoc($rs);
@@ -145,6 +146,7 @@ function runquery(){
 			$rs=fsql_query($cquery,$fdb);
 			$myrow=fsql_fetch_assoc($rs);
 		}
+		$ctb=microtime(1);
 
 		$c=$myrow['c'];
 		
@@ -314,6 +316,7 @@ function runquery(){
 					foreach ($rpkeys as $rp){
 						$rkey=$rp['rkey'];
 						$rpkey=$rp['rpkey'];
+						if (!isset($myrow[$rpkey])||!is_numeric($myrow[$rpkey])) continue;
 				?>
 				<nobr><a class="labelbutton" onclick="addquery('<?php echo $dbname;?>','<?php echo $rtable;?>',null,'',1,'<?php echo $rtable.'/'.$rkey.'/'.$myrow[$rpkey];?>');"><?php echo htmlspecialchars($rtable);?></a></nobr> &nbsp;
 				<?php	
@@ -376,7 +379,8 @@ function runquery(){
 	
 	$tb=microtime(1);
 	
-	echo "<br><br>Query time: ".round(($tb-$ta),3).' secs';
+	echo "<br><br>Count time: ".round(($ctb-$cta),3).' secs';
+	echo "<br>Query time: ".round(($tb-$ta),3).' secs';
 	
 	if ($qidx<count($qlines)-1) echo "<hr>";
 	
