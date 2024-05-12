@@ -18,13 +18,27 @@ function showquery(){
 	
 	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
+	$defquery='';
+	if ($tablename!='') $defquery="select * from $dtablename;";
+	
+	$reckv=GETSTR('reckv');
+	if ($reckv!=''){
+		$reckvparts=explode('/',$reckv);
+		if (count($reckvparts)==3){
+			$tablename=$reckvparts[0];
+			$pkey=$reckvparts[1];
+			$recid=$reckvparts[2];
+			$defquery="select * from $tablename where $pkey=$recid";	
+		}	
+	}
+	
 ?>
 <div class="section">
 	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>"></div>
 	
 	<div style="margin-bottom:5px;"><em style="color:#666666;">use "#" on a single line to separate multiple queries; select part of the text for partial querying</em></div>
 			
-	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?>select * from <?php echo $dtablename;?><?php }?></textarea>
+	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?><?php echo htmlspecialchars($defquery);?><?php }?></textarea>
 	<div class="inputrow">
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
 		&nbsp; &nbsp;

@@ -1,6 +1,7 @@
 <?php
 
 $sqlite_root='/opt/sqlite/';
+$profile_root='/opt/sqldash/';
 
 include 'lang.php';
 

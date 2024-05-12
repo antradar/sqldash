@@ -10,6 +10,7 @@ function runquery(){
 	
 	global $codepage;
 	global $sqlite_root;
+	global $profile_root;
 	
 
 	$dbname=GETSTR('dbname');
@@ -29,7 +30,13 @@ function runquery(){
 		$db=null;
 	}
 	
+	$relmap=null;
 	
+	$relmapfn=$profile_root.$dbname.'.relmap.json';
+	if (file_exists($relmapfn)){
+		$relmap=json_decode(file_get_contents($relmapfn),1);	
+	}
+		
 	$query=trim($_POST['query']);
 
 	$query=str_replace("\r\n#\r\n","\n#\n",$query);
@@ -264,7 +271,9 @@ function runquery(){
 				}
 		?>
 			<td valign="top"><acronym 
-				style="cursor:pointer;" 
+				style="
+				<?php if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)) echo 'display:inline-block;border:solid 1px #848cf7;padding:0 3px;';?>				
+				cursor:pointer;" 
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
 				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
@@ -289,7 +298,9 @@ function runquery(){
 		<tr>
 			<td valign="top"><?php echo hspc($k);?></td>
 			<td valign="top"><span
-				style="cursor:pointer"
+				style="
+				<?php if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)) echo 'display:inline-block;border:solid 1px #848cf7;padding:0 3px;';?>
+				cursor:pointer"
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
 				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"

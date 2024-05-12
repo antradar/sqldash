@@ -5,6 +5,7 @@ if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.ph
 function lookupcell(){
 	global $db;
 	global $SQL_ENGINE;
+	global $profile_root;
 	
 	$user=userinfo();
 
@@ -95,8 +96,26 @@ function lookupcell(){
 	if ($viewmode==''){
 		if (in_array($colinfo['Type'],array('blob','mediumblob','longblob','geography'))) $viewmode='bin';	
 	}
+	
+	$relmap=null;
+	
+	$relmapfn=$profile_root.$dbname.'.relmap.json';
+	if (file_exists($relmapfn)){
+		$relmap=json_decode(file_get_contents($relmapfn),1);	
+	}
+	
+	
 	?>
 	<div style="line-height:1.5em;margin-bottom:20px;">
+	<?php
+	if (isset($relmap)&&isset($relmap[$tablename])&&isset($colinfo['Field'])&&isset($relmap[$tablename][$colinfo['Field']])){
+		$rel=$relmap[$tablename][$colinfo['Field']];
+	?>
+	Open record in <a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $rel['table'].'/'.$rel['pkey'].'/'.intval($ofval);?>');"><?php echo htmlspecialchars($rel['table']);?></a><br>
+	<?php
+	}
+	?>
+	
 	Table: <?php echo htmlspecialchars($dbname.'.'.$tablename);?><br>
 	Record: <?php echo htmlspecialchars($pkey);?>=<?php echo htmlspecialchars($pval);?><br>
 	

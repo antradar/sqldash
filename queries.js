@@ -1,13 +1,14 @@
-addquery=function(dbname,tablename,fromid,sqlmode,instant){
+addquery=function(dbname,tablename,fromid,sqlmode,instant,reckv){
 	if (!tablename) tablename='';
 	if (!sqlmode) sqlmode='';
+	if (!reckv) reckv='';
 	
 	if (!document.appsettings.queryidx) document.appsettings.queryidx=0;
 	document.appsettings.queryidx++;
 	
 	var myidx=document.appsettings.queryidx;
 	
-	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename+'&sqlmode='+sqlmode,function(){
+	addtab('query_'+myidx,'<img src="imgs/t.gif" class="ico-query">#'+myidx,'showquery&queryidx='+myidx+'&dbname='+dbname+'&tablename='+tablename+'&sqlmode='+sqlmode+'&reckv='+reckv,function(){
 		if (fromid!=null&&gid('query_'+fromid)) gid('query_'+myidx).value=gid('query_'+fromid).value;
 		if (instant) runquery(myidx,dbname,sqlmode);
 	});
