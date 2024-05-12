@@ -1,3 +1,13 @@
+resolvecell=function(d,lookupquery,tablename,pkey,pval,fkey,lookuptitle,dbname,reckv){
+	var metakey=0;
+	if (document.keyboard['key_17']||document.keyboard['key_91']||document.keyboard['key_224']) metakey=1;
+	if (metakey&&reckv!=null&&reckv!=''){
+		addquery(dbname,tablename,null,'',1,reckv);
+	} else {
+		lookupentity(d,lookupquery+'&table='+tablename+'&pkey='+pkey+'&pval='+pval+'&fkey='+fkey,lookuptitle);
+	}
+}
+
 addquery=function(dbname,tablename,fromid,sqlmode,instant,reckv){
 	if (!tablename) tablename='';
 	if (!sqlmode) sqlmode='';

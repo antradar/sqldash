@@ -269,6 +269,12 @@ function runquery(){
 				if (is_a($dv,'DateTime')){
 					$dv=date_format($dv,'Y-n-j H:i:s e');	
 				}
+				
+				$reckv='';
+				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)){
+					$reckv=$relmap[$tablename][$k]['table'].'/'.$relmap[$tablename][$k]['pkey'].'/'.$v;	
+				}				
+				
 		?>
 			<td valign="top"><acronym 
 				style="
@@ -276,7 +282,7 @@ function runquery(){
 				cursor:pointer;" 
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
-				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
+				onclick="resolvecell(this,'cell&sqlmode=<?php echo $sqlmode;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $k;?>','Cell Properties','<?php echo $dbname;?>','<?php echo $reckv;?>');"
 				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"><?php echo $dv;?></acronym>
 			</td>
 		<?php
@@ -293,6 +299,11 @@ function runquery(){
 				if (isset($v)&&$v==='') $dv='<em style="color:#666666;">(empty)</em>';
 				if (is_a($dv,'DateTime')){
 					$dv=date_format($dv,'Y-n-j H:i:s e');	
+				}
+				
+				$reckv='';
+				if (isset($relmap)&&isset($relmap[$tablename])&&isset($relmap[$tablename][$k])&&is_numeric($v)){
+					$reckv=$relmap[$tablename][$k]['table'].'/'.$relmap[$tablename][$k]['pkey'].'/'.$v;	
 				}				
 		?>
 		<tr>
@@ -303,7 +314,7 @@ function runquery(){
 				cursor:pointer"
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
-				onclick="lookupentity(this,'cell&sqlmode=<?php echo $sqlmode;?>&table=<?php echo $tablename;?>&pkey=<?php echo $pkey;?>&pval=<?php echo $pval;?>&fkey=<?php echo $k;?>','Cell Properties');"
+				onclick="resolvecell(this,'cell&sqlmode=<?php echo $sqlmode;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $k;?>','Cell Properties','<?php echo $dbname;?>','<?php echo $reckv;?>');"
 				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"			
 			><?php echo $dv;?></span></td>
 		</tr>
