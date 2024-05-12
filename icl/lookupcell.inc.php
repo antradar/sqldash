@@ -117,7 +117,16 @@ function lookupcell(){
 	<?php
 		foreach ($rel['opts'] as $opt){
 	?>
-		<div class="listitem"><a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $opt['table'].'/'.$opt['pkey'].'/'.intval($ofval);?>');""><?php echo $opt['table'];?></a></div>
+		<div class="listitem"><a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $opt['table'].'/'.$opt['pkey'].'/'.intval($ofval);?>');"">
+		<?php echo $opt['table'];?>
+		</a> 
+		<?php if (isset($opt['notes'])){
+		?>
+		&nbsp; <em><?php echo htmlspecialchars($opt['notes']);?></em>
+		<?php	
+		}
+		?>
+		</div>
 	<?php
 		}//foreach opt
 	?>
