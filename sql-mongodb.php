@@ -2,7 +2,9 @@
 $SQL_ENGINE='mongodb';
 
 function sql_get_db($dbhost,$dbname,$dbuser,$dbpass){
-	$db=new MongoDB\Driver\Manager('mongodb://'.$dbhost.':27017',array('username'=>$dbuser,'password'=>$dbpass));
+	$dname='';
+	if (isset($dbname)) $dname='/'.$dbname;
+	$db=new MongoDB\Driver\Manager('mongodb://'.$dbhost.':27017'.$dname,array('username'=>$dbuser,'password'=>$dbpass));
 	return $db;
 }
 
@@ -12,7 +14,6 @@ function sql_prep($query,$db,$params=null){
 	//$cmd=new MongoDb\Driver\Command(array('find'=>'cars'));
 	//$rs=$db->executeCommand('cardb',$cmd);
 	//echo '<pre>'; print_r($rs->toArray()); die();
-
 	if (strtolower(trim($query))=='show databases'){
 		$cmd=new MongoDb\Driver\Command(array('listDatabases'=>1));
 		$rs=$db->executeCommand('admin',$cmd);
@@ -32,6 +33,7 @@ function sql_prep($query,$db,$params=null){
 
 	$obj=@json_decode(trim($query),1);
 	if (isset($obj)){
+		if (array_key_exists('cursor',$obj)&&!isset($obj['cursor'])) $obj['cursor']=new stdClass;
 		$cmd=new MongoDb\Driver\Command($obj);
 		$res=$db->executeCommand($dbname,$cmd);
 		//echo '<pre>'; print_r($res->toArray()); echo '</pre>'; die();

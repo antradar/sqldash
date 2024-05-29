@@ -289,14 +289,14 @@ function runquery(){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) {
 					$pval=$myrow[$pkey];
-					if ($SQL_ENGINE=='mongodb') $pval=$pval['$oid'];
+					if ($SQL_ENGINE=='mongodb'&&is_array($pval)) $pval='!'.$pval['$oid'];
 				}
 				if ($shortview){
 					if (is_string($v)&&mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
 				if ($SQL_ENGINE=='mongodb'){
 					if ($k=='_id') {
-						$v=$v['$oid'];
+						if (is_array($v)) $v=$v['$oid'];
 					}
 				}
 				$dv=hspc($v);
@@ -319,7 +319,7 @@ function runquery(){
 				class="cell_<?php echo $dbname;?>_<?php echo $tablename;?>_<?php echo $k;?>_<?php echo $pval;?>" 
 				title="<?php echo hspc($k);?>" 
 				onclick="resolvecell(this,'cell&sqlmode=<?php echo $sqlmode;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $k;?>','Cell Properties','<?php echo $dbname;?>','<?php echo $reckv;?>');"
-				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"><?php echo $dv;?></acronym>
+				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"><?php if (is_string($dv)) echo $dv; else print_r($dv);?></acronym>
 			</td>
 		<?php
 			}//foreach
@@ -367,12 +367,12 @@ function runquery(){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) {
 					$pval=$myrow[$pkey];
-					if ($SQL_ENGINE=='mongodb') $pval=$pval['$oid'];
+					if ($SQL_ENGINE=='mongodb'&&is_array($pval)) $pval='!'.$pval['$oid'];
 				}
 
 				if ($SQL_ENGINE=='mongodb'){
 					if ($k=='_id') {
-						$v=$v['$oid'];
+						if (is_array($v)) $v=$v['$oid'];
 					}
 				}
 
@@ -400,7 +400,7 @@ function runquery(){
 				title="<?php echo hspc($k);?>" 
 				onclick="resolvecell(this,'cell&sqlmode=<?php echo $sqlmode;?>','<?php echo $tablename;?>','<?php echo $pkey;?>','<?php echo $pval;?>','<?php echo $k;?>','Cell Properties','<?php echo $dbname;?>','<?php echo $reckv;?>');"
 				id="cell_<?php echo $queryidx;?>_<?php echo $qidx;?>_<?php echo $idx;?>_<?php echo $k;?>"			
-			><?php echo $dv;?></span></td>
+			><?php if (is_string($dv)) echo $dv; else print_r($dv);?></span></td>
 		</tr>
 		<?php
 			}//foreach

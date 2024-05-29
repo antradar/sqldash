@@ -62,7 +62,6 @@ function lookupcell(){
 	}
 
 	while ($myrow=sql_fetch_assoc($rs)){
-		//echo '<pre>'; print_r($myrow); echo '</pre>';
 		if ($SQL_ENGINE=='SQLSRV'){
 			$myrow['Field']=$myrow['COLUMN_NAME'];
 			$myrow['Type']=$myrow['DATA_TYPE'];
@@ -83,7 +82,10 @@ function lookupcell(){
 	}
 	
 	if ($SQL_ENGINE=='mongodb'){
- 		$cmd=new MongoDb\Driver\Command(array("find"=>$tablename,"filter"=>array("_id"=>new MongoDB\BSON\ObjectId($pval))));
+		if ($pval[0]=='!') $usepval=new MongoDB\BSON\ObjectId(ltrim($pval,'!')); else $usepval=$pval;
+ 		$cmd=new MongoDb\Driver\Command(array("find"=>$tablename,"filter"=>
+				array("_id"=>$usepval) 
+			));
 		$rs=$db->executeCommand($dbname,$cmd);
 	} else {
 		$query="select $fkey from $tablename where $pkey=$dbpval";

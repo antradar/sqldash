@@ -46,9 +46,7 @@ function login($silent=false){
 	
 	//check cookie authenticity
 	$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
-	
 	if (1==SQLDASH_AUTH_MODE){
-		
 		$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
 		$dispname=isset($_COOKIE['dispname'])?$_COOKIE['dispname']:null;
 		$userid=isset($_COOKIE['userid'])?$_COOKIE['userid']:null;

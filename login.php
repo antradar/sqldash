@@ -87,8 +87,14 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 		}
 
 		if (SQET('sqlmode')=='mongodb'){
-			$mdb=new MongoDB\Driver\Manager('mongodb://'.$_POST['dbhost'].':27017');
-			$db=array('raw'=>1);
+			$mdb=new MongoDB\Driver\Manager('mongodb://'.$_POST['dbhost'].':27017/'.$_POST['dbname'],array('username'=>$_POST['login'],'password'=>$_POST['password']));
+			$cmd=new MongoDb\Driver\Command(array('listDatabases'=>'1'));
+			try{
+				$res=$mdb->executeCommand('admin',$cmd);
+				$db=array('raw'=>1);
+			} catch (Exception $e){
+				$db=null;
+			}
 		}
 
 
@@ -99,7 +105,6 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 			)){
 
 			$auth=md5($salt.$salt.$raw_login);
-			
 			setcookie('auth',$auth);
 			setcookie('login',$raw_login);
 			setcookie('dashpass',$dashpass);
@@ -205,13 +210,13 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 	?>
 
 	<div style="padding-top:10px;padding-bottom:5px;">Engine:</div>
-	<select style="width:100%" id="sqlmode" class="lfsel" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
+	<select style="width:100%" id="sqlmode" class="lfsel" type="text" name="sqlmode" onchange="if (this.value=='sqlsrv'||this.value=='mongodb') gid('dbview').style.display='block'; else gid('dbview').style.display='none';if (this.value=='clickhouse') gid('apiportview').style.display='block'; else gid('apiportview').style.display='none';">
 		<option value="mysqli">MySQLi</option>
 		<option value="sqlsrv" <?php if ($defsqlmode=='sqlsrv') echo 'selected';?>>SQLSrv</option>
 		<option value="clickhouse" <?php if ($defsqlmode=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
 		<?php if (class_exists('MongoDB\Driver\Manager')){?>
 		<option value="mongodb" <?php if ($defsqlmode=='mongodb') echo 'selected';?>>MongoDB</option>
-		<?php }?>
+		<?php } ?>
 	</select>
 		
 	<div style="padding-top:10px;padding-bottom:5px;">Host:</div>
@@ -222,9 +227,15 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 		<input style="width:100%;" id="apiport" class="lfinp" type="text" name="apiport" value="<?php echo $defapiport;?>">
 	</div>
 	
-	<div id="dbview" style="display:none<?php if ($defsqlmode=='sqlsrv') echo 'a';?>;">
+	<div id="dbview" style="display:none<?php if ($defsqlmode=='sqlsrv'||$defsqlmode=='mongodb') echo 'a';?>;">
 		<div style="padding-top:10px;padding-bottom:5px;">Database:</div>
-		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?php echo isset($_POST['dbname'])?$_POST['dbname']:'';?>">
+		<?php $defdbname=''; 
+		if (isset($_POST['dbname'])) {
+			$defdbname=$_POST['dbname'];
+		} else {
+		}
+		?>
+		<input style="width:100%;" id="dbname" class="lfinp" type="text" name="dbname" value="<?php echo $defdbname;?>">
 	</div>
 
 	
