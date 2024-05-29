@@ -86,6 +86,11 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 			}	
 		}
 
+		if (SQET('sqlmode')=='mongodb'){
+			$mdb=new MongoDB\Driver\Manager('mongodb://'.$_POST['dbhost'].':27017');
+			$db=array('raw'=>1);
+		}
+
 
 		if (isset($db)&&$db!==false&&(
 			(is_array($db)&&isset($db['raw'])&&$db['raw'])
@@ -204,6 +209,9 @@ body{padding:0;margin:0;background:transparent url(imgs/bgtile.png) repeat;font-
 		<option value="mysqli">MySQLi</option>
 		<option value="sqlsrv" <?php if ($defsqlmode=='sqlsrv') echo 'selected';?>>SQLSrv</option>
 		<option value="clickhouse" <?php if ($defsqlmode=='clickhouse') echo 'selected';?>>ClickHouse/HTTP</option>
+		<?php if (class_exists('MongoDB\Driver\Manager')){?>
+		<option value="mongodb" <?php if ($defsqlmode=='mongodb') echo 'selected';?>>MongoDB</option>
+		<?php }?>
 	</select>
 		
 	<div style="padding-top:10px;padding-bottom:5px;">Host:</div>

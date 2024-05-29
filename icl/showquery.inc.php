@@ -19,7 +19,10 @@ function showquery(){
 	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 	
 	$defquery='';
-	if ($tablename!='') $defquery="select * from $dtablename;";
+	if ($tablename!='') {
+		$defquery="select * from $dtablename;";
+		if ($SQL_ENGINE=='mongodb') $defquery='{"find":"'.$dtablename.'"}';
+	}
 	
 	$reckv=GETSTR('reckv');
 	if ($reckv!=''){

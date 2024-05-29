@@ -106,7 +106,32 @@ function runquery(){
 	$perpage=30;
 	$page=isset($_GET['page'])?intval($_GET['page']):0;
 		
-	
+	if ($SQL_ENGINE=='mongodb'){
+		$mobj=@json_decode(trim($query),1);
+		if (!isset($mobj)){
+			echo "Malformed MongoDB command. Check the JSON syntax.";
+			return;
+		}
+
+		if (isset($mobj['find'])){
+			$tablename=$mobj['find'];
+			$pkey='_id';
+		}
+
+		if (isset($mobj['find'])&&!isset($mobj['limit'])){
+			$cquery=array('count'=>$mobj['find']);
+			if (isset($mobj['filter'])) $cquery['query']=$mobj['filter'];
+			$cmd=new MongoDb\Driver\Command($cquery);
+			$res=$db->executeCommand($dbname,$cmd);
+			$c=$res->toArray()[0]->n;
+
+
+			$mobj['limit']=$perpage;
+			$mobj['skip']=$page*$perpage;
+			$query=json_encode($mobj);
+			$token0='select'; //injected
+		}
+	}
 	if ($token0=='select'){
 		if (preg_match('/\s*limit\s*(\d+)$/',$query,$matches)){//promote to a,b paging
 			$query=preg_replace('/\s*limit\s*\d+$/',' limit 0,'.$matches[1],$query);
@@ -136,6 +161,7 @@ function runquery(){
 			}
 		}		
 
+	if ($SQL_ENGINE!='mongodb'){
 		$cquery="select count(*) as c from ($query) count_query";
 		$cta=microtime(1);
 		if (isset($db)) {
@@ -149,7 +175,7 @@ function runquery(){
 		$ctb=microtime(1);
 
 		$c=$myrow['c'];
-		
+	}	
 	?>
 	<div id="querydims_<?php echo $queryidx;?>" style="padding:10px 0;"></div>
 	<div>
@@ -261,9 +287,17 @@ function runquery(){
 		if ($c>1){
 			foreach ($myrow as $k=>$v){
 				$pval='';
-				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
+				if (isset($pkey)&&isset($myrow[$pkey])) {
+					$pval=$myrow[$pkey];
+					if ($SQL_ENGINE=='mongodb') $pval=$pval['$oid'];
+				}
 				if ($shortview){
 					if (is_string($v)&&mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
+				}
+				if ($SQL_ENGINE=='mongodb'){
+					if ($k=='_id') {
+						$v=$v['$oid'];
+					}
 				}
 				$dv=hspc($v);
 				if ($v==null&&!isset($v)) $dv='<span style="color:#EE00AA;">NULL</span>';
@@ -331,7 +365,17 @@ function runquery(){
 			
 			foreach ($myrow as $k=>$v){
 				$pval='';
-				if (isset($pkey)&&isset($myrow[$pkey])) $pval=$myrow[$pkey];
+				if (isset($pkey)&&isset($myrow[$pkey])) {
+					$pval=$myrow[$pkey];
+					if ($SQL_ENGINE=='mongodb') $pval=$pval['$oid'];
+				}
+
+				if ($SQL_ENGINE=='mongodb'){
+					if ($k=='_id') {
+						$v=$v['$oid'];
+					}
+				}
+
 				if ($shortview){
 					if (is_string($v)&&mb_strlen($v)>60) $v=mb_substr($v,0,57).'...';	
 				}
@@ -377,8 +421,7 @@ function runquery(){
 <?php	
 	
 	$tb=microtime(1);
-	
-	echo "<br><br>Count time: ".round(($ctb-$cta),3).' secs';
+	if (isset($ctb)) echo "<br><br>Count time: ".round(($ctb-$cta),3).' secs';
 	echo "<br>Query time: ".round(($tb-$ta),3).' secs';
 	
 	if ($qidx<count($qlines)-1) echo "<hr>";

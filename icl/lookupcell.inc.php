@@ -54,8 +54,13 @@ function lookupcell(){
 	
 	$query="describe $tablename";
 	if ($SQL_ENGINE=='SQLSRV') $query="select * from information_schema.columns where table_name = '$tablename'";
- 
-	$rs=sql_prep($query,$db);
+
+	if ($SQL_ENGINE=='mongodb'){
+		$rs=array();
+	} else {
+		$rs=sql_prep($query,$db);
+	}
+
 	while ($myrow=sql_fetch_assoc($rs)){
 		//echo '<pre>'; print_r($myrow); echo '</pre>';
 		if ($SQL_ENGINE=='SQLSRV'){
@@ -77,8 +82,13 @@ function lookupcell(){
 	//	return;	
 	}
 	
-	$query="select $fkey from $tablename where $pkey=$dbpval";
-	$rs=sql_prep($query,$db);
+	if ($SQL_ENGINE=='mongodb'){
+ 		$cmd=new MongoDb\Driver\Command(array("find"=>$tablename,"filter"=>array("_id"=>new MongoDB\BSON\ObjectId($pval))));
+		$rs=$db->executeCommand($dbname,$cmd);
+	} else {
+		$query="select $fkey from $tablename where $pkey=$dbpval";
+		$rs=sql_prep($query,$db);
+	}
 	if (!$myrow=sql_fetch_assoc($rs)){
 	?>
 	<div class="warnbox">unable to find record. maybe it's already deleted?</div>
@@ -94,7 +104,7 @@ function lookupcell(){
 	$viewmode=SGET('viewmode');
 	
 	if ($viewmode==''){
-		if (in_array($colinfo['Type'],array('blob','mediumblob','longblob','geography'))) $viewmode='bin';	
+		if (isset($colinfo['Type'])&&in_array($colinfo['Type'],array('blob','mediumblob','longblob','geography'))) $viewmode='bin';	
 	}
 	
 	$relmap=null;
@@ -159,7 +169,9 @@ function lookupcell(){
 	<?php	
 		}	
 	}?>
-	<?php if ($viewmode=='bin'){?>
+	<?php if ($viewmode=='bin'){
+		if (is_array($ofval)&&$SQL_ENGINE=='mongodb') $ofval=$ofval['$oid'];
+	?>
 	Bytes: <?php echo strlen($ofval);?><br>
 	Chars: <?php echo mb_strlen($ofval);?><br>
 	<?php }?>
@@ -206,7 +218,7 @@ function lookupcell(){
 		?>
 		</div>
 		<?php
-		if (in_array($colinfo['Type'],array('text','mediumtext','longtext','blob','mediumblob','longblob','String'))){
+		if (isset($colinfo['Type'])&&in_array($colinfo['Type'],array('text','mediumtext','longtext','blob','mediumblob','longblob','String'))){
 		?>
 		<textarea <?php if (!$canedit) echo 'readonly';?> <?php if ($itr!=0) echo 'style="background:#ffffcc;"';?> id="celllookuppfval" class="inplong"><?php echo htmlspecialchars($fval);?></textarea>
 		<?php	
