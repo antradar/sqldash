@@ -1,4 +1,6 @@
 <?php
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
+include 'pretty_array.php';
 
 function showqlogcmdqueries(){
     $dbname=SGET('dbname');
@@ -15,10 +17,7 @@ function showqlogcmdqueries(){
     global $db;
 
     sql_select_db($db,$dbname);
-    $log=file_get_contents($logfn);
-
-    $queries=explode("==--==--==\r\n",$log);
-    
+    $f=fopen($logfn,'r');    
 ?>
 
 <div class="section">
@@ -27,7 +26,8 @@ function showqlogcmdqueries(){
 <?php   
     $qobj=null;
 
-    foreach ($queries as $query){
+    while ($query=fgets($f)){
+
         if (trim($query)=='') continue;
         $obj=json_decode($query,1);
         $cmd=$obj['cmd'];
@@ -41,6 +41,7 @@ function showqlogcmdqueries(){
         }
     }//foreach
 
+    fclose($f);
 
     if (!isset($qobj)) return;
 
@@ -53,6 +54,21 @@ function showqlogcmdqueries(){
 
     $res=json_decode($myrow['EXPLAIN'],1);
 
+    $badtables=array();
+
+    $looproot=&$res['query_block']['nested_loop'];
+    if (!isset($looproot)) $looproot=&$res['query_block']['ordering_operation']['nested_loop'];
+    if (isset($looproot)&&count($looproot)==0&&isset($res['query_block']['grouping_operation'])){
+        $looproot=&$res['query_block']['grouping_operation']['nested_loop'];
+    }
+
+    foreach ($looproot as $nloop){
+        if (!isset($nloop['table'])) continue;
+        if (!isset($nloop['table']['possible_keys'])||count($nloop['table']['possible_keys'])==0) {
+            array_push($badtables,$nloop['table']['table_name']);
+        }
+    }
+
     ?>
     <textarea class="inplong" name="_"><?php echo htmlspecialchars($qobj['query']);?></textarea>
     <?php if (isset($qobj['params'])&&count($qobj['params'])>0){?>
@@ -63,7 +79,18 @@ function showqlogcmdqueries(){
     <?php } ?>
 
     <?php
-    echo '<pre>'; print_r($res); echo '</pre>';
+    //echo '<pre>'; print_r($res); echo '</pre>';
+
+    if (count($badtables)>0){
+    ?>
+    <div class="warnbox">
+        The following table<?php echo count($badtables)==1?' has':'s have';?> no possible keys for the above query:<br>
+        <?php foreach ($badtables as $badtable) echo "<nobr><u><a onclick=\"showtable('$badtable','$dbname');\">".$badtable.'</a></u></nobr> &nbsp; ';?>
+    </div>
+    <?php    
+    }
+
+    pretty_array($res['query_block'],$dbname.'_'.$mycmd.'_'.$qkey);
 
 ?>
 </div><!--section-->
