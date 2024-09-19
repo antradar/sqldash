@@ -14,7 +14,8 @@ $fastlane='phpx-services.php'; //change this name if HAProxy is set up to route 
 $conntypes=array(
 	'mysqli'=>'MySQLi',
 	'sqlsrv'=>'SQLSrv',
-	'clickhouse'=>'ClickHouse/HTTP'
+	'clickhouse'=>'ClickHouse/HTTP',
+	'mongodb'=>'MongoDB',
 );
 
 //define constants that are shared by both front- and back-end code

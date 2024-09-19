@@ -91,8 +91,8 @@ updateconn=function(connid,gskey){
 	if (!valstr(oconnname)) {valid=0; offender=offender||oconnname;}
 	if (!valstr(oconntype)) {valid=0; offender=offender||oconntype;}
 	if (!valstr(oconnhost)) {valid=0; offender=offender||oconnhost;}
-	if (!valstr(oconndbname)) {valid=0; offender=offender||oconndbname;}
-	if (!valstr(oconnapiport)) {valid=0; offender=offender||oconnapiport;}
+	//if (!valstr(oconndbname)) {valid=0; offender=offender||oconndbname;}
+	//if (!valstr(oconnapiport)) {valid=0; offender=offender||oconnapiport;}
 	if (!valstr(oconnuser)) {valid=0; offender=offender||oconnuser;}
 	if (!valstr(oconnpass)) {valid=0; offender=offender||oconnpass;}
 

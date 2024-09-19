@@ -3,18 +3,18 @@
 include 'icl/showconn.inc.php';
 
 function updateconn(){
+	global $sdb;
+
 	$connid=GETVAL('connid');
 
-	$connname=SQET('connname');
-	$conntype=SQET('conntype');
-	$connhost=SQET('connhost');
-	$conndbname=SQET('conndbname');
-	$connapiport=SQET('connapiport');
-	$connuser=SQET('connuser');
-	$connpass=SQET('connpass');
+	$connname=QETSTR('connname');
+	$conntype=QETSTR('conntype');
+	$connhost=QETSTR('connhost');
+	$conndbname=QETSTR('conndbname');
+	$connapiport=QETSTR('connapiport');
+	$connuser=QETSTR('connuser');
+	$connpass=SQET('connpass'); $connpass=encstr($connpass,SQLDASH_DB_TOKEN);
 
-
-	global $db;
 	$user=userinfo();
 	$gsid=$user['gsid'];
 	
@@ -23,11 +23,8 @@ function updateconn(){
 	checkgskey('updateconn_'.$connid);
 
 
-	$query="update conns set connname=?,conntype=?,connhost=?,conndbname=?,connapiport=?,connuser=?,connpass=? where connid=?";
-	sql_prep($query,$db,array($connname,$conntype,$connhost,$conndbname,$connapiport,$connuser,$connpass,$connid));
-
-
-	
+	$query="update conns set connname='$connname',conntype='$conntype',connhost='$connhost',conndbname='$conndbname',connapiport='$connapiport',connuser='$connuser',connpass='$connpass' where connid=$connid";
+	$sdb->query($query);
 
 
 	showconn($connid);

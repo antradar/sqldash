@@ -26,6 +26,13 @@ function sql_prep($query,$db,$params=null){
 		$rs=$db->executeCommand($dbname,$cmd);
 		return $rs;
 	}
+	
+	if (preg_match("/show\s*tables\s*like\s*'(\S+?)'/",trim($query),$matches)){
+		$keyword=trim($matches[1],'%');
+		$cmd=new MongoDb\Driver\Command(array('listCollections'=>1,'filter'=>array('name'=>array('$regex'=>$keyword,'$options'=>'i'))));
+		$rs=$db->executeCommand($dbname,$cmd);
+		return $rs;
+	}	
 
 	if (preg_match('/^describe \S+$/',$query)){
 		return array();

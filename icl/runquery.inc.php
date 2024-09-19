@@ -64,6 +64,17 @@ function runquery(){
 	$pkey='';
 	
 	$user=userinfo();
+
+	if ($SQL_ENGINE=='mongodb'){
+		$qobj=json_decode($query,1);
+		if (isset($qobj['count'])) $token0='select';
+		if (isset($qobj['find'])) $token0='select';
+		if (isset($qobj['aggregate'])) $token0='select';
+		if (isset($qobj['update'])) $token0='update';
+		if (isset($qobj['insert'])) $token0='insert';
+		if (isset($qobj['delete'])) $token0='delete';
+	}
+
 	if (1==SQLDASH_AUTH_MODE){
 		if ($token0!='select'&&$token0!='describe'&&$token0!='show'&&$token0!='explain'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
 	}

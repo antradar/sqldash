@@ -47,6 +47,22 @@ function showwelcome(){
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','');">Run Query</button>
 	</td>
 </tr>
+<?php
+	$logfn='/dev/shm/'.$dbname.'.log';
+	if (file_exists($logfn)){
+?>
+<tr>
+	<td colspan="2">
+		<div class="warnbox">
+			A profile log is available for this database. &nbsp; 
+			<a class="hovlink" onclick="addtab('plogview_<?php echo $dbname;?>','Log: <?php echo $dbname;?>','viewplog&dbname=<?php echo $dbname;?>');">Analyze</a>
+		</div>
+	</td>
+</tr>
+<?php
+	}
+?>
+
 <?php 
 //if ($SQL_ENGINE=='sqlsrv'){
 ?>

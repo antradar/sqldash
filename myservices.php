@@ -79,6 +79,8 @@ switch($cmd){
 	case 'slv_sqldash__databases': include 'icl/listdatabases.inc.php'; listdatabases(); break;
 	case 'setdatabase': include 'icl/setdatabase.inc.php'; setdatabase(); break;
 	case 'lookuptablecol': include 'icl/lookuptablecol.inc.php'; lookuptablecol(); break;
+	case 'viewplog': include 'icl/viewplog.inc.php'; viewplog(); break;
+	case 'showqlogcmdqueries': include 'icl/showqlogcmdqueries.inc.php'; showqlogcmdqueries(); break;
 
 //Tables
 	case 'slv_sqldash__tables': include 'icl/listtables.inc.php'; listtables(); break;
