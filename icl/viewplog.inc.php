@@ -51,6 +51,7 @@ function viewplog(){
     while ($query=fgets($f)){
         if (trim($query)=='') continue;
         $obj=json_decode($query,1);
+        if (!isset($obj)) continue;
         $cmd=$obj['cmd'];
         if (!isset($cmds[$cmd])) $cmds[$cmd]=array('count'=>0,'cost'=>0,'nokey'=>0,'queries'=>array());
 
@@ -64,12 +65,16 @@ function viewplog(){
 
         ob_start();
         $rs=@sql_prep($exq,$db,$params);
-        $myrow=sql_fetch_assoc($rs);
+        if (!$myrow=sql_fetch_assoc($rs)){
+            ob_end_clean();
+            continue;
+        }
         ob_end_clean();
 
         $res=json_decode($myrow['EXPLAIN'],1);
         if (!isset($res)) continue;
 
+        if (!isset($res['query_block']['cost_info'])) continue;
         $cost=floatval($res['query_block']['cost_info']['query_cost']);
 
         $cmds[$cmd]['queries'][$qkey]['count']++;
