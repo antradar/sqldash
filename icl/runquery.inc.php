@@ -89,7 +89,6 @@ function runquery(){
 	}
 
 	if (isset($db)&&$token0=='select'){
-
 		if ($tablename!=''){
 			$dquery="describe $tablename";
 			
@@ -205,7 +204,8 @@ function runquery(){
 				
 		$start=$page*$perpage;
 		if (in_array($SQL_ENGINE,array('MySQL','MySQLi','ClickHouse'))) $query.=" limit $start,$perpage ";
-		if ($SQL_ENGINE=='SQLSRV') $query.=" order by @@identity offset $start rows fetch next $perpage rows only ";	
+		if ($SQL_ENGINE=='SQLSRV') $query.=" order by @@identity offset $start rows fetch next $perpage rows only ";
+		if ($SQL_ENGINE=='sfdx') $query.=" limit $perpage offset $start ";	
 		
 		if ($maxpage>0){
 ?>
@@ -221,7 +221,6 @@ function runquery(){
 <?php			
 		}
 	}
-	
 	$ta=microtime(1);
 
 	if (isset($db)) {
@@ -233,7 +232,6 @@ function runquery(){
 		$rs=fsql_query($query,$fdb);
 		if (!isset($c)) $c=fsql_affected_rows($fdb,$rs);
 	}
-	
 	$idx=0;
 	
 	$colnames=array();
@@ -254,6 +252,7 @@ function runquery(){
 		pretty_array($eobj,'explain_'.$queryidx,0);
 		return;
 	}
+	
 ?>
 <div class="stable" id="queryview_<?php echo $queryidx;?>">
 <div class="grid">

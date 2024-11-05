@@ -22,8 +22,19 @@ function addconn(){
 	checkgskey('addconn');
 	
 	//todo: clickhouse special case?
+
+	if ($conntype=='sfdx'){
+		$dbconnuser=str_replace(' ','',$dbconnuser);
+		$cmd='sfdx org:display --json -o '.$connuser.' --json 2>&1';
+		$res=shell_exec($cmd);
+		$obj=json_decode($res,1);
+		if (isset($obj['status'])&&$obj['status']!=0){
+			apperror('Invalid Salesforce credentials');
+		}
+	}
 		
 	$db=@sql_get_db($connhost,$conndbname,$connuser,$connpass);
+
 	
 	if ($conndbname=='') $conndbname='null'; else $conndbname="'$conndbname'";
 	if (!is_numeric($connapiport)) $connapiport='null';

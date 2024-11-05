@@ -1,12 +1,29 @@
 <?php
 include 'subconnect.php';
 
+if ($sqlmode=='sfdx') include 'icl/listtables.inc.php';
+
 function listdatabases(){
 	global $db;
 	global $connname;
 	global $sqlmode;
 	
 	$key=GETSTR('key');
+
+	if ($sqlmode=='sfdx'){
+		listtables();
+		return;
+		
+	?>
+	<div style="text-align:center;padding-top:20px;">
+		<button onclick="showview('sqldash.tables');">Show SObjects</button>
+	</div>
+	<script>
+		gid('tooltitle').innerHTML='<a>Databases</a>';
+	</script>
+	<?php
+		return;
+	}
 
 	global $SQL_ENGINE;
 		

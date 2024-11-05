@@ -21,7 +21,7 @@ function showqlogcmdqueries(){
 ?>
 
 <div class="section">
-    <div class="sectiontitle"><?php echo $dbname;?> / <?php echo $mycmd;?> / <?php echo $qkey;?></div>
+    <div class="sectiontitle"><?php echo $dbname;?> / <?php echo $mycmd;?> / <?php echo $myqkey;?></div>
 
 <?php   
     $qobj=null;
@@ -65,7 +65,7 @@ function showqlogcmdqueries(){
     foreach ($looproot as $nloop){
         if (!isset($nloop['table'])) continue;
         if (!isset($nloop['table']['possible_keys'])||count($nloop['table']['possible_keys'])==0) {
-            array_push($badtables,$nloop['table']['table_name']);
+            if (!isset($nloop['table']['key'])) array_push($badtables,$nloop['table']['table_name']);
         }
     }
 

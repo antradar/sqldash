@@ -14,4 +14,8 @@ function setactiveconn(){
 	
 	setcookie('connid',$connid,null,null,null,$usehttps,true);	
 	setcookie('sqlmode',$myrow['conntype'],null,null,null,$usehttps,true);
+
+	if ($myrow['conntype']=='sfdx'){
+		setcookie('dbname','Salesforce');
+	}
 }

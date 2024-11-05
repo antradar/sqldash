@@ -66,6 +66,8 @@ switch($cmd){
 	case 'addyubikey': include 'icl/addyubikey.inc.php'; addyubikey(); break;
 	case 'delyubikey': include 'icl/delyubikey.inc.php'; delyubikey(); break;
 	case 'testyubikey': include 'icl/testyubikey.inc.php'; testyubikey(); break;
+
+	case 'lookupsfdx_org': include 'icl/lookupsfdx_org.inc.php'; lookupsfdx_org(); break;
 	
 //SQLite
 	case 'slv_sqldash__sqlite': include 'icl/slite_listdbs.inc.php'; slite_listdbs(); break;

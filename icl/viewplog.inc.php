@@ -91,8 +91,10 @@ function viewplog(){
                 //echo '<pre>'; print_r($nloop); echo '</pre>';
                 if (!isset($nloop['table'])) continue;
                 if (!isset($nloop['table']['possible_keys'])||count($nloop['table']['possible_keys'])==0) {
-                    $cmds[$cmd]['queries'][$qkey]['nokey']=1;
-                    $cmds[$cmd]['nokey']=1;
+                    if (!isset($nloop['table']['key'])){
+                        $cmds[$cmd]['queries'][$qkey]['nokey']=1;
+                        $cmds[$cmd]['nokey']=1;
+                    }
                 }
             }
         }   
@@ -138,6 +140,7 @@ function viewplog(){
 
         <div class="qlog_queries" id="qlog_queries_<?php echo $cmdkey;?>">
             <?php foreach ($cmd['queries'] as $qkey=>$q){
+                if (!isset($q['count'])||$q['count']==0) continue;
             ?>
             <div class="qlog_subrow<?php if ($q['nokey']) echo ' nokey';?>">
                 <div class="qslogcol0">

@@ -278,7 +278,11 @@ function lookupcell(){
 	<div id="celllookupdecoder" style="padding-top:10px;"></div>
 	
 	<div style="padding-top:20px;">
-		<a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $tablename.'/'.$pkey.'/'.intval($pval);?>');">show this record only</a>
+	<?php
+		if (is_numeric($pval)) $dpval=$pval;
+		else $dpval=urlencode($pval);
+	?>
+		<a class="hovlink" onclick="addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',null,'',1,'<?php echo $tablename.'/'.$pkey.'/'.$dpval;?>');">show this record only</a>
 	</div>
 	
 	<?php	

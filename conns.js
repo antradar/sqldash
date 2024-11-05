@@ -16,6 +16,44 @@ _inline_lookupconn=function(d){
 	);	
 }
 
+setconntype=function(d){
+	gid('newconn_host').style.display='none';
+	gid('newconn_dbname').style.display='none';
+	gid('newconn_apiport').style.display='none';
+	gid('newconn_connuser').style.display='none';
+	gid('newconn_connpass').style.display='none';
+
+	switch (d.value){
+		case 'mysqli':
+			gid('newconn_host').style.display='block';
+			gid('newconn_connuser').style.display='block';
+			gid('newconn_connpass').style.display='block';
+		break;
+		case 'sqlsrv':
+			gid('newconn_host').style.display='block';
+			gid('newconn_dbname').style.display='block';
+			gid('newconn_connuser').style.display='block';
+			gid('newconn_connpass').style.display='block';
+		break;
+		case 'clickhouse':
+			gid('newconn_host').style.display='block';
+			gid('newconn_apiport').style.display='block';
+			gid('newconn_connuser').style.display='block';
+			gid('newconn_connpass').style.display='block';
+		break;
+		case 'mongodb':
+			gid('newconn_host').style.display='block';
+			gid('newconn_dbname').style.display='block';
+			gid('newconn_connuser').style.display='block';
+			gid('newconn_connpass').style.display='block';
+		break;
+		case 'sfdx':
+			gid('newconn_connuser').style.display='block';
+		break;
+		default: return;
+	}//switch
+}
+
 
 addconn=function(gskey){
 
@@ -35,11 +73,11 @@ addconn=function(gskey){
 	//delete the excessive validate rules
 	if (!valstr(oconnname)) {valid=0; offender=offender||oconnname;}
 	if (!valstr(oconntype)) {valid=0; offender=offender||oconntype;}
-	if (!valstr(oconnhost)) {valid=0; offender=offender||oconnhost;}
+	//if (!valstr(oconnhost)) {valid=0; offender=offender||oconnhost;}
 	//if (!valstr(oconndbname)) {valid=0; offender=offender||oconndbname;}
 	//if (!valstr(oconnapiport)) {valid=0; offender=offender||oconnapiport;}
 	if (!valstr(oconnuser)) {valid=0; offender=offender||oconnuser;}
-	if (!valstr(oconnpass)) {valid=0; offender=offender||oconnpass;}
+	//if (!valstr(oconnpass)) {valid=0; offender=offender||oconnpass;}
 
 	//add more validation rules
 	

@@ -31,7 +31,9 @@ function showquery(){
 			$tablename=$reckvparts[0];
 			$pkey=$reckvparts[1];
 			$recid=$reckvparts[2];
-			$defquery="select * from $tablename where $pkey=$recid";	
+			$drecid=$recid;
+			if (!is_numeric($recid)) $drecid="'".$recid."'";
+			$defquery="select * from $tablename where $pkey=$drecid";	
 		}	
 	}
 	
@@ -46,8 +48,10 @@ function showquery(){
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
 		&nbsp; &nbsp;
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
+		<?php if ($SQL_ENGINE=='MySQLi'||$SQL_ENGINE=='ClickHouse'){?>
 		&nbsp; &nbsp;
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>',1);">Explain</button>
+		<?php }?>
 	</div>
 	<div class="inputrow">
 		<input id="shortview_<?php echo $queryidx;?>" type="checkbox" checked>

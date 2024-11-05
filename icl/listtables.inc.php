@@ -12,9 +12,10 @@ function listtables(){
 	$sqlmode=SGET('sqlmode');	
 		
 	if ($mode!='embed'){
-				
+		$ddbname=$dbname;
+		if ($SQL_ENGINE=='sfdx') $ddbname='';
 	?>
-	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname).'//';?><?php echo $dbname;?></div>
+	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname); if ($SQL_ENGINE!='sfdx') echo '//';?><?php echo $ddbname;?></div>
 	<?php
 	}
 
@@ -43,6 +44,30 @@ function listtables(){
 		$query.=" order by TABLE_NAME ";
 	}
 
+	if ($SQL_ENGINE=='sfdx'){
+		$perpage=20;
+		$page=isset($_GET['page'])?intval($_GET['page']):0;
+
+		$cquery="select count() from EntityDefinition ";
+		$query="show tables ";
+		if ($key!='') {
+			$query.=" where QualifiedApiName like '%$key%' ";
+			$cquery.=" where QualifiedApiName like '%$key%' ";
+		}
+
+		$query.=" order by QualifiedApiName ";
+		
+		$rs=sql_prep($cquery,$db);
+		$count=$rs['totalSize'];
+		$maxpage=ceil($count/$perpage)-1;
+		if ($maxpage<0) $maxpage=0;
+		if ($page<0) $page=0;
+		if ($page>$maxpage) $page=$maxpage;
+		$start=$page*$perpage;
+		
+
+		$query.=" limit $perpage offset $start ";
+	}
 	
 	if ($mode!='embed'){
 	
@@ -60,6 +85,18 @@ function listtables(){
 
 <?php
 	}//embed
+
+	if (isset($maxpage)&&$maxpage>0){
+	?>
+	<div>
+	<a class="hovlink" onclick="ajxpgn('tablelist',document.appsettings.codepage+'?cmd=slv_sqldash__tables&mode=embed&key='+encodeHTML(gid('tablekey').value)+'&page=<?php echo $page-1;?>');">&laquo; Prev</a>
+	&nbsp;
+	Page <?php echo $page+1;?> of <?php echo $maxpage+1;?>
+	&nbsp;
+	<a class="hovlink" onclick="ajxpgn('tablelist',document.appsettings.codepage+'?cmd=slv_sqldash__tables&mode=embed&key='+encodeHTML(gid('tablekey').value)+'&page=<?php echo $page+1;?>');">Next &raquo;</a>
+	</div>
+	<?php	
+	}
 	
 	$rs=sql_prep($query,$db);
 	

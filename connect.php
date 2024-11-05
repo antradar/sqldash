@@ -14,11 +14,14 @@ if (SGET('sqlmode')=='mysqli'||SQET('sqlmode')=='mysqli') $sqlmode='mysqli';
 if (SGET('sqlmode')=='sqlsrv'||SQET('sqlmode')=='sqlsrv') $sqlmode='sqlsrv';
 if (SGET('sqlmode')=='clickhouse'||SQET('sqlmode')=='clickhouse') $sqlmode='clickhouse';
 if (SGET('sqlmode')=='mongodb'||SQET('sqlmode')=='mongodb') $sqlmode='mongodb';
+if (SGET('sqlmode')=='sfdx'||SQET('sqlmode')=='sfdx') $sqlmode='sfdx';
+
 
 switch ($sqlmode){
 	case 'clickhouse': include_once 'sql-clickhouse.php'; break;
 	case 'sqlsrv': include_once 'sql-sqlsrv.php'; break;
 	case 'mongodb': include_once 'sql-mongodb.php'; break;
+	case 'sfdx': include_once 'sql-sfdx.php'; break;
 	default: include_once "sql-mysqli.php";
 }
 
