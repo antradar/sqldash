@@ -16,7 +16,8 @@ $conntypes=array(
 	'sqlsrv'=>'SQLSrv',
 	'clickhouse'=>'ClickHouse/HTTP',
 	'mongodb'=>'MongoDB',
-	'sfdx'=>'Salesforce/CLI'
+	'sfdx'=>'Salesforce/CLI',
+	'sfapi'=>'Salesforce Connected App API',
 );
 
 //define constants that are shared by both front- and back-end code

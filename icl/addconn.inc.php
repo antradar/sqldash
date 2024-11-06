@@ -13,6 +13,11 @@ function addconn(){
 	$connuser=SQET('connuser'); $dbconnuser=addslashes($connuser);
 	$connpass=SQET('connpass');
 	
+	$appdomain=QETSTR('appdomain');
+	$appclientid=QETSTR('appclientid');
+	$appsecret=QETSTR('appsecret');
+	$apptoken=QETSTR('apptoken');
+	
 	global $sdb;
 	$user=userinfo();
 	$userid=intval($user['userid']);
@@ -32,8 +37,14 @@ function addconn(){
 			apperror('Invalid Salesforce credentials');
 		}
 	}
-		
+
 	$db=@sql_get_db($connhost,$conndbname,$connuser,$connpass);
+		
+	if ($conntype=='sfapi'){
+		$token=sql_salesforce_gettoken($apptoken,$appclientid,$appsecret,$appdomain);
+		if (trim($token)=='') apperror('Invalid OAuth credentials');	
+	}
+		
 
 	
 	if ($conndbname=='') $conndbname='null'; else $conndbname="'$conndbname'";
@@ -56,7 +67,8 @@ function addconn(){
 			
 	
 	
-	$query="insert into conns (userid,connname,conntype,connhost,conndbname,connapiport,connuser,connpass) values ($userid,'$connname','$conntype','$connhost',$conndbname,$connapiport,'$dbconnuser','$dbconnpass') ";
+	$query="insert into conns (userid,connname,conntype,connhost,conndbname,connapiport,connuser,connpass, appdomain,appclientid,appsecret,apptoken) 
+	values ($userid,'$connname','$conntype','$connhost',$conndbname,$connapiport,'$dbconnuser','$dbconnpass', '$appdomain', '$appclientid', '$appsecret','$apptoken') ";
 	$rs=$sdb->query($query);
 
 	$connid=$sdb->lastInsertRowID();

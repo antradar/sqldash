@@ -69,6 +69,8 @@ switch($cmd){
 
 	case 'lookupsfdx_org': include 'icl/lookupsfdx_org.inc.php'; lookupsfdx_org(); break;
 	
+	case 'showconnhelp': include 'icl/showconnhelp.inc.php'; showconnhelp(); break;
+	
 //SQLite
 	case 'slv_sqldash__sqlite': include 'icl/slite_listdbs.inc.php'; slite_listdbs(); break;
 	case 'slite_showdb': include 'icl/slite_showdb.inc.php'; slite_showdb(); break;

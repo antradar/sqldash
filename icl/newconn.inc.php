@@ -43,11 +43,42 @@ function newconn(){
 		<div class="formlabel"><?php tr('conn_label_connpass');?>:</div>
 		<input class="inp" id="connpass_new" type="password">
 	</div>
+	
+	<div class="inputrow" id="newconn_appdomain" style="display:none;">
+		<div class="formlabel">API Domain:</div>
+		<input class="inplong" id="appdomain_new" onchange="makeconnbutton();">
+	</div>
+	<div class="inputrow" id="newconn_appredirurl" style="display:none;">
+		<div class="formlabel">Redirect URL: &nbsp; <em>(not stored)</em></div>
+		<input class="inpmed" id="appredirurl_new" onchange="makeconnbutton();">
+	</div>	
+	<div class="inputrow" id="newconn_appclientid" style="display:none;">
+		<div class="formlabel">Client ID:</div>
+		<input class="inpmed" id="appclientid_new" onchange="makeconnbutton();">
+	</div>
+	<div class="inputrow" id="newconn_appsecret" style="display:none;">
+		<div class="formlabel">Secret:</div>
+		<input class="inplong" id="appsecret_new">
+	</div>
+	<div class="inputrow" id="newconn_apptoken" style="display:none;">
+		<div class="formlabel">Refresh Token:</div>
+		<input class="inplong" id="apptoken_new">
+	</div>
+	
+	
 </div>
 <div class="clear"></div>
 
 	<div class="inputrow buttonbelt">
-		<button onclick="addconn('<?php emitgskey('addconn');?>');"><?php tr('button_conn_add');?></button>
+		<a class="button" onclick="addconn('<?php emitgskey('addconn');?>');"><?php tr('button_conn_add');?></a>
+		&nbsp;
+		<span id="newconnbuttons">
+		
+		</span>
+	</div>
+	
+	<div id="newconnhelp">
+	
 	</div>
 
 </div>

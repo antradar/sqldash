@@ -13,9 +13,9 @@ function listtables(){
 		
 	if ($mode!='embed'){
 		$ddbname=$dbname;
-		if ($SQL_ENGINE=='sfdx') $ddbname='';
+		if ($SQL_ENGINE=='sfdx'||$SQL_ENGINE=='sfapi') $ddbname='';
 	?>
-	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname); if ($SQL_ENGINE!='sfdx') echo '//';?><?php echo $ddbname;?></div>
+	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname); if ($SQL_ENGINE!='sfdx'&&$SQL_ENGINE!='sfapi') echo '//';?><?php echo $ddbname;?></div>
 	<?php
 	}
 
@@ -44,7 +44,7 @@ function listtables(){
 		$query.=" order by TABLE_NAME ";
 	}
 
-	if ($SQL_ENGINE=='sfdx'){
+	if ($SQL_ENGINE=='sfdx'||$SQL_ENGINE=='sfapi'){
 		$perpage=20;
 		$page=isset($_GET['page'])?intval($_GET['page']):0;
 

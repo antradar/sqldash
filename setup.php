@@ -167,7 +167,11 @@ if ($authmode==1){
 		connuser text,
 		connpass text,
 		connapiport text,
-		conndbname text
+		conndbname text,
+		apptoken text,
+		appclientid text,
+		appsecret text,
+		appdomain text
 	)";
 	
 	$rs=$db->query($query);	

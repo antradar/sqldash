@@ -23,6 +23,11 @@ function showconn($connid=null){
 	$connuser=$myrow['connuser'];
 	$connpass=$myrow['connpass'];
 	
+	$appdomain=$myrow['appdomain'];
+	$appclientid=$myrow['appclientid'];
+	$appsecret=$myrow['appsecret'];
+	$apptoken=$myrow['apptoken'];
+	
 	if ($connpass!='') $connpass=decstr($connpass,SQLDASH_DB_TOKEN);
 
 	header('newtitle:'.tabtitle(htmlspecialchars($connname)));
@@ -62,6 +67,23 @@ function showconn($connid=null){
 	<div class="inputrow">
 		<div class="formlabel"><?php tr('conn_label_connpass');?>:</div>
 		<input class="inpmed" type="password" id="connpass_<?php echo $connid;?>" value="<?php echo htmlspecialchars($connpass);?>" oninput="this.onchange();" onchange="marktabchanged('conn_<?php echo $connid;?>');">
+	</div>
+	
+	<div class="inputrow">
+		<div class="formlabel">API Domain:</div>
+		<input class="inplong" value="<?php echo htmlspecialchars($appdomain);?>">
+	</div>
+	<div class="inputrow">
+		<div class="formlabel">Client ID:</div>
+		<input class="inp" value="<?php echo htmlspecialchars($appclientid);?>">
+	</div>
+	<div class="inputrow">
+		<div class="formlabel">Secret:</div>
+		<input class="inplong" value="<?php echo htmlspecialchars($appsecret);?>">
+	</div>
+	<div class="inputrow">
+		<div class="formlabel">Refresh Token:</div>
+		<input class="inplong" value="<?php echo htmlspecialchars($apptoken);?>">
 	</div>
 
 	

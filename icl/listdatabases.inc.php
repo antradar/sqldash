@@ -1,7 +1,7 @@
 <?php
 include 'subconnect.php';
 
-if ($sqlmode=='sfdx') include 'icl/listtables.inc.php';
+if ($sqlmode=='sfdx'||$sqlmode=='sfapi') include 'icl/listtables.inc.php';
 
 function listdatabases(){
 	global $db;
@@ -10,7 +10,7 @@ function listdatabases(){
 	
 	$key=GETSTR('key');
 
-	if ($sqlmode=='sfdx'){
+	if ($sqlmode=='sfdx'||$sqlmode=='sfapi'){
 		listtables();
 		return;
 		

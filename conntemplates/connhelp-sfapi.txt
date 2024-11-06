@@ -1,0 +1,30 @@
+<?php
+
+// place this file on %%appredirurl%%
+// for a one-time refresh token setup
+
+$salesforce_clientid='%%appclientid%%';
+$salesforce_secret='%%appsecret%%';
+$salesforce_domain='%%appdomain%%';
+$redirect_url='%%appredirurl%%';
+
+$error=isset($_GET['error'])?$_GET['error']:'';
+$code=isset($_GET['code'])?$_GET['code']:'';
+
+$url='https://'.$salesforce_domain.'/services/oauth2/token';
+$curl=curl_init($url);
+curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,0);
+curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,0);
+curl_setopt($curl,CURLOPT_POST,1);
+curl_setopt($curl,CURLOPT_POSTFIELDS,'grant_type=authorization_code&code='.$code.'&client_id='.$salesforce_clientid.'&client_secret='.$salesforce_secret.'&redirect_uri='.urlencode($redirect_url));
+curl_setopt($curl,CURLOPT_HTTPHEADER,array('Accept: application/json'));
+
+$res=curl_exec($curl);
+
+$obj=json_decode($res,1);
+
+echo '<pre>'; print_r($obj); echo '</pre>';
+
+
+
