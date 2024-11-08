@@ -57,7 +57,7 @@ function runquery(){
 	
 	$tokens=explode(' ',$query);
 	$token0=strtolower($tokens[0]);
-	
+	$token1=count($tokens)>1?strtolower($tokens[1]):'';
 	$tquery=preg_replace('/limit\s*(\d+),\s*\d+/','limit $1',$query);
 	
 	$tablename='';
@@ -224,7 +224,10 @@ function runquery(){
 	$ta=microtime(1);
 
 	if (isset($db)) {
-		$rs=sql_prep($query,$db);
+		
+		if (($token0=='create'||$token0=='drop')&&in_array($token1,array('trigger','function'))){
+			$rs=sql_query($query,$db);	
+		} else $rs=sql_prep($query,$db);
 		if (!isset($c)||$SQL_ENGINE!='SQLSRV') $c=sql_affected_rows($db,$rs);
 	}
 	
@@ -250,6 +253,12 @@ function runquery(){
 			}	
 		}
 		pretty_array($eobj,'explain_'.$queryidx,0);
+	?>
+	<a class="hovlink" onclick="showhide('explainjson_<?php echo $queryidx;?>');">view raw</a>
+	<div id="explainjson_<?php echo $queryidx;?>" style="display:none;padding:10px 0;">
+	<textarea class="inplong" style="height:400px;"><?php echo htmlspecialchars($res);?></textarea>
+	</div>
+	<?php	
 		return;
 	}
 	

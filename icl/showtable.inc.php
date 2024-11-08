@@ -4,12 +4,30 @@ include 'subconnect.php';
 function showtable(){
 	global $db;
 	global $SQL_ENGINE;
-	
-	$dbname=GETSTR('dbname'); //checkdbname();
-	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
-	
+
 	$tablename=GETSTR('tablename');
+	$triggers=array();
+		
+	$dbname=GETSTR('dbname'); //checkdbname();
+	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) {
+		sql_select_db($db,$dbname);
+
+		$query="select TRIGGER_NAME, EVENT_MANIPULATION from information_schema.TRIGGERS
+				where 
+				TRIGGER_SCHEMA = ? AND EVENT_OBJECT_TABLE = ? ";
+				
+		$rs=sql_prep($query,$db,array($dbname, $tablename));
+		
+		while ($myrow=sql_fetch_assoc($rs)){
+			array_push($triggers,array(
+				'name'=>$myrow['TRIGGER_NAME'],
+				'event'=>$myrow['EVENT_MANIPULATION']
+			));
+		}
+				
+	}
 	
+		
 ?>
 <div class="section">
 	<div class="sectiontitle"><?php echo $dbname;?> &raquo; <?php echo $tablename;?></div>
@@ -55,6 +73,21 @@ function showtable(){
 </div>
 <?php
 }
+
+if (count($triggers)>0){
+?>
+<div class="sectionheader">Triggers</div>
+<table cellspacing="0" cellpadding="5">
+<?php foreach ($triggers as $trigger){?>
+<tr>
+	<td><b><?php echo $trigger['name'];?></b></td>
+	<td><?php echo $trigger['event'];?></td>
+</tr>
+<?php }?>
+</table>
+<?php	
+}//triggers
+
 ?>
 
 <div class="sectionheader">Structure</div>
