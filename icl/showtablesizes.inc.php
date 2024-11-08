@@ -1,5 +1,7 @@
 <?php
 
+if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
+
 function showtablesizes(){
 
 	$dbname=checkdbname();
@@ -7,9 +9,12 @@ function showtablesizes(){
 	if (!is_string($dbname)) return;
 	
 	global $db;
+	global $sqlmode;
+	global $SQL_ENGINE;
 	
-	$query="select
-  TABLE_NAME AS tablename,
+	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
+			
+	$query="select TABLE_NAME AS tablename,
   round((DATA_LENGTH) / 1024 / 1024) as datasize,
   round((INDEX_LENGTH) / 1024 / 1024) as indexsize
   from

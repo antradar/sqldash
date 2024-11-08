@@ -12,7 +12,6 @@ function runquery(){
 	global $sqlite_root;
 	global $profile_root;
 	
-
 	$dbname=GETSTR('dbname');
 	$queryidx=GETVAL('queryidx');
 	$shortview=GETVAL('shortview');
@@ -56,7 +55,7 @@ function runquery(){
 	//check for select+limit
 	
 	$tokens=explode(' ',$query);
-	$token0=strtolower($tokens[0]);
+	$token0=trim(strtolower($tokens[0]));
 	$token1=count($tokens)>1?strtolower($tokens[1]):'';
 	$tquery=preg_replace('/limit\s*(\d+),\s*\d+/','limit $1',$query);
 	

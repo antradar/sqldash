@@ -49,7 +49,7 @@ function sql_prep($query,&$db,$params=null){
 		$dbinfo=$dbdefers[$db];
 		$db=sql_get_db($dbinfo['host'],$dbinfo['source'],$dbinfo['user'],$dbinfo['pass']);
 	}	
-	
+		
 	if (isset($params)){
 		if (!is_array($params)) $params=array($params);
 	} else $params=array();
