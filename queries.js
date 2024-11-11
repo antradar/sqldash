@@ -8,6 +8,48 @@ resolvecell=function(d,lookupquery,tablename,pkey,pval,fkey,lookuptitle,dbname,r
 	}
 }
 
+query_remove_spaces = function(query, keep_tabs) {
+    let stack = [];
+    let result = '';
+    let inQuotes = false;
+    let buffer = '';
+
+    for (let i = 0; i < query.length; i++) {
+        const char = query[i];
+
+        if (char === '"' || char === "'") {
+            if (inQuotes && stack[stack.length - 1] === char) {
+                stack.pop();
+                inQuotes = false;
+            } else if (!inQuotes) {
+                stack.push(char);
+                inQuotes = true;
+            }
+            buffer += char;
+        } else if (inQuotes) {
+            buffer += char;
+        } else {
+            if (/\s/.test(char) && (char !== '\t' || !keep_tabs)) {
+                if (buffer.length > 0) {
+                    result += buffer + (char === '\n' ? '\n' : ' ');
+                    buffer = '';
+                }
+            } else {
+                buffer += char;
+            }
+        }
+    }
+    
+    if (buffer.length > 0) {
+        result += buffer;
+    }
+
+    return result.trim();
+}
+
+
+
+
 addquery=function(dbname,tablename,fromid,sqlmode,instant,reckv){
 	if (!tablename) tablename='';
 	if (!sqlmode) sqlmode='';

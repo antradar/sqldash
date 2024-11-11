@@ -41,6 +41,11 @@ function showquery(){
 <div class="section">
 	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>"></div>
 	
+	<div style="padding-bottom:10px;">
+		<acronym title="hold Ctrl or CMD key to remove tabs">
+		<a class="labelbutton" onclick="gid('query_<?php echo $queryidx;?>').value=query_remove_spaces(gid('query_<?php echo $queryidx;?>').value,!(document.keyboard['key_17']||document.keyboard['key_91']||document.keyboard['key_224']));">remove spaces</a>
+		</acronym>
+	</div>
 	<div style="margin-bottom:5px;"><em style="color:#666666;">use "#" on a single line to separate multiple queries; select part of the text for partial querying</em></div>
 			
 	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?><?php echo htmlspecialchars($defquery);?><?php }?></textarea>

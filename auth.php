@@ -160,7 +160,9 @@ function checkdbname(){
 	$dbname=$_COOKIE['dbname'];
 	$dbname=noapos($dbname);
 
-	if (!isset($dbname)||$dbname=='') apperror('Select a database first');
+	if ($SQL_ENGINE!='sfapi'){
+		if (!isset($dbname)||$dbname=='') apperror('Select a database first');
+	}
 
 	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
