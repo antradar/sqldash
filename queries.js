@@ -8,17 +8,22 @@ resolvecell=function(d,lookupquery,tablename,pkey,pval,fkey,lookuptitle,dbname,r
 	}
 }
 
+
 query_remove_spaces = function(query, keep_tabs) {
     let stack = [];
     let result = '';
     let inQuotes = false;
     let buffer = '';
+    let prevChar = '';
+    let prevPrevChar = '';
 
     for (let i = 0; i < query.length; i++) {
         const char = query[i];
 
-        if (char === '"' || char === "'") {
-            if (inQuotes && stack[stack.length - 1] === char) {
+        if (['"', "'"].includes(char) && prevChar !== '\\') {
+            if (prevPrevChar === '\\') {
+                buffer = buffer.slice(0, -1);
+            } else if (inQuotes && stack[stack.length - 1] === char) {
                 stack.pop();
                 inQuotes = false;
             } else if (!inQuotes) {
@@ -38,6 +43,9 @@ query_remove_spaces = function(query, keep_tabs) {
                 buffer += char;
             }
         }
+
+        prevPrevChar = prevChar;
+        prevChar = char;
     }
     
     if (buffer.length > 0) {
@@ -46,6 +54,7 @@ query_remove_spaces = function(query, keep_tabs) {
 
     return result.trim();
 }
+
 
 
 
