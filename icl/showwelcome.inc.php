@@ -99,6 +99,27 @@ function showwelcome(){
 	}//while
 
 	if (isset($dbname)){
+		
+	$query="select name from mysql.proc where type='function' and db=? order by name";
+	$rs=sql_prep($query,$db,$dbname);
+	$c=sql_affected_rows($db,$rs);
+	
+	if ($c>0){
+	?>
+	<tr><td><b>Functions</b></td>
+	<td>
+		<?php while ($myrow=sql_fetch_assoc($rs)){
+			$func=$myrow['name'];
+		?>
+		<nobr><a class="hovlink" onclick="loadfs('Function / <?php echo $func;?>','showfunc&func=<?php echo $func;?>&dbname=<?php echo $dbname;?>');"><?php echo $func;?></a></nobr> &nbsp;
+		<?php	
+		}?>
+	</td>
+	</tr>
+	<?php	
+	}
+	
+		
 			
 	$query="SELECT TABLE_SCHEMA, TABLE_NAME, CREATE_OPTIONS FROM INFORMATION_SCHEMA.TABLES WHERE table_schema like ? and CREATE_OPTIONS LIKE '%ENCRYPTION=\"Y\"%';";
 	$rs=sql_prep($query,$db,$dbname);

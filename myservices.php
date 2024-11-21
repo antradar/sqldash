@@ -92,6 +92,9 @@ switch($cmd){
 	case 'lookupcell': include 'icl/lookupcell.inc.php'; lookupcell(); break;
 	case 'updatecell': include 'icl/updatecell.inc.php'; updatecell(); break;
 	
+	case 'showtrigger': include 'icl/showtrigger.inc.php'; showtrigger(); break;
+	case 'showfunc': include 'icl/showfunc.inc.php'; showfunc(); break;
+	
 	case 'showtablesizes': include 'icl/showtablesizes.inc.php'; showtablesizes(); break;
 	
 //Queries

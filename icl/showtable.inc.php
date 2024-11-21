@@ -80,7 +80,7 @@ if (count($triggers)>0){
 <table cellspacing="0" cellpadding="5">
 <?php foreach ($triggers as $trigger){?>
 <tr>
-	<td><b><?php echo $trigger['name'];?></b></td>
+	<td><b><a class="hovlink" onclick="loadfs('Trigger / <?php echo $trigger['name'];?>','showtrigger&dbname=<?php echo $dbname;?>&trigger=<?php echo $trigger['name'];?>');"><?php echo $trigger['name'];?></a></b></td>
 	<td><?php echo $trigger['event'];?></td>
 </tr>
 <?php }?>
