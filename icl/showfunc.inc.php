@@ -14,6 +14,7 @@ function showfunc(){
 	$rs=sql_prep($query,$db);
 	$myrow=sql_fetch_assoc($rs);
 	$def=$myrow['Create Function'];
+	$def=preg_replace('/^create\s*definer=\S+\s*function/i','CREATE FUNCTION',$def);
 	
 ?>
 <div class="section" style="height:100%;box-sizing:border-box;">

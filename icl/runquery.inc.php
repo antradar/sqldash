@@ -54,6 +54,9 @@ function runquery(){
 
 	//check for select+limit
 	
+	$query=preg_replace('/^create\s*definer=\S+\s*trigger/i','CREATE TRIGGER',$query);
+	$query=preg_replace('/^create\s*definer=\S+\s*function/i','CREATE FUNCTION',$query);
+	
 	$tokens=explode(' ',$query);
 	$token0=trim(strtolower($tokens[0]));
 	$token1=count($tokens)>1?strtolower($tokens[1]):'';

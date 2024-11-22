@@ -14,6 +14,9 @@ function showtrigger(){
 	$rs=sql_prep($query,$db);
 	$myrow=sql_fetch_assoc($rs);
 	$def=$myrow['SQL Original Statement'];
+	
+	$def=preg_replace('/^create\s*definer=\S+\s*trigger/i','CREATE TRIGGER',$def);
+	
 
 ?>
 <div class="section" style="height:100%;box-sizing:border-box;">
