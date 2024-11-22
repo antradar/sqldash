@@ -8,6 +8,44 @@ resolvecell=function(d,lookupquery,tablename,pkey,pval,fkey,lookuptitle,dbname,r
 	}
 }
 
+savequery=function(qidx){
+	var query=gid('query_'+qidx).value;
+	if (query.trim()=='') return;
+	
+	var qname=sprompt('Save Query As:');
+	if (!qname) qname='';
+	
+	qname=encodeHTML(qname);
+	
+	ajxpgn('statusc',document.appsettings.codepage+'?cmd=savequery&qname='+qname,0,0,'squery='+query,function(rq){
+		var squeryid=rq.getResponseHeader('squeryid');
+		lookupentity(gid('statusc'),'squery&squeryid='+squeryid+'&qidx='+qidx,'Saved Queries');
+	});
+		
+}
+
+loadquery=function(squeryid,qidx){
+	ajxpgn('query_'+qidx,document.appsettings.codepage+'?cmd=loadquery&squeryid='+squeryid,0,0,null,function(rq){
+		gid('query_'+qidx).value=rq.responseText;
+		gid('query_'+qidx).innerHTML='';
+	});
+}
+
+delquery=function(squeryid,qidx){
+	if (!sconfirm('Are you sure you want to remove this saved query?')) return;
+	
+	ajxpgn('lkvc',document.appsettings.codepage+'?cmd=delquery&squeryid='+squeryid+'&qidx='+qidx);
+		
+}
+
+_inline_lookupquery=function(d,qidx){
+	if (d.timer) clearTimeout(d.timer);
+	d.timer=setTimeout(function(){
+		ajxpgn('lkv_querylist',document.appsettings.codepage+'?cmd=lookupsquery&qidx='+qidx+'&mode=embed&key='+encodeHTML(d.value));
+	},300
+	);	
+}
+
 
 query_remove_spaces = function(query, keep_tabs) {
     let stack = [];

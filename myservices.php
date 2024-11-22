@@ -42,6 +42,12 @@ if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','p
 
 switch($cmd){
 	
+//Saved Queries
+
+	case 'savequery': include 'icl/savequery.inc.php'; savequery(); break;
+	case 'lookupsquery': include 'icl/lookupsquery.inc.php'; lookupsquery(); break;
+	case 'loadquery': include 'icl/loadquery.inc.php'; loadquery(); break;
+	case 'delquery': include 'icl/delquery.inc.php'; delquery(); break;
 
 //Connections
 

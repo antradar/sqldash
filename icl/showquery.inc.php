@@ -39,7 +39,11 @@ function showquery(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>"></div>
+	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>">
+		<?php if (1==SQLDASH_AUTH_MODE){?>
+		&nbsp; <button onclick="lookupentity(gid('statusc'),'squery&qidx=<?php echo $queryidx;?>','Saved Queries');">Load</button>
+		<?php }?>
+	</div>
 	
 	<div style="padding-bottom:10px;">
 		<acronym title="hold Ctrl or CMD key to remove tabs">
@@ -51,11 +55,16 @@ function showquery(){
 	<textarea spellcheck="false" class="inplong" id="query_<?php echo $queryidx;?>"><?php if ($tablename!=''){?><?php echo htmlspecialchars($defquery);?><?php }?></textarea>
 	<div class="inputrow">
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>');">Execute</button>
-		&nbsp; &nbsp;
-		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
 		<?php if ($SQL_ENGINE=='MySQLi'||$SQL_ENGINE=='ClickHouse'){?>
 		&nbsp; &nbsp;
 		<button onclick="runquery(<?php echo $queryidx;?>,'<?php echo $dbname;?>','<?php echo $sqlmode;?>',1);">Explain</button>
+		<?php }?>
+		<img src="imgs/t.gif" style="height:1px;width:50px;">
+		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
+		
+		<?php if (1==SQLDASH_AUTH_MODE){?>
+		&nbsp; &nbsp;
+		<button onclick="savequery(<?php echo $queryidx;?>);">Save</button>
 		<?php }?>
 	</div>
 	<div class="inputrow">

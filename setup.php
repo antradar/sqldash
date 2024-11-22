@@ -174,7 +174,18 @@ if ($authmode==1){
 		appdomain text
 	)";
 	
-	$rs=$db->query($query);	
+	$rs=$db->query($query);
+	
+	$query="
+	create table squeries (
+		squeryid integer primary key,
+		userid integer,
+		squeryname text,
+		squeryconntype text,
+		squery text
+	)";
+	
+	$rs=$db->query($query);		
 
 	
 	chmod($dbfn,0777);
