@@ -119,8 +119,10 @@ exportcsv=function(queryidx){
 	gid('csvqueryform_'+queryidx).submit();
 }
 	
-runquery=function(queryidx,dbname,sqlmode,explain){
+runquery=function(queryidx,dbname,sqlmode,explain,predrop){
+	
 	if (!explain) explain=0;
+	if (!predrop) predrop=0;
 	
 	var oquery=gid('query_'+queryidx);
 	var query=oquery.value;
@@ -145,7 +147,21 @@ runquery=function(queryidx,dbname,sqlmode,explain){
 	if (!document.sqlmodes) document.sqlmodes={};
 	document.sqlmodes[queryidx]=sqlmode;
 	
-	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode+'&explain='+explain,0,0,'query='+encodeHTML(query),null,null,1);
+	ajxpgn('queryresult_'+queryidx,document.appsettings.codepage+'?cmd=runquery&queryidx='+queryidx+'&dbname='+dbname+'&shortview='+shortview+'&usemacros='+usemacros+'&sqlmode='+sqlmode+'&explain='+explain,0,0,'query='+encodeHTML(query)+'&predrop='+predrop,[
+	function(){},
+	function(ef,msg,rq){
+		if (ef!='predrop'){
+			salert(msg);
+			return;	
+		}
+		
+		if (sconfirm(msg)){
+			runquery(queryidx,dbname,sqlmode,explain,1);
+		} else {
+			return;	
+		}
+	}
+	],null,1);
 		
 }
 

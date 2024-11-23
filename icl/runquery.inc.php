@@ -17,6 +17,8 @@ function runquery(){
 	$shortview=GETVAL('shortview');
 	$usemacros=GETVAL('usemacros');
 	
+	$predrop=intval(SQET('predrop'));
+	
 	$explain=GETVAL('explain');
 		
 	$sqlmode=SGET('sqlmode');
@@ -57,9 +59,10 @@ function runquery(){
 	$query=preg_replace('/^create\s*definer=\S+\s*trigger/i','CREATE TRIGGER',$query);
 	$query=preg_replace('/^create\s*definer=\S+\s*function/i','CREATE FUNCTION',$query);
 	
-	$tokens=explode(' ',$query);
+	$tokens=preg_split('/\r\n|\n|\s/',$query);
 	$token0=trim(strtolower($tokens[0]));
 	$token1=count($tokens)>1?strtolower($tokens[1]):'';
+	$token2=count($tokens)>2?strtolower($tokens[2]):'';
 	$tquery=preg_replace('/limit\s*(\d+),\s*\d+/','limit $1',$query);
 	
 	$tablename='';
@@ -228,6 +231,23 @@ function runquery(){
 	if (isset($db)) {
 		
 		if (($token0=='create'||$token0=='drop')&&in_array($token1,array('trigger','function'))){
+
+			if ($token0=='create'){
+				$dquery="show create $token1 $token2";
+				ob_start();
+				$rs=sql_query($dquery,$db);
+				ob_end_clean();
+				if ($myrow=sql_fetch_assoc($rs)){
+					if (!$predrop){
+					header('errfunc: predrop');
+					apperror("The $token1 $token2 already exists. Do you want to drop the old one first?");
+					} else {//drop existing trigger/functrion
+						$dquery="drop $token1 $token2";
+						sql_query($dquery,$db);
+					}
+				}
+			}
+			
 			$rs=sql_query($query,$db);	
 		} else $rs=sql_prep($query,$db);
 		if (!isset($c)||$SQL_ENGINE!='SQLSRV') $c=sql_affected_rows($db,$rs);
