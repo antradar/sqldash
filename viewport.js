@@ -161,6 +161,7 @@ function autosize(){
   }
   if (document.tabcount>0){
   var t=document.tabtitles[document.tabcount-1];
+  if (document.lasttab) t=document.lasttab;
   var topmargin=0; //change this if changing tab style
 //wrapping
       document.rowcount=(t.offsetTop-topmargin)/38+1;

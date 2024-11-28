@@ -37,6 +37,7 @@ showtab=function(key,opts){
   
 //wrapping
   var t=document.tabtitles[document.tabcount-1];
+  if (document.lasttab) t=document.lasttab;
   var topmargin=0; //change this if changing tab style
 
       document.rowcount=(t.offsetTop-topmargin)/38+1;
@@ -310,6 +311,11 @@ function addtab(key,title,params,loadfunc,data,opts){
 	}
 	document.onmousemove=t.onmousemove;
 	document.onmouseup=t.onmouseup;
+	
+	document.lasttab=null;
+	var os=gid('tabtitles').getElementsByTagName('span');
+	for (var i=0;i<os.length;i++) if (os[i].reloadinfo) document.lasttab=os[i];
+	
 	
   }
 
