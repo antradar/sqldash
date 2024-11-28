@@ -106,7 +106,9 @@ document.appsettings={codepage:'<?php echo $codepage;?>', fastlane:'<?php echo $
 </div>
 
 <!-- right panel -->
-<div id="tabtitles" scale:cw="225"> <a id="closeall" style="" onclick="resettabs('welcome');"><b><img src="imgs/t.gif" class="img-closeall" width="10" height="10"><?php tr('close_all_tabs');?></b></a> </div>
+<div id="tabtitles" scale:cw="225"> <a id="closeall" style="" onclick="resettabs('welcome');"><b><img src="imgs/t.gif" class="img-closeall" width="10" height="10"><?php tr('close_all_tabs');?></b></a> 
+	<span class="activetab" id="tabshadow" style="position:absolute;top:0;left:0;display:none;"></span>
+</div>
 <div id="tabviews" style="overflow:auto;position:absolute;left:295px;height:30px;top:122px;" scale:cw="225" scale:ch="105"></div>
 
 <div id="sptr" scale:ch="104"></div>
