@@ -78,7 +78,7 @@ body{font-family:helvetica;}
 	<div id="tooltitleshadow" style="width:150px;height:25px;"></div>
 	<div id="lvviews">
 	<?php foreach ($toolbaritems as $modid=>$ti){?>
-		<div id="lv<?php echo $modid;?>" style="background-color:#ffffff;display:none;"></div>
+		<div id="lv<?php echo $modid;?>" style="display:none;"></div>
 	<?php }?>	
 	</div>
 	<div id="lkv" style="height:100%;">

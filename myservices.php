@@ -42,6 +42,12 @@ if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','p
 
 switch($cmd){
 	
+//Procsses
+
+	case 'showdbprocesses': include 'icl/showdbprocesses.inc.php'; showdbprocesses(); break;
+	case 'killdbprocess': include 'icl/killdbprocess.inc.php'; killdbprocess(); break;
+	case 'killalldbprocesses': include 'icl/killalldbprocesses.inc.php'; killalldbprocesses(); break;
+
 //Saved Queries
 
 	case 'savequery': include 'icl/savequery.inc.php'; savequery(); break;
@@ -91,7 +97,7 @@ switch($cmd){
 	case 'lookuptablecol': include 'icl/lookuptablecol.inc.php'; lookuptablecol(); break;
 	case 'viewplog': include 'icl/viewplog.inc.php'; viewplog(); break;
 	case 'showqlogcmdqueries': include 'icl/showqlogcmdqueries.inc.php'; showqlogcmdqueries(); break;
-
+	
 //Tables
 	case 'slv_sqldash__tables': include 'icl/listtables.inc.php'; listtables(); break;
 	case 'showtable': include 'icl/showtable.inc.php'; showtable(); break;

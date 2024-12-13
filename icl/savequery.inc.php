@@ -5,7 +5,7 @@ function savequery(){
 	global $SQL_ENGINE;
 	
 	$qname=GETSTR('qname');
-	$squery=QETSTR('squery');
+	$squery=SQLite3::escapeString(SQET('squery'));
 	
 	$user=userinfo();
 	$userid=$user['userid'];
@@ -17,11 +17,14 @@ function savequery(){
 
 	$squeryid=$sdb->lastInsertRowID();
 	
+	if (!$squeryid){
+		apperror('Error saving query');	
+	}
 	if ($qname==''){
 		$query="update squeries set squeryname='Q_$squeryid' where squeryid=$squeryid";
 		$sdb->query($query);	
 	}
-	
+		
 	header('squeryid: '.$squeryid);
 		
 }

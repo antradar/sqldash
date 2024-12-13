@@ -19,7 +19,7 @@ function showwelcome(){
 	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
 
 	<div class="infobox">
-		Start by <a class="hovlink" onclick="showview('codegen.conns');">selecting a connection</a>.
+		Start by <a class="hovlink" onclick="showview('codegen.conns',null,1);">selecting a connection</a>.
 	</div>
 </div>
 <?php
@@ -76,7 +76,7 @@ function showwelcome(){
 <tr>
 	<td>Engine:</td>
 	<td><?php echo $SQL_ENGINE;?></td>
-</tr>	
+</tr>
 	<?php
 
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))){

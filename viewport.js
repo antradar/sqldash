@@ -301,6 +301,10 @@ if (document.createEvent){
 		}
 	}
 	
+	window.onblur=function(){
+		document.keyboard=[];
+	}
+	
 	function picktop(){
 		document.keyboard=[];
 		if (!document.hotspot) return;

@@ -32,7 +32,7 @@ if (!$rateok){
 
 $dblogin=addslashes($login);
 
-$query="select * from users where login='$dblogin' and active=1 and (virtualuser=0 or virtualuser is null)";
+$query="select * from users where lower(login)=lower('$dblogin') and active=1 and (virtualuser=0 or virtualuser is null)";
 $rs=$sdb->query($query);
 
 

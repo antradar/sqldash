@@ -33,8 +33,10 @@ $userroles=array(
 	'delete'=>'delete records',
 	'alter'=>'alter tables',
 	'create'=>'create tables',
+	'rename'=>'rename tables',
 	'truncate'=>'truncate collections',
 	'drop'=>'drop tables',
+	'kill'=>'terminate processes',
 );
 
 $userrolelocks=array_keys($userroles);

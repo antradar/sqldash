@@ -703,7 +703,7 @@ yubilogin=function(){
 	navigator.credentials.get({
 		publicKey:{
 			challenge:stringToArrayBuffer('no-challenge'),
-			pubKeyCredParams:[{'type':'public-key','alg':-7}],
+			pubKeyCredParams:[{'type':'public-key','alg':-7},{'type':'public-key','alg':-257}],
 			timeout: 30000,
 			allowCredentials:creds
 		}

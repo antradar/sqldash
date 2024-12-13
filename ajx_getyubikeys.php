@@ -8,7 +8,7 @@ $login=GETSTR('login');
 if ($login==''){header('HTTP/1.0 403');die('.');}
 
 
-$query="select attid from yubikeys,users where yubikeys.userid=users.userid and useyubi=1 and login='$login'";
+$query="select attid from yubikeys,users where yubikeys.userid=users.userid and useyubi=1 and lower(login)=lower('$login')";
 $rs=$sdb->query($query);
 
 $attids=array();

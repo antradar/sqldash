@@ -114,6 +114,13 @@ if (count($triggers)>0){
 	<tr class="gridrow <?php echo $idx%2==1?'even':'odd';?>">
 	<td></td>
 	<td><b><?php echo htmlspecialchars($field);?></b></td>
+	<td>
+	<?php if ($keytype!=''){?>
+		<span class="labelbutton"><?php echo htmlspecialchars(strtolower($keytype));?></span>
+		<?php
+		}
+		?>
+	</td>
 	<td><?php echo htmlspecialchars($type);?></td>
 	<td><b><?php echo htmlspecialchars($extra);?></b></td>
 	</tr>

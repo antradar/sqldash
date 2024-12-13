@@ -54,6 +54,12 @@ function listdatabases(){
 	</div>
 	<input type="image" src="imgs/mg.gif" class="searchsubmit" value=".">
 	</form>
+	<?php if (in_array($SQL_ENGINE,array('MySQLi','MySQL'))) {?>
+	<div style="text-align:right;">
+	<a class="hovlink" onclick="showdbprocesses();">processes &raquo;</a>
+	</div>
+	<?php }?>
+
 </div>
 <div id="databaselist">
 <?php

@@ -14,6 +14,8 @@ include 'connect.php';
 include 'auth.php';
 include 'xss.php';
 
+include 'icl/calcgapins.inc.php';
+include 'libcbor.php';
 
 $csrfkey=sha1($salt.'csrf'.$_SERVER['REMOTE_ADDR'].date('Y-m-j-g'));
 $csrfkey2=sha1($salt.'csrf'.$_SERVER['REMOTE_ADDR'].date('Y-m-j-g',time()-3600));
@@ -49,6 +51,8 @@ if (isset($_POST['lang'])&&in_array($_POST['lang'],array_keys($langs))) {
 	$lang=$_POST['lang'];include 'lang/dict.'.$lang.'.php';  
 	setcookie('userlang',$_POST['lang'],time()+3600*24*30*6); //keep for 6 months
 }
+
+$deflogin=isset($_COOKIE['fingername'])?$_COOKIE['fingername']:'';
 
 if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&&$_POST['login']) ){	
 	

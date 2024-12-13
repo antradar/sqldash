@@ -3,6 +3,7 @@ include 'fsql-sqlite.php';
 if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 
 include 'pretty_array.php';
+include 'icl/getbadtables.inc.php';
 
 function runquery(){
 	global $db;
@@ -275,6 +276,20 @@ function runquery(){
 			}	
 		}
 		pretty_array($eobj,'explain_'.$queryidx,0);
+		$badtables=getbadtables($eobj);
+		if (count($badtables)>0){
+		?>
+		<div class="warnbox">
+			Some tables may not have proper keys:
+			<?php foreach ($badtables as $badtable){
+			?>
+			<a class="hovlink" onclick="showtable('<?php echo $badtable;?>','<?php echo $dbname;?>');"><?php echo $badtable;?></a> &nbsp;
+			<?php	
+			}?>
+		</div>
+		<?php
+		}
+		
 	?>
 	<a class="hovlink" onclick="showhide('explainjson_<?php echo $queryidx;?>');">view raw</a>
 	<div id="explainjson_<?php echo $queryidx;?>" style="display:none;padding:10px 0;">

@@ -20,8 +20,6 @@ function updateuser(){
 	$passreset=GETVAL('passreset');
 
 	$newpass=SQET('pass');
-
-
 		
 	$groupnames=GETSTR('groupnames');
 	global $sdb;
@@ -68,10 +66,8 @@ function updateuser(){
 		$query.=", password='$np' ";
 	}
 
-
 	$query.=" where userid=$userid";
 	$sdb->query($query);
-
 
 	reauth();
 	showuser($userid);

@@ -128,7 +128,7 @@ if ($authmode==1){
 	$rs=$db->query($query);
 	
 	$login=addslashes($login);
-	$groupnames='users|admins|connedit|accounts|update|insert|delete|alter|create|truncate|drop';
+	$groupnames='users|admins|connedit|accounts|update|insert|delete|alter|create|truncate|drop|rename|kill';
 
 	$np=password_hash($dbsalt.$pass,PASSWORD_DEFAULT,array('cost'=>12));
 			

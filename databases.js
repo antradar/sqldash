@@ -17,6 +17,41 @@ setdatabase=function(dbname){
 	});
 }
 
+showdbprocesses=function(){
+	addtab('dbprocesses','DB Processes', 'showdbprocesses');	
+}
+
+_inline_lookupdbprocess=function(d,forced){
+	var delay=500;
+	if (forced) {
+		d.lastkey=null;
+		delay=0;
+	}
+	if (d.lastkey!=null&&d.lastkey==d.value) return;
+	d.lastkey=d.value;
+	if (d.timer) clearTimeout(d.timer);
+	d.timer=setTimeout(function(){
+		ajxpgn('dbprocesses',document.appsettings.codepage+'?cmd=showdbprocesses&mode=embed&key='+encodeHTML(d.value));
+	},delay
+	);	
+}
+
+killdbprocess=function(procid){
+	if (!sconfirm('Are you sure you want to terminate Process #'+procid+'?')) return;
+	
+	ajxpgn('dbprocesses',document.appsettings.codepage+'?cmd=killdbprocess&mode=embed&procid='+procid+'&key='+encodeHTML(gid('dbprocesskey').value));	
+}
+
+killalldbprocesses=function(){
+	if (!sconfirm('Are you sure you want to terminate ALL the matching processes?')) return;
+	var procids=[];
+	var os=gid('dbprocesses').getElementsByClassName('dbprocid');
+	for (var i=0;i<os.length;i++) procids.push(os[i].value);
+	
+	ajxpgn('dbprocesses',document.appsettings.codepage+'?cmd=killalldbprocesses&mode=embed&key='+encodeHTML(gid('dbprocesskey').value),0,0,'procids='+procids.join(','));	
+		
+}
+
 setlitedb=function(dbfn){
 	addtab('litedb_'+dbfn,'<img src="imgs/t.gif" class="ico-sqlite">'+dbfn,'slite_showdb&dbfn='+dbfn);	
 }

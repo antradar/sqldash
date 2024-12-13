@@ -1,6 +1,7 @@
 <?php
 if (!isset($_GET['sqlmode'])||$_GET['sqlmode']!='sqlite') include 'subconnect.php';
 include 'pretty_array.php';
+include 'icl/getbadtables.inc.php';
 
 function showqlogcmdqueries(){
     $dbname=SGET('dbname');
@@ -54,21 +55,8 @@ function showqlogcmdqueries(){
 
     $res=json_decode($myrow['EXPLAIN'],1);
 
-    $badtables=array();
-
-    $looproot=&$res['query_block']['nested_loop'];
-    if (!isset($looproot)) $looproot=&$res['query_block']['ordering_operation']['nested_loop'];
-    if (isset($looproot)&&count($looproot)==0&&isset($res['query_block']['grouping_operation'])){
-        $looproot=&$res['query_block']['grouping_operation']['nested_loop'];
-    }
-
-    foreach ($looproot as $nloop){
-        if (!isset($nloop['table'])) continue;
-        if (!isset($nloop['table']['possible_keys'])||count($nloop['table']['possible_keys'])==0) {
-            if (!isset($nloop['table']['key'])) array_push($badtables,$nloop['table']['table_name']);
-        }
-    }
-
+    $badtables=getbadtables($res);
+    
     ?>
     <textarea class="inplong" name="_"><?php echo htmlspecialchars($qobj['query']);?></textarea>
     <?php if (isset($qobj['params'])&&count($qobj['params'])>0){?>
