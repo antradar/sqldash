@@ -2,7 +2,7 @@
 include_once 'encdec.php';
 include_once 'forminput.php';
 
-if (1==SQLDASH_AUTH_MODE) $sdb=new SQLite3(SQLDASH_USERDB_PATH);
+if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE) $sdb=new SQLite3(SQLDASH_USERDB_PATH);
 
 
 $sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';

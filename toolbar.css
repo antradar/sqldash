@@ -69,6 +69,9 @@ input:disabled{
 .img-conns{background:transparent url(imgs/toolbar.gif) no-repeat -544px 0;}
 .img-conns-light{background:transparent url(imgs/toolbar.gif) no-repeat -544px -32px;}
 
+.img-repos{background:transparent url(imgs/toolbar.gif) no-repeat -576px 0;}
+.img-repos-light{background:transparent url(imgs/toolbar.gif) no-repeat -576px -32px;}
+
 .img-reports{background:transparent url(imgs/toolbar.gif) no-repeat -224px 0;}
 .img-reports-light{background:transparent url(imgs/toolbar.gif) no-repeat -224px -32px;}
 
@@ -266,7 +269,7 @@ svg > g > g.google-visualization-tooltip { pointer-events: none }
 
 .gridheader{background:#C4C4C4;}
 .gridrow{padding:10px;color:#4a4a4a;border-bottom:solid 1px #CACACA;}
-.gridrow.even{background:#F2F2F2;}
+.gridrow.even{background:#dedede;}
 .gridheader .gridrow{font-weight:bold;}
 
 .gridrow.warn{color:#4A4831;background:#FFF9AC;border-color:#CAC9B8;}

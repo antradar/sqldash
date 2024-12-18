@@ -116,7 +116,7 @@ document.appsettings={codepage:'<?php echo $codepage;?>',fastlane:'<?php echo $f
 hdpromote('toolbar_hd.css');
 </script>
 <script src="iphone/tabs.js"></script>
-<script src="iphone/viewport.js"></script>
+<script src="iphone/viewport.js?v=3"></script>
 <script src="validators.js"></script>
 <script src="autocomplete.js"></script>
 

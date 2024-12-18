@@ -20,7 +20,7 @@ header('Cache-Control: no-store');
 $user=userinfo();
 $userid=intval($user['userid']??0);
 
-if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','pump','imgqrcode','testgapin','resetgapin','addyubikey','testyubikey','delyubikey','setaccount'))){
+if ((1==SQLDASH_AUTH_MODE)&&!in_array($cmd,array('showaccount','setaccountpass','pump','imgqrcode','testgapin','resetgapin','addyubikey','testyubikey','delyubikey','setaccount'))){
 	$query="select usega,useyubi from users where userid=$userid";
 	$rs=$sdb->query($query);
 	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
@@ -41,6 +41,14 @@ if (1==SQLDASH_AUTH_MODE&&!in_array($cmd,array('showaccount','setaccountpass','p
 
 
 switch($cmd){
+
+//Repos
+
+	case 'slv_sqldash__repos': case 'listrepos': include 'icl/listrepos.inc.php'; listrepos(); break;
+	case 'slv_sqldash__repoarchives': case 'listrepoarchives': include 'icl/listrepoarchives.inc.php'; listrepoarchives(); break;
+	case 'showrepoarchive': include 'icl/showrepoarchive.inc.php'; showrepoarchive(); break;
+	case 'lookuprepoimport': include 'icl/lookuprepoimport.inc.php'; lookuprepoimport(); break;
+	case 'importrepo': include 'icl/importrepo.inc.php'; importrepo(); break;
 	
 //Procsses
 

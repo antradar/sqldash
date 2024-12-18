@@ -122,11 +122,14 @@ function reloadview(idx,listid){
 	hidelookup();
 	if (document.viewindex!=idx) return;
 	
+	var params='';
+	if (gid('lv'+document.viewindex)) params=gid('lv'+document.viewindex).params;
+	
 	if (listid) reajxpgn(listid,'lv'+idx);
-	else showview(idx);
+	else showview(idx,0,0,params);
 }
 
-function showview(idx,lazy,force){
+function showview(idx,lazy,force,params){
 	if (!force&&document.viewmode!=1&&document.iphone_portrait) return;	
 	document.viewmode=1;
 	rotate();
@@ -143,13 +146,18 @@ function showview(idx,lazy,force){
       gid('lv'+i).style.display='none';
     } else {
       if (!lazy||document.viewindex==idx||!gid('lv'+i).viewloaded)
-	      ajxpgn('lv'+i,document.appsettings.codepage+'?cmd=slv_'+i.replace(/\./g,'__')+'&hb='+hb(),true,true);
+	      ajxpgn('lv'+i,document.appsettings.codepage+'?cmd=slv_'+i.replace(/\./g,'__')+'&hb='+hb()+'&'+params,true,true);
       else {
 	      gid('lv'+idx).style.display='block';
 	      gid('tooltitle').innerHTML=gid('lv'+idx).tooltitle;
       }
     }
   }
+  
+  if (gid('lv'+idx)) {
+	  gid('lv'+idx).params=params;
+  }
+  
   gid('lv'+idx).viewloaded=1;
   document.viewindex=idx;
   if (force&&self.onrotate) onrotate();

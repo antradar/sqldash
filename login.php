@@ -1,7 +1,7 @@
 <?php
 include 'lb.php';
 
-if (1==SQLDASH_AUTH_MODE){
+if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){
 	include 'login_sec.php';
 	die();	
 }

@@ -7,6 +7,7 @@ $enableudf=0; //allow UDF editing, disable this on production server
 
 date_default_timezone_set('America/Toronto');
 
+define ('SERVER_NAME','DevLocal');
 define ('PASSWORD_COST',12);
 
 $_SERVER['REMOTE_ADDR']=ip_strip_port($_SERVER['REMOTE_ADDR']??'');

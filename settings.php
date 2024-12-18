@@ -20,9 +20,10 @@ $conntypes=array(
 	'sfapi'=>'Salesforce Connected App API',
 );
 
+if (file_exists('plugins/borg.php')) include 'plugins/borg.php';
+
 //define constants that are shared by both front- and back-end code
 //repeat the settings in settings.tmpl.php
-
 
 $userroles=array(
 	//'admins'=>'standard admin rights',
@@ -49,7 +50,9 @@ $toolbaritems=array(
 'codegen.conns'=>array('title'=>'Connections','icon'=>'img-conns'),
 'sqldash.databases'=>array('title'=>'Databases','icon'=>'img-databases','modversion'=>'1'),
 'sqldash.tables'=>array('title'=>'Tables','icon'=>'img-tables','modversion'=>'1'),
-'sqldash.sqlite'=>array('title'=>'SQLite','icon'=>'img-sqlite'),	
+'sqldash.sqlite'=>array('title'=>'SQLite','icon'=>'img-sqlite'),
+'sqldash.repos'=>array('title'=>'Snapshots','icon'=>'img-repos'),	
+	'sqldash.repoarchives'=>array('title'=>'Snapshot Archives','icon'=>''),	
 'core.settings'=>array('title'=>'Settings','icon'=>'img-settings','modversion'=>'78','lockdown'=>1),
 	'core.users'=>array('title'=>'Users'),
 'core.reports'=>array('title'=>'Reports','icon'=>'img-reports','modversion'=>'78','lockdown'=>1,'groups'=>'admins'),
@@ -57,7 +60,7 @@ $toolbaritems=array(
 
 if (!isset($sqlmode)) $sqlmode=isset($_COOKIE['sqlmode'])?$_COOKIE['sqlmode']:'';
 
-if (1!=SQLDASH_AUTH_MODE){
+if (1!=SQLDASH_AUTH_MODE&&2!=SQLDASH_AUTH_MODE){
 	unset($toolbaritems['codegen.conns']);
 	unset($toolbaritems['core.settings']);
 }
@@ -67,5 +70,6 @@ if (1!=SQLDASH_AUTH_MODE){
 //}
 
 
+if (!isset($borg_repos)) unset($toolbaritems['sqldash.repos']);
 
 foreach ($toolbaritems as $idx=>$item) if (!$item) unset($toolbaritems[$idx]);

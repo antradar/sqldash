@@ -8,7 +8,7 @@ function updatecell(){
 	
 	$user=userinfo();
 	
-	if (1==SQLDASH_AUTH_MODE&&!isset($user['groups']['update'])) apperror('Access denied');
+	if ((1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE)&&!isset($user['groups']['update'])) apperror('Access denied');
 
 	$dbname=GETSTR('dbname');
 	$tablename=GETSTR('table');

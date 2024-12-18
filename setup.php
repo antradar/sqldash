@@ -47,8 +47,9 @@ function prompt($prompt,$opts=null,$def=null,$validate_func=null,$passmask=0){
 
 
 $authmode=prompt('Auth Mode',array(
-	0=>'Development',
-	1=>'Production'
+	0=>'Direct Auth',
+	1=>'Strict',
+	2=>'Relaxed',
 ),1);
 
 if ($authmode==0) {
@@ -69,7 +70,7 @@ if ($authmode==0) {
 	die("\r\n");
 }
 
-if ($authmode==1){
+if ($authmode==1||$authmode==2){
 	if (!class_exists('SQLite3')){
 		echo "\r\n  Managed accounts mode (Secure) requires the SQLite3 extension, which is not made available in this environment.\r\n\r\n";
 		die();	
@@ -208,5 +209,5 @@ if ($authmode==1){
 	echo "\r\nRemember to chmod $ppath so that it is also writable\r\n\r\n";
 
 		
-}//authmode==1
+}//authmode==1 or 2
 

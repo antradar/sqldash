@@ -16,7 +16,7 @@ $user=userinfo();
 <!doctype html>
 <html>
 <head>
-	<title>Antradar SQL Dash&trade;</title>
+	<title><?php echo SERVER_NAME;?> | SQL Dash&trade;</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href='gyroscope.css' type='text/css' rel='stylesheet'>
 	<link href='toolbar.css' type='text/css' rel='stylesheet'>

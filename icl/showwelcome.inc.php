@@ -12,15 +12,34 @@ function showwelcome(){
 	global $SQL_ENGINE;
 	
 	global $connid;
+	/*	
+	$pipes=array();
+	$fd=array();
 	
-	if (1==SQLDASH_AUTH_MODE&&!isset($connid)){
+	//$cmd="mysql -hlocalhost -uroot -pmnstudio relo < /var/dx/actionlog.0.sql"; //nohup? //00019
+
+	$cmd="nohup /usr/bin/pdump 4 localhost root mnstudio loanstudio"; //nohup? //00019
+
+	$p=proc_open($cmd,$fd,$pipes,'/var/dx');
+	
+	$status=proc_get_status($p);
+	$pid=$status['pid'];
+	
+	echo "Task #$taskid  PID: $pid\r\n";
+	*/
+	
+	if ((1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE)&&!isset($connid)){
 ?>
 <div class="section">
-	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
+	<div class="sectiontitle"><?php tr('hometab_welcome');?> / <?php echo SERVER_NAME;?></div>
 
+	<?php welcome_show_auth_warning();?>
+	
 	<div class="infobox">
 		Start by <a class="hovlink" onclick="showview('codegen.conns',null,1);">selecting a connection</a>.
 	</div>
+	
+	
 </div>
 <?php
 		return;		
@@ -30,7 +49,10 @@ function showwelcome(){
 	
 ?>
 <div class="section">
-	<div class="sectiontitle"><?php tr('hometab_welcome');?></div>
+	<div class="sectiontitle"><?php tr('hometab_welcome');?> <span style="opacity:0.3;">/</span> <span style="display:inline-block;padding:4px 8px;border:dashed 1px #999999;border-radius:3px;"><?php echo SERVER_NAME;?></span></div>
+
+	<?php welcome_show_auth_warning(); ?>
+	
 	
 <div class="sectionheader">Database Status</div>
 <div class="stable">
@@ -181,6 +203,16 @@ function showwelcome(){
 	
 </div><!-- section -->
 <?php
+}
+
+function welcome_show_auth_warning(){
+	if (2==SQLDASH_AUTH_MODE){?>
+	<div class="warnbox">
+		You are authenticated in Relaxed mode. 2FA is not enforced.<br>
+		You can set SQLDASH_AUTH_MODE to "1" in config.php to enable Strict mode.
+	</div>
+	<?php 
+	}
 }
 
 function auto_welcome(){

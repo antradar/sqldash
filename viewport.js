@@ -191,15 +191,21 @@ function flashstatus(t,l){
 }
 
 
-function reloadview(idx,listid){
+function reloadview(idx,listid){	
 	hidelookup();
 	if (document.viewindex!=idx) return;
 	
+	var params='';
+	if (gid('lv'+document.viewindex)) params=gid('lv'+document.viewindex).params;
+	
 	if (listid) reajxpgn(listid,'lv'+idx);
-	else showview(idx);
+	else showview(idx,0,0,params);
 }
 
-function showview(idx,lazy){
+function showview(idx,lazy,force,params){
+	
+  if (!params) params='';
+	
   hidelookup();
     
   if (document.viewindex!=null) {
@@ -216,7 +222,7 @@ function showview(idx,lazy){
       gid('lv'+i).style.display='none';
     } else {
       if (!lazy||document.viewindex==idx||!gid('lv'+i).viewloaded)      
-	      ajxpgn('lv'+i,document.appsettings.codepage+'?cmd=slv_'+i.replace(/\./g,'__')+'&hb='+hb(),true,true,'',callback(i));
+	      ajxpgn('lv'+i,document.appsettings.codepage+'?cmd=slv_'+i.replace(/\./g,'__')+'&hb='+hb()+'&'+params,true,true,'',callback(i));
       else {
 	      gid('lv'+idx).style.display='block';
 	      gid('tooltitle').innerHTML=gid('lv'+idx).tooltitle;
@@ -224,6 +230,11 @@ function showview(idx,lazy){
       }
     }
   }
+  
+  if (gid('lv'+idx)) {
+	  gid('lv'+idx).params=params;
+  }
+ 
   gid('lv'+idx).viewloaded=1;
   document.viewindex=idx;
   
@@ -284,11 +295,22 @@ function sv(d,v){gid(d).value=v;}
 if (document.createEvent){
 	document.keyboard=[];
 	
+	window.onblur=function(){
+		document.keyboard=[];
+		document.gamepadlock=true;
+		if (gid('statusinfo')) gid('statusinfo').style.filter='';	
+	}	
 	document.onkeyup=function(e){
 		var keycode;
 		if (e) keycode=e.keyCode; else keycode=event.keyCode;	
 		document.keyboard['key_'+keycode]=null;
 		delete document.keyboard['key_'+keycode];
+		
+		if (keycode==17||keycode==91||keycode==224) delete document.keyboard['key_meta'];
+		
+		if (!document.keyboard['key_meta']&&gid('statusinfo')){
+			gid('statusinfo').style.filter='';			
+		}
 	}
 	
 	document.onkeydown=function(e){
@@ -296,14 +318,20 @@ if (document.createEvent){
 		if (e) keycode=e.keyCode; else keycode=event.keyCode;	
 		document.keyboard['key_'+keycode]=1;
 		
-		if (document.keyboard['key_13']&&document.keyboard['key_17']){
+		var metakey=0;
+		if (document.keyboard['key_17']||document.keyboard['key_91']||document.keyboard['key_224']) metakey=1;
+		
+		if (metakey){
+			document.keyboard['key_meta']=1;
+			if (gid('statusinfo')) gid('statusinfo').style.filter='sepia(0.6)';
+		}
+		
+		if (document.keyboard['key_13']&&metakey){
 			picktop();	
 		}
 	}
 	
-	window.onblur=function(){
-		document.keyboard=[];
-	}
+
 	
 	function picktop(){
 		document.keyboard=[];

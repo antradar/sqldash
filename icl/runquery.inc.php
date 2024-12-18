@@ -81,7 +81,7 @@ function runquery(){
 		if (isset($qobj['delete'])) $token0='delete';
 	}
 
-	if (1==SQLDASH_AUTH_MODE){
+	if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){
 		if ($token0!='select'&&$token0!='describe'&&$token0!='show'&&$token0!='explain'&&!in_array($token0,array_keys($user['groups']))) apperror('Access denied');
 	}
 	

@@ -70,7 +70,7 @@ function newconn(){
 <div class="clear"></div>
 
 	<div class="inputrow buttonbelt">
-		<a class="button" onclick="addconn('<?php emitgskey('addconn');?>');"><?php tr('button_conn_add');?></a>
+		<a class="button" href=# onclick="addconn('<?php emitgskey('addconn');?>');return false;"><?php tr('button_conn_add');?></a>
 		&nbsp;
 		<span id="newconnbuttons">
 		

@@ -1,6 +1,6 @@
 <?php
 
-if (1==SQLDASH_AUTH_MODE){
+if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){
 
 	$connid=isset($_COOKIE['connid'])?$_COOKIE['connid']:null;
 

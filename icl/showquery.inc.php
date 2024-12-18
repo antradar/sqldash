@@ -40,7 +40,7 @@ function showquery(){
 ?>
 <div class="section">
 	<div class="sectiontitle"><?php echo $dbname;?> &raquo; Query &nbsp; <input class="inpshort" onfocus="this.select();" onchange="if (this.value=='') this.value='#<?php echo $queryidx;?>';settabtitle('query_<?php echo $queryidx;?>','<img src=&quot;imgs/t.gif&quot; class=&quot;ico-query&quot;>'+this.value);" value="#<?php echo $queryidx;?>">
-		<?php if (1==SQLDASH_AUTH_MODE){?>
+		<?php if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){?>
 		&nbsp; <button onclick="lookupentity(gid('statusc'),'squery&qidx=<?php echo $queryidx;?>','Saved Queries');">Load</button>
 		<?php }?>
 	</div>
@@ -62,7 +62,7 @@ function showquery(){
 		<img src="imgs/t.gif" style="height:1px;width:50px;">
 		<button onclick="ajxjs(self.addquery,'queries.js');addquery('<?php echo $dbname;?>','<?php echo $tablename;?>',<?php echo $queryidx;?>);">Duplicate</button>
 		
-		<?php if (1==SQLDASH_AUTH_MODE){?>
+		<?php if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){?>
 		&nbsp; &nbsp;
 		<button onclick="savequery(<?php echo $queryidx;?>);">Save</button>
 		<?php }?>
