@@ -290,7 +290,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['gyroscope
 <!doctype html>
 <html>
 <head>
-	<title><?php echo GYROSCOPE_PROJECT;?></title>
+	<title><?php echo SERVER_NAME;?> | <?php echo GYROSCOPE_PROJECT;?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name = "viewport" content = "width=device-width, user-scalable=no" />
 	<meta name="theme-color" content="#9FA3A7" />	

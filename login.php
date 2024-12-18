@@ -151,7 +151,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['login'])&
 ?>
 <html>
 <head>
-	<title><?php tr('login');?></title>
+	<title><?php echo SERVER_NAME;?> | <?php tr('login');?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="refresh" content="1800" />
 	<meta name = "viewport" content = "width=device-width, init-scale=1.0, user-scalable=no" />
