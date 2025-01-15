@@ -27,7 +27,7 @@ if (file_exists('plugins/borg.php')) include 'plugins/borg.php';
 //extensions are maintaned by 3rd parties
 
 $sqldash_exts=array(
-//	'antradar/querymaker'
+	'antradar/querymaker'
 );
 
 //define constants that are shared by both front- and back-end code

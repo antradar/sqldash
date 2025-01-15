@@ -1,9 +1,9 @@
 <?php
 
-if (1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE){
+if ((1==SQLDASH_AUTH_MODE||2==SQLDASH_AUTH_MODE)&&!defined('SQLDASH_NO_SUBCONNECT')){
 
 	$connid=isset($_COOKIE['connid'])?$_COOKIE['connid']:null;
-
+	
 	if (!isset($connid)||!is_numeric($connid)) apperror('Select a connection first');
 	
 	$user=userinfo();

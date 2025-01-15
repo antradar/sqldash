@@ -43,7 +43,8 @@ $allexts=sqldash_getexts();
 
 //handle extension switches
 foreach ($allexts['routes'] as $route){
-	if ($cmd==$route['route']){		
+	if ($cmd==$route['route']){
+		if (!defined('SQLDASH_NO_SUBCONNECT')&&!$route['subconnect']) define('SQLDASH_NO_SUBCONNECT',1);
 		include 'ext/'.$route['ext'].'.ext.php'; $route['route']();
 	 	$cmd='dummy'; 
 	}

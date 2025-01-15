@@ -25,7 +25,7 @@ function sqldash_getexts(){
 			array_push($res['hooks'][$hkey],array('name'=>$extinfo['name'],'func'=>$func,'ext'=>$ext));	
 		}//hooks
 		
-		foreach ($extinfo['routes'] as $route) array_push($res['routes'],array('route'=>$route,'ext'=>$ext));
+		foreach ($extinfo['routes'] as $route=>$subconnect) array_push($res['routes'],array('route'=>$route,'subconnect'=>$subconnect,'ext'=>$ext));
 	}	
 	
 	return $res;

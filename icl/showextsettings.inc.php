@@ -1,7 +1,10 @@
 <?php
 
 $ext=SGET('ext'); //todo: clean up input
-include 'ext/'.$ext.'.ext.php'; //todo: check file existance
+if ($ext!='') {
+	define('SQLDASH_NO_SUBCONNECT',1);
+	include 'ext/'.$ext.'.ext.php'; //todo: check file existance
+}
 
 function showextsettings(){
 

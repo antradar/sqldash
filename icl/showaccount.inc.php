@@ -10,6 +10,10 @@ function showaccount(){
 	$user=userinfo();
 	$userid=intval($user['userid']);
 	
+	global $allexts;
+	
+	define('SQLDASH_NO_SUBCONNECT',1);
+	
 	$query="select * from users where userid=$userid";
 	$rs=$sdb->query($query);
 	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
@@ -124,6 +128,24 @@ function showaccount(){
 				
 		<input id="myaccount_darkmode" value="<?php echo $darkmode;?>" type="hidden">		
 	</div>
+	
+	<?php
+	if (isset($allexts['hooks']['accountconfig'])){
+		foreach ($allexts['hooks']['accountconfig'] as $hook){
+		?>
+		<div class="sectionheader"><em><?php echo $hook['name'];?></em></div>
+		<div id="accountextsettings_<?php echo $hook['ext'];?>">
+		<?php		
+			$func=$hook['func'];
+			$extfn='ext/'.$hook['ext'].'.ext.php';
+			include_once($extfn);
+			$func();
+		}
+		?>
+		</div>
+		<?php
+	}
+	?>
 	
 </div>
 <div class="clear"></div>
