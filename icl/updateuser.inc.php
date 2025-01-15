@@ -12,6 +12,7 @@ function updateuser(){
 	if (!$user['groups']['accounts']) apperror('Access denied');
 	
 	$myuserid=$user['userid'];
+	$gsid=intval($user['gsid']);
 	
 	$userid=GETVAL('userid');	
 	$login=GETSTR('login');
@@ -30,7 +31,7 @@ function updateuser(){
 		header('apperror: User already exists. Use a different login.');die();		
 	}
 
-	$query="select groupnames,virtualuser from users where userid=$userid";
+	$query="select groupnames,virtualuser from users where gsid=$gsid and userid=$userid";
 	$rs=$sdb->query($query);
 	$myrow=$rs->fetchArray(SQLITE3_ASSOC);
 	

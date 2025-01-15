@@ -292,3 +292,6 @@ explorequerydims=function(queryidx){
 		nav_loadcharts('dashquerydims','dashquerydimkey','dashquerydims',queryidx);
 	},'dims='+encodeHTML(strdims)+'&query='+query+'&sqlmode='+sqlmode);
 }
+
+//////
+

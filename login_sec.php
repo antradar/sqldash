@@ -87,6 +87,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['gyroscope
 				$passok=0;
 				$yubiok=0;
 				$userid=intval($myrow['userid']);
+				$gsid=intval($myrow['gsid']);
 				$query="select count(*) as c from yubikeys where userid=$userid";
 				$rs2=$sdb->query($query);
 				$myrow2=$rs2->fetchArray(SQLITE3_ASSOC);
@@ -159,6 +160,7 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['gyroscope
 		if ($passok){
 			
 			$userid=$myrow['userid'];
+			$gsid=$myrow['gsid'];
 			$passreset=$myrow['passreset'];
 						
 			$usega=$myrow['usega'];
@@ -225,9 +227,10 @@ if ( (isset($_POST['password'])&&$_POST['password']) || (isset($_POST['gyroscope
 					$rand=substr(base64_encode($rand),0,16);
 										
 					$groupnames=$myrow['groupnames'];
-					$auth=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
+					$auth=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname.$salt.$gsid);
 					setcookie('auth',$auth,null,null,null,$usehttps,true);
 					setcookie('userid',$userid,null,null,null,$usehttps,true);
+					setcookie('gsid',$gsid,null,null,null,$usehttps,true);
 					setcookie('login',$login,null,null,null,$usehttps,true);
 					setrawcookie('dispname',rawurlencode($dispname),null,null,null,$usehttps,true);
 					setcookie('groupnames',$groupnames,null,null,null,$usehttps,true);

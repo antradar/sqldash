@@ -50,12 +50,13 @@ function login($silent=false){
 		$login=isset($_COOKIE['login'])?$_COOKIE['login']:null;
 		$dispname=isset($_COOKIE['dispname'])?$_COOKIE['dispname']:null;
 		$userid=isset($_COOKIE['userid'])?$_COOKIE['userid']:null;
+		$gsid=isset($_COOKIE['gsid'])?$_COOKIE['gsid']:null;
 		$auth=isset($_COOKIE['auth'])?$_COOKIE['auth']:null;
 	
 		$groupnames=isset($_COOKIE['groupnames'])?$_COOKIE['groupnames']:null;
 		
-		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
-		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname);
+		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname.$salt.$gsid);
+		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname.$salt2.$gsid);
 				
 		if (!isset($login)||(!hash_equals($auth,$auth_)&&!hash_equals($auth,$auth2_))||$auth===''||$auth===null) {
 					
@@ -117,13 +118,14 @@ function userinfo(){
 	
 		$dispname=isset($_COOKIE['dispname'])?$_COOKIE['dispname']:null;
 		$userid=isset($_COOKIE['userid'])?$_COOKIE['userid']:null;
+		$gsid=isset($_COOKIE['gsid'])?$_COOKIE['gsid']:null;
 		$auth=isset($_COOKIE['auth'])?$_COOKIE['auth']:null;
 			
 		$groupnames=isset($_COOKIE['groupnames'])?$_COOKIE['groupnames']:null;
 		$salt2=$saltroot.$_SERVER['REMOTE_ADDR'].date('Y-m-j-H',time()-3600);
 			
-		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
-		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname);
+		$auth_=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname.$salt.$gsid);
+		$auth2_=md5($salt2.$userid.$groupnames.$salt2.$login.$salt2.$dispname.$salt2.$gsid);
 			
 		
 		
@@ -133,6 +135,7 @@ function userinfo(){
 			'login'=>stripslashes($_COOKIE['login']),
 			'dispname'=>$_COOKIE['dispname'],
 			'userid'=>$_COOKIE['userid'],
+			'gsid'=>$_COOKIE['gsid'],
 			'groups'=>array()
 		);	
 		

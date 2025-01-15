@@ -34,6 +34,11 @@ setconntype=function(d){
 			gid('newconn_connuser').style.display='block';
 			gid('newconn_connpass').style.display='block';
 		break;
+		case 'mysql-noprep':
+			gid('newconn_host').style.display='block';
+			gid('newconn_connuser').style.display='block';
+			gid('newconn_connpass').style.display='block';
+		break;		
 		case 'sqlsrv':
 			gid('newconn_host').style.display='block';
 			gid('newconn_dbname').style.display='block';

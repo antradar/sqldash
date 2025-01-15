@@ -18,7 +18,7 @@ function listtables(){
 	<div class="sectionheader" style="margin:0;">Database: <?php if (isset($connname)) echo htmlspecialchars($connname); if ($SQL_ENGINE!='sfdx'&&$SQL_ENGINE!='sfapi') echo '//';?><?php echo $ddbname;?></div>
 	<?php
 	}
-
+	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))){
 	
 		$query="show table status where Engine!='InnoDB' or Create_options!='' ";
@@ -57,7 +57,7 @@ function listtables(){
 
 		$query.=" order by QualifiedApiName ";
 		
-		$rs=sql_prep($cquery,$db);
+		$rs=sql_query($cquery,$db);
 		$count=$rs['totalSize'];
 		$maxpage=ceil($count/$perpage)-1;
 		if ($maxpage<0) $maxpage=0;
@@ -98,7 +98,7 @@ function listtables(){
 	<?php	
 	}
 	
-	$rs=sql_prep($query,$db);
+	$rs=sql_query($query,$db);
 	
 	while ($myrow=sql_fetch_array($rs)){
 		$tablename=$myrow[0];

@@ -16,6 +16,7 @@ if (SGET('sqlmode')=='clickhouse'||SQET('sqlmode')=='clickhouse') $sqlmode='clic
 if (SGET('sqlmode')=='mongodb'||SQET('sqlmode')=='mongodb') $sqlmode='mongodb';
 if (SGET('sqlmode')=='sfdx'||SQET('sqlmode')=='sfdx') $sqlmode='sfdx';
 if (SGET('sqlmode')=='sfapi'||SQET('sqlmode')=='sfapi') $sqlmode='sfapi';
+if (SGET('sqlmode')=='mysql-noprep'||SQET('sqlmode')=='mysql-noprep') $sqlmode='mysql-noprep';
 
 switch ($sqlmode){
 	case 'clickhouse': include_once 'sql-clickhouse.php'; break;
@@ -23,6 +24,7 @@ switch ($sqlmode){
 	case 'mongodb': include_once 'sql-mongodb.php'; break;
 	case 'sfdx': include_once 'sql-sfdx.php'; break;
 	case 'sfapi': include_once 'sql-sfapi.php'; break;
+	case 'mysql-noprep': include_once 'sql-mysqli.php'; $SQL_ENGINE='MySQL-noprep'; break;
 	default: include_once "sql-mysqli.php";
 }
 

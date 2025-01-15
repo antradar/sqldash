@@ -13,6 +13,7 @@ $fastlane='phpx-services.php'; //change this name if HAProxy is set up to route 
 
 $conntypes=array(
 	'mysqli'=>'MySQLi',
+	'mysql-noprep'=>'MySQL compat. No Prep.',
 	'sqlsrv'=>'SQLSrv',
 	'clickhouse'=>'ClickHouse/HTTP',
 	'mongodb'=>'MongoDB',
@@ -20,7 +21,14 @@ $conntypes=array(
 	'sfapi'=>'Salesforce Connected App API',
 );
 
+//plugins are detachable modules maintained by sqldash
 if (file_exists('plugins/borg.php')) include 'plugins/borg.php';
+
+//extensions are maintaned by 3rd parties
+
+$sqldash_exts=array(
+//	'antradar/querymaker'
+);
 
 //define constants that are shared by both front- and back-end code
 //repeat the settings in settings.tmpl.php
@@ -38,6 +46,7 @@ $userroles=array(
 	'truncate'=>'truncate collections',
 	'drop'=>'drop tables',
 	'kill'=>'terminate processes',
+	'gsconfig'=>'manage team settings',
 );
 
 $userrolelocks=array_keys($userroles);

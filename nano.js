@@ -101,14 +101,14 @@ function ajxpgn(c,u,d,e,data,callback,slowtimer,runonce,gskey){
 			if (apperror!=null&&apperror!=''){
 				if (ct.slowtimerorg){ct.innerHTML=ct.slowtimerorg;ct.slowtimerorg=null;}
 				var errfunc=rq.getResponseHeader('errfunc');
-				if (callback&&typeof(callback)=='object'&&callback.length>0){
+				if (callback&&typeof(callback)=='object'&&callback.length>0&&callback[1]!=null){
 					callback[1](errfunc,decodeURIComponent(apperror),rq);					
 				} else {
 					if (errfunc!=null&&errfunc!=''&&self[errfunc.toLowerCase()]){
 						self[errfunc.toLowerCase()](decodeURIComponent(apperror));
 					} else salert(decodeURIComponent(apperror));
 				}
-				
+								
 				return;	
 			}
 
@@ -140,6 +140,11 @@ function ajxpgn(c,u,d,e,data,callback,slowtimer,runonce,gskey){
 	if (ct.reqobj!=null)  {ct.abortflag=1;ct.reqobj.abort();cancelgswi(ct);}
 	ct.reqobj=rq;
 	if (!slowtimer) slowtimer=800;
+	
+	if (callback&&typeof(callback)=='object'&&callback.length>1&&callback[2]!=null){
+		rq.onprogress=callback[2];	
+	}
+	
 	
 	ct.slowtimer=setTimeout(function(){
 

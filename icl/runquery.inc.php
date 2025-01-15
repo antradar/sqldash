@@ -23,6 +23,10 @@ function runquery(){
 	$explain=GETVAL('explain');
 		
 	$sqlmode=SGET('sqlmode');
+	
+	$prepfunc='sql_prep';
+	if ($SQL_ENGINE=='MySQL-noprep') $prepfunc='sql_query';
+	
 		
 	if ($sqlmode!='sqlite'&&in_array($SQL_ENGINE,array('MySQL','MySQLi'))) sql_select_db($db,$dbname);
 		
@@ -108,7 +112,9 @@ function runquery(){
 				and T.CONSTRAINT_TYPE='PRIMARY KEY'";	
 			}
 			
-			$rs=sql_prep($dquery,$db);
+			if ($SQL_ENGINE=='MySQL-noprep') $dquery="select 1 ";
+			
+			$rs=$prepfunc($dquery,$db);
 			while ($myrow=sql_fetch_assoc($rs)){
 				if (isset($myrow['Key'])&&$myrow['Key']=='PRI') $pkey=$myrow['Field'];
 				if ($SQL_ENGINE=='SQLSRV'&&$myrow['COLUMN_NAME']!='') $pkey=$myrow['COLUMN_NAME'];
@@ -177,7 +183,7 @@ function runquery(){
 			}
 		}		
 
-	if ($SQL_ENGINE!='mongodb'){
+	if ($SQL_ENGINE!='mongodb'&&$SQL_ENGINE!='MySQL-noprep'){
 		$cquery="select count(*) as c from ($query) count_query";
 		$cta=microtime(1);
 		if (isset($db)) {
@@ -191,6 +197,10 @@ function runquery(){
 		$ctb=microtime(1);
 
 		$c=$myrow['c'];
+	}
+	
+	if ($SQL_ENGINE=='MySQL-noprep'){
+		$c=0;	
 	}	
 	?>
 	<div id="querydims_<?php echo $queryidx;?>" style="padding:10px 0;"></div>
@@ -211,7 +221,7 @@ function runquery(){
 		$start=$page*$perpage;
 		if (in_array($SQL_ENGINE,array('MySQL','MySQLi','ClickHouse'))) $query.=" limit $start,$perpage ";
 		if ($SQL_ENGINE=='SQLSRV') $query.=" order by @@identity offset $start rows fetch next $perpage rows only ";
-		if ($SQL_ENGINE=='sfdx') $query.=" limit $perpage offset $start ";	
+		if ($SQL_ENGINE=='sfdx'||$SQL_ENGINE=='MySQL-noprep') $query.=" limit $perpage offset $start ";	
 		
 		if ($maxpage>0){
 ?>
@@ -228,7 +238,7 @@ function runquery(){
 		}
 	}
 	$ta=microtime(1);
-
+	
 	if (isset($db)) {
 		
 		if (($token0=='create'||$token0=='drop')&&in_array($token1,array('trigger','function'))){
@@ -250,12 +260,30 @@ function runquery(){
 			}
 			
 			$rs=sql_query($query,$db);	
-		} else $rs=sql_prep($query,$db);
+		} else {
+			if ($SQL_ENGINE=='MySQL-noprep'||$SQL_ENGINE=='MySQLi'){
+				$rss=array();
+				if ($db->multi_query($query)){
+					do {
+						if ($rs = $db->store_result()){
+							array_push($rss,$rs);
+						}
+					} while ($db->next_result());
+				} else {
+					echo 'Error executing query: '.$db->error."<hr>";	
+				}
+			} else {
+				$rs=$prepfunc($query,$db);
+				$rss=array($rs);	
+			}
+			
+		}
 		if (!isset($c)||$SQL_ENGINE!='SQLSRV') $c=sql_affected_rows($db,$rs);
 	}
 	
 	if (isset($fdb)) {
 		$rs=fsql_query($query,$fdb);
+		$rss=array($rs);
 		if (!isset($c)) $c=fsql_affected_rows($fdb,$rs);
 	}
 	$idx=0;
@@ -266,6 +294,7 @@ function runquery(){
 	if (isset($fdb)) $fetchfunc='fsql_fetch_assoc';	
 	
 	if ($explain){
+		foreach ($rss as $rs){
 		$myrow=$fetchfunc($rs);
 		$res=$myrow['EXPLAIN'];
 		$eobj=json_decode($res,1);
@@ -296,15 +325,19 @@ function runquery(){
 	<textarea class="inplong" style="height:400px;"><?php echo htmlspecialchars($res);?></textarea>
 	</div>
 	<?php	
-		return;
+		//return;
+		}
 	}
 	
+	if($explain) return;
+	
+	foreach ($rss as $rs){
+		
 ?>
 <div class="stable" id="queryview_<?php echo $queryidx;?>">
 <div class="grid">
 <table>
 <?php
-
 
 	
 	while ($myrow=$fetchfunc($rs)){
@@ -340,7 +373,7 @@ function runquery(){
 	<tr class="gridrow <?php echo $idx%2==1?'even':'odd';?>">
 	<?php
 		
-		if ($c>1){
+		if ($c>1||count($rss)>1){
 			foreach ($myrow as $k=>$v){
 				$pval='';
 				if (isset($pkey)&&isset($myrow[$pkey])) {
@@ -474,7 +507,11 @@ function runquery(){
 </div>
 </div>
 <textarea style="display:none;" class="inplong" id="colnames_<?php echo $queryidx;?>"><?php echo json_encode($colnames);?></textarea>
+<hr>
 <?php	
+		if (isset($rs)&&isset($db)) $rs->free();
+
+	}//foreach rss
 	
 	$tb=microtime(1);
 	if (isset($ctb)) echo "<br><br>Count time: ".round(($ctb-$cta),3).' secs';

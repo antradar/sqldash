@@ -102,6 +102,7 @@ function showwelcome(){
 	<?php
 
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))){
+		
 	$query="show variables";
 	$rs=sql_prep($query,$db);
 	

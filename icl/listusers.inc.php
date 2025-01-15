@@ -10,6 +10,8 @@ function listusers(){
 	$page=isset($_GET['page'])?$_GET['page']+0:0;
 	
 	$user=userinfo();
+	$gsid=intval($user['gsid']);
+	
 	$myuserid=$user['userid']+0;
 	
 	if (!isset($user['groups']['accounts'])) die('access denied');
@@ -29,7 +31,7 @@ function listusers(){
 <?php		
 	}
 
-	$query="select * from users where 1 ";
+	$query="select * from users where gsid=$gsid ";
 	if ($key!='') $query.=" and (login like '$key%') ";
 	
 	$cquery="select count(*) as c from ($query)t";

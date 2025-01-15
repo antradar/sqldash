@@ -9,6 +9,8 @@ function adduser(){
 		
 	$user=userinfo();
 	if (!$user['groups']['accounts']) die('Access denied');
+	
+	$gsid=intval($user['gsid']);
 		
 	$login=GETSTR('login');
 	$active=GETVAL('active');
@@ -46,7 +48,7 @@ function adduser(){
 	$rs=$sdb->query($query);
 	if ($myrow=$rs->fetchArray(SQLITE3_ASSOC)) apperror('User already exists. Use a different login.');
 	
-	$query="insert into users (login,dispname,active,virtualuser,passreset,groupnames,password) values ('$login','$dispname',$active,$virtual,'$passreset','$groupnames','$np') ";
+	$query="insert into users (gsid,login,dispname,active,virtualuser,passreset,groupnames,password) values ($gsid,'$login','$dispname',$active,$virtual,'$passreset','$groupnames','$np') ";
 	$rs=$sdb->query($query);
 	
 	$userid=$sdb->lastInsertRowID();

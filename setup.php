@@ -127,7 +127,20 @@ if ($authmode==1||$authmode==2){
 	)";
 	
 	$rs=$db->query($query);
+
+	$query="
+	create table extvars (
+		extvarid integer primary key,
+		gsid integer,
+		userid integer,
+		vendor text,
+		package text,
+		varname text,
+		varval text
+	)";
 	
+	$rs=$db->query($query);
+		
 	$login=addslashes($login);
 	$groupnames='users|admins|connedit|accounts|update|insert|delete|alter|create|truncate|drop|rename|kill';
 

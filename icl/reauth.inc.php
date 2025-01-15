@@ -9,6 +9,7 @@ function reauth(){
 	
 	$user=userinfo();
 	$userid=intval($user['userid']);
+	$gsid=intval($user['gsid']);
 	
 	$gsexpiry=0;
 	$gstier=0;
@@ -28,13 +29,14 @@ function reauth(){
 	$virtual=$myrow['virtualuser']??0;
 	
 	$groupnames=$myrow['groupnames'];
-	$auth=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname);
+	$auth=md5($salt.$userid.$groupnames.$salt.$login.$salt.$dispname.$salt.$gsid);
 		
 	
 	//$wsskey=md5($wssecret.$gsid.date('Y-n-j-H').$userid).'-'.$gsid.'-'.$userid;
 	
 	if (!$active||$virtual){
 		setcookie('userid',NULL,time()-3600,null,null,$usehttps,true);
+		setcookie('gsid',NULL,time()-3600,null,null,$usehttps,true);
 		setcookie('login',NULL,time()-3600,null,null,$usehttps,true);
 		setcookie('dispname',NULL,time()-3600,null,null,$usehttps,true);		
 		setcookie('auth',NULL,time()-3600,null,null,$usehttps,true);
@@ -43,6 +45,7 @@ function reauth(){
 		//header('wsskey:'.$wsskey);
 		setcookie('auth',$auth,null,null,null,$usehttps,true);
 		setcookie('userid',$userid,null,null,null,$usehttps,true);
+		setcookie('gsid',$gsid,null,null,null,$usehttps,true);
 		setcookie('login',$login,null,null,null,$usehttps,true);
 		setrawcookie('dispname',rawurlencode($dispname),null,null,null,$usehttps,true);
 		setcookie('groupnames',$groupnames,null,null,null,$usehttps,true);

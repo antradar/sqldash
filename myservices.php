@@ -37,11 +37,24 @@ if ((1==SQLDASH_AUTH_MODE)&&!in_array($cmd,array('showaccount','setaccountpass',
 	
 }//2fa enforcement
 
+include 'sqldashext.php';
 
+$allexts=sqldash_getexts();
 
+//handle extension switches
+foreach ($allexts['routes'] as $route){
+	if ($cmd==$route['route']){		
+		include 'ext/'.$route['ext'].'.ext.php'; $route['route']();
+	 	$cmd='dummy'; 
+	}
+}//foreach
 
-switch($cmd){
+switch($cmd){	
 
+//Extension Handler
+
+	case 'showextsettings': include 'icl/showextsettings.inc.php'; showextsettings(); break;
+	
 //Repos
 
 	case 'slv_sqldash__repos': case 'listrepos': include 'icl/listrepos.inc.php'; listrepos(); break;
@@ -116,6 +129,8 @@ switch($cmd){
 	case 'showfunc': include 'icl/showfunc.inc.php'; showfunc(); break;
 	
 	case 'showtablesizes': include 'icl/showtablesizes.inc.php'; showtablesizes(); break;
+	case 'update_table_comment': include 'icl/update_table_comment.inc.php'; update_table_comment(); break;
+	case 'update_col_comment': include 'icl/update_col_comment.inc.php'; update_col_comment(); break;
 	
 //Queries
 
@@ -175,6 +190,8 @@ switch($cmd){
 	case 'wk': include 'icl/showwelcome.inc.php'; showwelcome(); break;
 	case 'updategyroscope': include 'icl/updater.inc.php'; updategyroscope(); break;
 	case 'showhelp': include 'icl/showhelp.inc.php'; showhelp(); break;
-	
+
+	case 'dummy': break;
+		
 	default: echo 'unspecified interface:'.$cmd;
 }

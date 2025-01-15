@@ -8,12 +8,15 @@ function showuser($userid=null){
 	if (!$user['groups']['accounts']) die('Access denied');
 	$myuserid=$user['userid'];
 	
+	$gsid=intval($user['gsid']);
+	
+	
 	global $sdb;
 	global $userroles;
 	
 	$jsroles=str_replace('"',"'",json_encode(array_keys($userroles)));	
 	
-	$query="select * from users where userid=$userid";
+	$query="select * from users where gsid=$gsid and userid=$userid";
 	$rs=$sdb->query($query);
 	
 	if (!$myrow=$rs->fetchArray(SQLITE3_ASSOC)) die('This user record has been removed');

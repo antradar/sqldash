@@ -331,6 +331,8 @@ function closetabs(rectype){
 	}
 }
 
+function marktabchanged(){}
+
 function showhelp(topic,title){
 	addtab('help_'+topic,'<img src="imgs/t.gif" width="12" height="12" class="img-help"> '+title,'showhelp&topic='+topic+'&title='+encodeHTML(title));	
 }

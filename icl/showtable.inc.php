@@ -9,6 +9,7 @@ function showtable(){
 	$triggers=array();
 		
 	$dbname=GETSTR('dbname'); //checkdbname();
+	
 	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))) {
 		sql_select_db($db,$dbname);
 
@@ -62,6 +63,24 @@ function showtable(){
 <table class="subtable">
 	<tr><td>Engine:</td><td><?php echo $engine;?></td></tr>
 <?php	
+	if (in_array($SQL_ENGINE,array('MySQL','MySQLi'))){
+
+			$query="select table_comment from information_schema.tables where table_name=? and table_schema=?";
+			$rs=sql_prep($query,$db,array($tablename,$dbname));
+			$myrow=sql_fetch_assoc($rs);
+			$table_comment=$myrow['table_comment'];
+	?>
+	<tr>
+	<td valign="top">Comment:</td>
+	<td>
+		<textarea class="inp" id="tablecomment_<?php echo $dbname;?>_<?php echo $tablename;?>"><?php echo htmlspecialchars($table_comment);?></textarea>
+		<br>
+		<button onclick="update_table_comment('<?php echo $tablename;?>','<?php echo $dbname;?>');">Update</button>
+	</td>
+	</tr>
+	<?php
+	}
+
 
 	if ($options!=''){
 ?>
@@ -95,9 +114,25 @@ if (count($triggers)>0){
 <table cellspacing="0" cellpadding="5">
 <?php		
 	
+			$query="select column_name, column_comment from information_schema.columns
+			where table_name = ? and table_schema = ? and column_comment!=''
+			";
+			
+			$rs=sql_prep($query,$db,array($tablename,$dbname));
+			$colcomments=array();
+			while ($myrow=sql_fetch_assoc($rs)){
+				$colcomments[$myrow['column_name']]=$myrow['column_comment'];	
+			}
+			
 	$query="describe $tablename";
+	
+
+				
+	
 	if ($SQL_ENGINE=='SQLSRV') $query="select COLUMN_NAME as Field, DATA_TYPE as Type, IS_NULLABLE as 'Null' from information_schema.columns where table_name = '$tablename' order by ordinal_position";
-	$rs=sql_prep($query,$db);
+		
+	if ($query!=''){
+	$rs=sql_query($query,$db);
 	$idx=0;
 	while ($myrow=sql_fetch_assoc($rs)){
 		$field=isset($myrow['Field'])?$myrow['Field']:'';
@@ -105,6 +140,7 @@ if (count($triggers)>0){
 		$nullable=isset($myrow['Null'])?$myrow['Null']:'';
 		$keytype=isset($myrow['Key'])?$myrow['Key']:'';
 		$extra=isset($myrow['Extra'])?$myrow['Extra']:'';
+		$colcomment=$colcomments[$field]??'';
 		if ($SQL_ENGINE=='ClickHouse'){
 			$field=$myrow['name'];
 			$type=$myrow['type'];
@@ -123,10 +159,13 @@ if (count($triggers)>0){
 	</td>
 	<td><?php echo htmlspecialchars($type);?></td>
 	<td><b><?php echo htmlspecialchars($extra);?></b></td>
+	<td><input class="inp" value="<?php echo htmlspecialchars($colcomment);?>" onchange="update_col_comment(this,'<?php echo $dbname;?>','<?php echo $tablename;?>','<?php echo $field;?>');"></td>
 	</tr>
 	<?php	
 		$idx++;
 	}//while
+	
+	}//no-empty describe querys
 ?>
 </table>
 

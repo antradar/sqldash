@@ -8,8 +8,9 @@ function deluser(){
 	$user=userinfo();
 	if (!$user['groups']['accounts']) die('Access denied');
 		
+	$gsid=intval($user['gsid']);
 	
-	$query="delete from users where userid=$userid";
+	$query="delete from users where gsid=$gsid and userid=$userid";
 	$sdb->query($query);
 	
 	reauth();
